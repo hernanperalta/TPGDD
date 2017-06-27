@@ -20,6 +20,7 @@ namespace UberFrba
         [STAThread]
         static void Main()
         {
+            
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
@@ -31,9 +32,11 @@ namespace UberFrba
             //String s = (String) DBConexion.ResolverFuncion("SELECT LOS_CHATADROIDES.Hashear_Password('lihue')");
             //MessageBox.Show(s);
             new Login_Usuario.Login().Show();
+            //new Abm_Chofer.Baja_o_Modificacion(true, "", "").Show();
+            //new Abm_Chofer.Alta("", "").Show();
             Application.Run();
 
-
+            
             
         }
     }

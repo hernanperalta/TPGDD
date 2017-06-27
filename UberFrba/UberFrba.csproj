@@ -75,6 +75,7 @@
     <Compile Include="Abm Chofer\Baja_o_Modificacion.Designer.cs">
       <DependentUpon>Baja_o_Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Chofer\Chofer.cs" />
     <Compile Include="Abm Chofer\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>

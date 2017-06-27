@@ -28,48 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.buscar = new System.Windows.Forms.Button();
+            this.limpiar = new System.Windows.Forms.Button();
             this.bajaOModificacion = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.dniChofer = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.apellidoChofer = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.nombreChofer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dni = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.telefono = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.direccion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fechaNacimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.depto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nroPiso = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.volver = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.choferesGrid = new System.Windows.Forms.DataGridView();
+            ((System.ComponentModel.ISupportInitialize)(this.choferesGrid)).BeginInit();
             this.SuspendLayout();
             // 
-            // button4
+            // buscar
             // 
-            this.button4.Location = new System.Drawing.Point(516, 151);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(101, 25);
-            this.button4.TabIndex = 49;
-            this.button4.Text = "Buscar";
-            this.button4.UseVisualStyleBackColor = true;
+            this.buscar.Location = new System.Drawing.Point(516, 151);
+            this.buscar.Name = "buscar";
+            this.buscar.Size = new System.Drawing.Size(101, 25);
+            this.buscar.TabIndex = 49;
+            this.buscar.Text = "Buscar";
+            this.buscar.UseVisualStyleBackColor = true;
+            this.buscar.Click += new System.EventHandler(this.buscar_Click);
             // 
-            // button3
+            // limpiar
             // 
-            this.button3.Location = new System.Drawing.Point(67, 151);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(101, 25);
-            this.button3.TabIndex = 48;
-            this.button3.Text = "Limpiar";
-            this.button3.UseVisualStyleBackColor = true;
+            this.limpiar.Location = new System.Drawing.Point(67, 151);
+            this.limpiar.Name = "limpiar";
+            this.limpiar.Size = new System.Drawing.Size(101, 25);
+            this.limpiar.TabIndex = 48;
+            this.limpiar.Text = "Limpiar";
+            this.limpiar.UseVisualStyleBackColor = true;
             // 
             // bajaOModificacion
             // 
@@ -81,12 +72,12 @@
             this.bajaOModificacion.UseVisualStyleBackColor = true;
             this.bajaOModificacion.Click += new System.EventHandler(this.bajaOModificacion_Click);
             // 
-            // textBox3
+            // dniChofer
             // 
-            this.textBox3.Location = new System.Drawing.Point(434, 106);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 44;
+            this.dniChofer.Location = new System.Drawing.Point(434, 106);
+            this.dniChofer.Name = "dniChofer";
+            this.dniChofer.Size = new System.Drawing.Size(100, 20);
+            this.dniChofer.TabIndex = 44;
             // 
             // label3
             // 
@@ -97,12 +88,12 @@
             this.label3.TabIndex = 43;
             this.label3.Text = "DNI :";
             // 
-            // textBox2
+            // apellidoChofer
             // 
-            this.textBox2.Location = new System.Drawing.Point(286, 106);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 42;
+            this.apellidoChofer.Location = new System.Drawing.Point(286, 106);
+            this.apellidoChofer.Name = "apellidoChofer";
+            this.apellidoChofer.Size = new System.Drawing.Size(100, 20);
+            this.apellidoChofer.TabIndex = 42;
             // 
             // label2
             // 
@@ -113,12 +104,12 @@
             this.label2.TabIndex = 41;
             this.label2.Text = "Apellido :";
             // 
-            // textBox1
+            // nombreChofer
             // 
-            this.textBox1.Location = new System.Drawing.Point(143, 106);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 40;
+            this.nombreChofer.Location = new System.Drawing.Point(143, 106);
+            this.nombreChofer.Name = "nombreChofer";
+            this.nombreChofer.Size = new System.Drawing.Size(100, 20);
+            this.nombreChofer.TabIndex = 40;
             // 
             // label1
             // 
@@ -138,76 +129,6 @@
             this.label4.TabIndex = 50;
             this.label4.Text = "Ingrese los campos por los que quiera filtrar :";
             // 
-            // dataGridView2
-            // 
-            this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nombre,
-            this.apellido,
-            this.dni,
-            this.mail,
-            this.telefono,
-            this.direccion,
-            this.fechaNacimiento,
-            this.depto,
-            this.nroPiso,
-            this.dataGridViewButtonColumn1});
-            this.dataGridView2.Location = new System.Drawing.Point(23, 191);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(671, 149);
-            this.dataGridView2.TabIndex = 51;
-            // 
-            // nombre
-            // 
-            this.nombre.HeaderText = "Nombre";
-            this.nombre.Name = "nombre";
-            // 
-            // apellido
-            // 
-            this.apellido.HeaderText = "Apellido";
-            this.apellido.Name = "apellido";
-            // 
-            // dni
-            // 
-            this.dni.HeaderText = "DNI";
-            this.dni.Name = "dni";
-            // 
-            // mail
-            // 
-            this.mail.HeaderText = "Mail";
-            this.mail.Name = "mail";
-            // 
-            // telefono
-            // 
-            this.telefono.HeaderText = "Telefono";
-            this.telefono.Name = "telefono";
-            // 
-            // direccion
-            // 
-            this.direccion.HeaderText = "Direccion";
-            this.direccion.Name = "direccion";
-            // 
-            // fechaNacimiento
-            // 
-            this.fechaNacimiento.HeaderText = "Fecha de nacimiento";
-            this.fechaNacimiento.Name = "fechaNacimiento";
-            // 
-            // depto
-            // 
-            this.depto.HeaderText = "Depto";
-            this.depto.Name = "depto";
-            // 
-            // nroPiso
-            // 
-            this.nroPiso.HeaderText = "Numero Piso";
-            this.nroPiso.Name = "nroPiso";
-            // 
-            // dataGridViewButtonColumn1
-            // 
-            this.dataGridViewButtonColumn1.HeaderText = "Seleccionar";
-            this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
-            // 
             // volver
             // 
             this.volver.Location = new System.Drawing.Point(240, 374);
@@ -218,27 +139,35 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
-            // Baja
+            // choferesGrid
+            // 
+            this.choferesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.choferesGrid.Location = new System.Drawing.Point(67, 197);
+            this.choferesGrid.Name = "choferesGrid";
+            this.choferesGrid.Size = new System.Drawing.Size(550, 150);
+            this.choferesGrid.TabIndex = 54;
+            // 
+            // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(727, 421);
+            this.ClientSize = new System.Drawing.Size(713, 418);
+            this.Controls.Add(this.choferesGrid);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.buscar);
+            this.Controls.Add(this.limpiar);
             this.Controls.Add(this.bajaOModificacion);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.dniChofer);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.apellidoChofer);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.nombreChofer);
             this.Controls.Add(this.label1);
-            this.Name = "Baja";
+            this.Name = "Baja_o_Modificacion";
             this.Text = "Baja y modificacion de chofer";
             this.Load += new System.EventHandler(this.Baja_y_Modificacion_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.choferesGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -246,27 +175,17 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button buscar;
+        private System.Windows.Forms.Button limpiar;
         private System.Windows.Forms.Button bajaOModificacion;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox dniChofer;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox apellidoChofer;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox nombreChofer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn apellido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dni;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn telefono;
-        private System.Windows.Forms.DataGridViewTextBoxColumn direccion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fechaNacimiento;
-        private System.Windows.Forms.DataGridViewTextBoxColumn depto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nroPiso;
-        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.DataGridView choferesGrid;
     }
 }

@@ -16,7 +16,6 @@ CREATE TABLE LOS_CHATADROIDES.Domicilio
 	PRIMARY KEY (localidad, direccion)
 );
 
-
 CREATE TABLE LOS_CHATADROIDES.Turno
 (
 	hora_inicio_turno NUMERIC(18,0),
@@ -27,7 +26,6 @@ CREATE TABLE LOS_CHATADROIDES.Turno
 	habilitado BIT NOT NULL DEFAULT 1,
 	PRIMARY KEY (hora_inicio_turno, hora_fin_turno)
 );
-
 
 CREATE TABLE LOS_CHATADROIDES.Rol
 (
@@ -66,7 +64,6 @@ CREATE TABLE LOS_CHATADROIDES.Cliente
 	FOREIGN KEY (localidad, direccion) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion)
 );
 
-
 CREATE TABLE LOS_CHATADROIDES.Chofer
 (
 	telefono NUMERIC(18,0) PRIMARY KEY,
@@ -81,7 +78,6 @@ CREATE TABLE LOS_CHATADROIDES.Chofer
 	habilitado BIT NOT NULL DEFAULT 1,
 	FOREIGN KEY (localidad, direccion) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion)
 );
-
 
 CREATE TABLE LOS_CHATADROIDES.Administrador
 (
@@ -698,7 +694,125 @@ BEGIN
 	DEALLOCATE factura_cursor
 END
 GO
-SELECT * FROM LOS_CHATADROIDES.Usuario
+
+CREATE PROCEDURE LOS_CHATADROIDES.Insertar_domicilio_si_no_existe
+@localidad VARCHAR(20), @direccion VARCHAR(255),
+@nro_piso SMALLINT, @depto VARCHAR(3)
+AS
+BEGIN
+	IF( NOT EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Domicilio WHERE localidad = @localidad AND direccion = @direccion) )
+	BEGIN
+		INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, nro_piso, depto) 
+			VALUES (@localidad, @direccion, @nro_piso, @depto)
+	END
+END
+GO
+
+CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_chofer
+@localidad VARCHAR(20), @direccion VARCHAR(255),
+@nro_piso SMALLINT, @depto VARCHAR(3),
+@telefono NUMERIC(18,0), @nombre VARCHAR(255), 
+@apellido VARCHAR(255), @dni NUMERIC(18,0), 
+@fecha_de_nac DATETIME, @mail VARCHAR(50), 
+@username VARCHAR(50)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			IF( NOT EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Domicilio WHERE localidad = @localidad AND direccion = @direccion) )
+			BEGIN
+				INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, nro_piso, depto) 
+					VALUES (@localidad, @direccion, @nro_piso, @depto)
+			END
+
+			INSERT INTO LOS_CHATADROIDES.Chofer (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username)
+				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username)
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW;
+	END CATCH
+END
+GO
+
+
+CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_cliente
+@localidad VARCHAR(20), @direccion VARCHAR(255),
+@nro_piso SMALLINT, @depto VARCHAR(3),
+@telefono NUMERIC(18,0), @nombre VARCHAR(255), 
+@apellido VARCHAR(255), @dni NUMERIC(18,0), 
+@fecha_de_nac DATETIME, @codigo_postal SMALLINT,
+@mail VARCHAR(50), @username VARCHAR(50)
+AS
+BEGIN
+	BEGIN TRY
+		BEGIN TRANSACTION
+			EXEC LOS_CHATADROIDES.Insertar_domicilio_si_no_existe @localidad, @direccion, @nro_piso, @depto
+
+			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal)
+				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username, @codigo_postal)
+		COMMIT TRANSACTION
+	END TRY
+	BEGIN CATCH
+		ROLLBACK;
+		THROW;
+	END CATCH
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
+ON LOS_CHATADROIDES.Cliente
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @username VARCHAR(50)
+	DECLARE @habilitado BIT
+
+	SELECT @username=username, @habilitado=habilitado FROM inserted
+	
+	IF(@habilitado = 1)
+	BEGIN
+		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol, habilitado)
+			VALUES (@username, 'Cliente', 1)
+	END
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Chofer
+ON LOS_CHATADROIDES.Chofer
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @username VARCHAR(50)
+	DECLARE @habilitado BIT
+
+	SELECT @username=username, @habilitado=habilitado FROM inserted
+	
+	IF(@habilitado = 1)
+	BEGIN
+		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol, habilitado)
+			VALUES (@username, 'Chofer', 1)
+	END
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
+ON LOS_CHATADROIDES.Cliente
+AFTER INSERT
+AS
+BEGIN
+	DECLARE @username VARCHAR(50)
+	DECLARE @habilitado BIT
+
+	SELECT @username=username, @habilitado=habilitado FROM inserted
+	
+	IF(@habilitado = 1)
+	BEGIN
+		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol, habilitado)
+			VALUES (@username, 'Cliente', 1)
+	END
+END
 
 EXEC LOS_CHATADROIDES.Migrar_Domicilios;
 EXEC LOS_CHATADROIDES.Migrar_Turnos;
@@ -735,7 +849,3 @@ EXEC LOS_CHATADROIDES.Migrar_Rendicion;
 EXEC LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe; 
 EXEC LOS_CHATADROIDES.Migrar_Viajes;
 EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
-
-
-SELECT * FROM LOS_CHATADROIDES.Usuario WHERE username LIKE '%CHEVY%'
-UPDATE LOS_CHATADROIDES.Usuario SET habilitado = 1 WHERE username = 'admin'

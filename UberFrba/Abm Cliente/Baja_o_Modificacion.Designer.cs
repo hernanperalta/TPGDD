@@ -29,15 +29,15 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.nombreCliente = new System.Windows.Forms.TextBox();
+            this.apellidoCliente = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.dniCliente = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.bajaOModificacion = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.limpiarCampos = new System.Windows.Forms.Button();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -63,19 +63,19 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre :";
             // 
-            // textBox1
+            // nombreCliente
             // 
-            this.textBox1.Location = new System.Drawing.Point(157, 71);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 1;
+            this.nombreCliente.Location = new System.Drawing.Point(157, 71);
+            this.nombreCliente.Name = "nombreCliente";
+            this.nombreCliente.Size = new System.Drawing.Size(100, 20);
+            this.nombreCliente.TabIndex = 1;
             // 
-            // textBox2
+            // apellidoCliente
             // 
-            this.textBox2.Location = new System.Drawing.Point(300, 71);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 9;
+            this.apellidoCliente.Location = new System.Drawing.Point(300, 71);
+            this.apellidoCliente.Name = "apellidoCliente";
+            this.apellidoCliente.Size = new System.Drawing.Size(100, 20);
+            this.apellidoCliente.TabIndex = 9;
             // 
             // label2
             // 
@@ -86,12 +86,12 @@
             this.label2.TabIndex = 8;
             this.label2.Text = "Apellido :";
             // 
-            // textBox3
+            // dniCliente
             // 
-            this.textBox3.Location = new System.Drawing.Point(448, 71);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.Size = new System.Drawing.Size(100, 20);
-            this.textBox3.TabIndex = 11;
+            this.dniCliente.Location = new System.Drawing.Point(448, 71);
+            this.dniCliente.Name = "dniCliente";
+            this.dniCliente.Size = new System.Drawing.Size(100, 20);
+            this.dniCliente.TabIndex = 11;
             // 
             // label3
             // 
@@ -130,14 +130,15 @@
             this.button4.Text = "Buscar";
             this.button4.UseVisualStyleBackColor = true;
             // 
-            // button3
+            // limpiarCampos
             // 
-            this.button3.Location = new System.Drawing.Point(81, 131);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(101, 25);
-            this.button3.TabIndex = 37;
-            this.button3.Text = "Limpiar";
-            this.button3.UseVisualStyleBackColor = true;
+            this.limpiarCampos.Location = new System.Drawing.Point(81, 131);
+            this.limpiarCampos.Name = "limpiarCampos";
+            this.limpiarCampos.Size = new System.Drawing.Size(101, 25);
+            this.limpiarCampos.TabIndex = 37;
+            this.limpiarCampos.Text = "Limpiar";
+            this.limpiarCampos.UseVisualStyleBackColor = true;
+            this.limpiarCampos.Click += new System.EventHandler(this.limpiarCampos_Click);
             // 
             // dataGridView2
             // 
@@ -233,14 +234,14 @@
             this.Controls.Add(this.volver);
             this.Controls.Add(this.dataGridView2);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.limpiarCampos);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.dniCliente);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.apellidoCliente);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.nombreCliente);
             this.Controls.Add(this.label1);
             this.Name = "Baja_o_Modificacion";
             this.Text = "Selección de Cliente";
@@ -254,15 +255,15 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox nombreCliente;
+        private System.Windows.Forms.TextBox apellidoCliente;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.TextBox dniCliente;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button bajaOModificacion;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button limpiarCampos;
         private System.Windows.Forms.DataGridView dataGridView2;
         private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
         private System.Windows.Forms.DataGridViewTextBoxColumn apellido;

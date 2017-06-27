@@ -12,15 +12,16 @@ namespace UberFrba.Abm_Cliente
 {
     public partial class Baja_o_Modificacion : Form
     {
+        string errores = "";
         private string username;
         private string rol;
         private bool puedeDarDeBaja;
 
-        public Baja_o_Modificacion(bool puedeDarDeBaja, string p1, string p2)
+        public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
         {
             InitializeComponent();
-            this.username = p1;
-            this.rol = p2;
+            this.username = username;
+            this.rol = rol;
             this.puedeDarDeBaja = puedeDarDeBaja;
             if (puedeDarDeBaja)
             {
@@ -53,14 +54,16 @@ namespace UberFrba.Abm_Cliente
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
         {
-            if (puedeDarDeBaja)
+            this.validarCampos();
+            if (this.errores != "")
             {
-                /*baja*/
+                MessageBox.Show(errores);
+                this.errores = "";
             }
             else
             {
                 /*aca crear el objeto con los datos que selecciono del cliente y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
-                Form modificar = new Modificacion(clienteSeleccionado, this.username, this.rol);
+                Form modificar = new Modificacion(this.username, this.rol);
                 modificar.Show();
             }
         }
@@ -68,6 +71,48 @@ namespace UberFrba.Abm_Cliente
         private void Baja_o_Modificacion_Load(object sender, EventArgs e)
         {
 
+        }
+        private void validarCampos()
+        {
+            this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
+            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z- ]+$");
+            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z- ]+$");
+        }
+
+        private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
+        {
+            this.validarExpresion(expresion, campo, campoError);
+            this.validarCantDigitos(cantLetras, campo, campoError);
+        }
+
+        private void validarExpresion(string expresion, string campo, string campoError)
+        {
+            if (campo == "")
+                errores += "El campo" + campoError + " esta vacio\n";
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
+            {
+                errores += "El campo " + campoError + " posee caracteres invalidos\n";
+            }
+        }
+
+        private void validarCantDigitos(int cantLetras, string campo, string campoError)
+        {
+            if (campo.Length > cantLetras)
+            {
+                errores += "El campo " + campoError + " no puede exceder los " + cantLetras + " digitos\n";
+            }
+        }
+
+        private void limpiarCampos_Click(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox text = ctrl as TextBox;
+                    text.Clear();
+                }
+            }
         }
     }
 }

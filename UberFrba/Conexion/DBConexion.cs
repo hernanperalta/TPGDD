@@ -52,7 +52,6 @@ namespace UberFrba.Conexion
             SqlCommand sqlcom = new SqlCommand(nonQuery, conexion);
            
             sqlcom.ExecuteNonQuery();
-           
         }
 
         public static object ResolverFuncion(String query)
