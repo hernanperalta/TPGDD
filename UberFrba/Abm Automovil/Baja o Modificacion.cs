@@ -78,9 +78,15 @@ namespace UberFrba.Abm_Automovil
                 /*baja*/
             }
             else {
+<<<<<<< HEAD
                 /*aca crear el objeto con los datos que selecciono del auto y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
                 //Form modificar = new Modificacion(automovilSeleccionado, this.username, this.rol);
                 //modificar.Show();
+=======
+                /*aca crear el objeto con los datos que selecciono del auto y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
+                Form modificar = new Modificacion(automovilSeleccionado, this.username, this.rol);
+                modificar.Show();*/
+>>>>>>> d94bfc6f05c23077cd18a0f3e1ca92333c665987
             }
         }
     }

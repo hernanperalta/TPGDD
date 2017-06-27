@@ -57,12 +57,14 @@
     <Compile Include="Abm Automovil\Baja o Modificacion.Designer.cs">
       <DependentUpon>Baja o Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Automovil\Error.cs" />
     <Compile Include="Abm Automovil\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Abm Automovil\Modificacion.Designer.cs">
       <DependentUpon>Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Automovil\Turno.cs" />
     <Compile Include="Abm Chofer\Alta.cs">
       <SubType>Form</SubType>
     </Compile>

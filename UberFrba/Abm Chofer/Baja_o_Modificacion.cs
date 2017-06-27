@@ -54,6 +54,7 @@ namespace UberFrba.Abm_Chofer
             }
             else
             {
+<<<<<<< HEAD
                 /*aca crear el objeto con los datos que selecciono del chofer y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
                 //Form modificar = new Modificacion(choferSeleccionado, this.username, this.rol);
                 //modificar.Show();
@@ -69,6 +70,11 @@ namespace UberFrba.Abm_Chofer
             foreach(Chofer chofer in this.choferesGrid.SelectedRows)
             {
                 MessageBox.Show(chofer.telefono.ToString());
+=======
+                /*aca crear el objeto con los datos que selecciono del chofer y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
+                Form modificar = new Modificacion(choferSeleccionado, this.username, this.rol);
+                modificar.Show();*/
+>>>>>>> d94bfc6f05c23077cd18a0f3e1ca92333c665987
             }
         }
     }

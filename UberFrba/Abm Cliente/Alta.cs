@@ -59,7 +59,6 @@ namespace UberFrba.Abm_Cliente
 
         private void apellidoCliente_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void dptoYlocalidad_TextChanged(object sender, EventArgs e)
@@ -69,7 +68,6 @@ namespace UberFrba.Abm_Cliente
 
         private void nroPiso_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void calleYaltura_TextChanged(object sender, EventArgs e)
