@@ -797,23 +797,6 @@ BEGIN
 END
 GO
 
-CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
-ON LOS_CHATADROIDES.Cliente
-AFTER INSERT
-AS
-BEGIN
-	DECLARE @username VARCHAR(50)
-	DECLARE @habilitado BIT
-
-	SELECT @username=username, @habilitado=habilitado FROM inserted
-	
-	IF(@habilitado = 1)
-	BEGIN
-		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol, habilitado)
-			VALUES (@username, 'Cliente', 1)
-	END
-END
-
 EXEC LOS_CHATADROIDES.Migrar_Domicilios;
 EXEC LOS_CHATADROIDES.Migrar_Turnos;
 
