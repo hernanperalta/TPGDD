@@ -24,16 +24,18 @@ namespace UberFrba.Abm_Automovil
             InitializeComponent();
             this.username = username;
             this.rol = rol;
+            this.cargarLosHorariosDeLosTurnos();
         }
 
+        private void limpiarLosCampos() {
+            this.marca.ResetText();
+            this.patente.ResetText();
+            this.numeroChofer.ResetText();
+        }
 
         private void limpiar_Click(object sender, EventArgs e)
         {
-            this.marca.ResetText();
-            this.horaInicioTurno.ResetText();
-            this.modelo.ResetText();
-            this.patente.ResetText();
-            this.numeroChofer.ResetText();
+            this.limpiarLosCampos();
         }
 
         private void turno_TextChanged(object sender, EventArgs e){
@@ -48,33 +50,95 @@ namespace UberFrba.Abm_Automovil
         {
             
         }
+        /* VALIDACIONES : */
+        private bool estaVacio(string campo) {
+            return campo == null || campo.Equals("") || campo.Any(char.IsWhiteSpace);
+        }
 
         private void validarNumeroChofer() {
-            if (System.Text.RegularExpressions.Regex.IsMatch(numeroChofer.Text, "[^0-9]"))
-            {
-                errores += "El telefono solo puede tener numeros\n";
-            }
-            else if (this.numeroChofer.Text.Length > 18) {
-                errores += "El telefono excede los 18 digitos\n";
-            }
+            if (this.estaVacio(this.numeroChofer.Text)) 
+                errores += "El telefono esta vacio.\n";
+
+            if (this.numeroChofer.Text.Any(char.IsLetter))
+                errores += "El telefono solo puede tener numeros.\n";
+
+            if (this.numeroChofer.Text.Length > 18) 
+                errores += "El telefono excede los 18 digitos.\n";
+            
         }
 
         private void validarModelo()
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(numeroChofer.Text, "[^0-9]"))
+            if (this.estaVacio(this.modelo.Text))
+                errores += "Debe insertar un modelo para el automovil.\n";
+            if (this.modelo.Text.Any(char.IsDigit))
+                errores += "El modelo del automovil no puede contener numeros.\n";
+            
+            if (this.modelo.Text.Length > 255) 
+                errores += "El modelo excede el numero de caracteres permitidos (255).\n";
+        }
+
+        private void validarMarca() {
+            if (this.estaVacio(this.marca.Text))
+                errores += "Debe insertar una marca para el automovil.\n";
+            if (this.marca.Text.Any(char.IsDigit))
+                errores += "La marca no puede contener numeros.\n";
+
+            if (this.marca.Text.Length > 255) 
+                errores += "La marca excede el numero de caracteres permitidos (255)";
+            
+        }
+
+        private void validarPatente() {
+            if (this.estaVacio(this.patente.Text))
+                errores += "La patente esta vacia.\n";
+                
+            if (this.patente.Text.Length > 10)
+                errores += "La patente excede los 10 caracteres.\n";
+        }
+
+        private void validarLosCampos() {
+            this.validarMarca();
+            this.validarModelo();
+            this.validarPatente();
+            this.validarNumeroChofer();
+        }
+
+        /**  - VALIDACIONES **/
+
+        private void cargarLosHorariosDeLosTurnos(){
+            
+            try
             {
-                errores += "El telefono solo puede tener numeros\n";
+                SqlDataReader readerTurnos = DBConexion.ResolverConsulta("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno");
+
+                while (readerTurnos.Read())
+                {
+                    Turno nuevoTurno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
+                    this.selectorTurno.Items.Add(nuevoTurno);
+                }
+                selectorTurno.Items.Add("No asignar turno");
+                readerTurnos.Close();
+
             }
-            else if (this.numeroChofer.Text.Length > 18)
-            {
-                errores += "El telefono excede los 18 digitos\n";
+            catch (Exception e) {
+                this.selectorTurno.Text = "No hay turnos en la base de datos";
             }
+
         }
 
         private void crear_Click(object sender, EventArgs e)
         {
-         
-           try
+            this.validarLosCampos();
+            if (!this.errores.Equals(""))
+            {
+                MessageBox.Show(errores);
+                this.limpiarLosCampos();
+                this.errores = "";
+            }
+            else
+            {
+               /* try
                 {
                     DBConexion.ResolverNonQuery("INSERT LOS_CHATADROIDES.Automovil SET"
                                                + " marca = '" + this.marca.Text +
@@ -86,11 +150,12 @@ namespace UberFrba.Abm_Automovil
 
                     MessageBox.Show("Se pudo crear el automovil de patente nro: " + this.patente.Text);
                 }
-                catch (SqlException sqle) {
+                catch (SqlException sqle)
+                {
                     MessageBox.Show("No se pudo crear el automovil de patente nro: " + this.patente.Text);
-                } 
-                
-            
+                }*/
+                MessageBox.Show("TODO OK :D ");
+            }
         }
 
         private void Alta_o_Modificacion_Load(object sender, EventArgs e)
@@ -118,6 +183,11 @@ namespace UberFrba.Abm_Automovil
         private void horaInicioTurno_TextChanged(object sender, EventArgs e)
         {
         
+        }
+
+        private void selectorTurno_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
 
       

@@ -53,9 +53,9 @@ namespace UberFrba.Abm_Chofer
             }
             else
             {
-                /*aca crear el objeto con los datos que selecciono del chofer y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
+                /*aca crear el objeto con los datos que selecciono del chofer y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
                 Form modificar = new Modificacion(choferSeleccionado, this.username, this.rol);
-                modificar.Show();
+                modificar.Show();*/
             }
         }
     }

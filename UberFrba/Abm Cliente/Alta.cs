@@ -47,8 +47,8 @@ namespace UberFrba.Abm_Cliente
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (!puedeDarDeAlta) { /* hacer update */}
-            else { /*hacer insert*/ }
+            
+            /*hacer insert*/ 
         }
     }
 }

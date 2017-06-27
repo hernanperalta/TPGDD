@@ -63,6 +63,7 @@
     <Compile Include="Abm Automovil\Modificacion.Designer.cs">
       <DependentUpon>Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Automovil\Turno.cs" />
     <Compile Include="Abm Chofer\Alta.cs">
       <SubType>Form</SubType>
     </Compile>

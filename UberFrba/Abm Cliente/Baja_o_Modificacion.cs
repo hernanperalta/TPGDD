@@ -59,9 +59,9 @@ namespace UberFrba.Abm_Cliente
             }
             else
             {
-                /*aca crear el objeto con los datos que selecciono del cliente y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
+                /*aca crear el objeto con los datos que selecciono del cliente y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
                 Form modificar = new Modificacion(clienteSeleccionado, this.username, this.rol);
-                modificar.Show();
+                modificar.Show();*/
             }
         }
 
