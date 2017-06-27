@@ -57,6 +57,7 @@
     <Compile Include="Abm Automovil\Baja o Modificacion.Designer.cs">
       <DependentUpon>Baja o Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Automovil\Error.cs" />
     <Compile Include="Abm Automovil\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
