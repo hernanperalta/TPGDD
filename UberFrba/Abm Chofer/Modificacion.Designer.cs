@@ -39,13 +39,12 @@
             this.nombreChofer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.telefonoChofer = new System.Windows.Forms.Label();
             this.localidadChofer = new System.Windows.Forms.TextBox();
             this.label12 = new System.Windows.Forms.Label();
             this.usernameChofer = new System.Windows.Forms.TextBox();
             this.label11 = new System.Windows.Forms.Label();
             this.volver = new System.Windows.Forms.Button();
-            this.crear = new System.Windows.Forms.Button();
+            this.guardar = new System.Windows.Forms.Button();
             this.deptoChofer = new System.Windows.Forms.TextBox();
             this.label10 = new System.Windows.Forms.Label();
             this.nroPisoChofer = new System.Windows.Forms.TextBox();
@@ -54,6 +53,8 @@
             this.label4 = new System.Windows.Forms.Label();
             this.fechaNacChofer = new System.Windows.Forms.DateTimePicker();
             this.limpiar = new System.Windows.Forms.Button();
+            this.habilitado = new System.Windows.Forms.CheckBox();
+            this.telefonoChofer = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label9
@@ -141,20 +142,11 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(44, 61);
+            this.label3.Location = new System.Drawing.Point(33, 62);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(49, 13);
+            this.label3.Size = new System.Drawing.Size(55, 13);
             this.label3.TabIndex = 69;
-            this.label3.Text = "Telefono";
-            // 
-            // telefonoChofer
-            // 
-            this.telefonoChofer.AutoSize = true;
-            this.telefonoChofer.Location = new System.Drawing.Point(62, 87);
-            this.telefonoChofer.Name = "telefonoChofer";
-            this.telefonoChofer.Size = new System.Drawing.Size(45, 13);
-            this.telefonoChofer.TabIndex = 70;
-            this.telefonoChofer.Text = "telefono";
+            this.label3.Text = "Telefono :";
             // 
             // localidadChofer
             // 
@@ -197,14 +189,15 @@
             this.volver.Text = "Volver";
             this.volver.UseVisualStyleBackColor = true;
             // 
-            // crear
+            // guardar
             // 
-            this.crear.Location = new System.Drawing.Point(191, 391);
-            this.crear.Name = "crear";
-            this.crear.Size = new System.Drawing.Size(100, 32);
-            this.crear.TabIndex = 77;
-            this.crear.Text = "Guardar chofer";
-            this.crear.UseVisualStyleBackColor = true;
+            this.guardar.Location = new System.Drawing.Point(191, 378);
+            this.guardar.Name = "guardar";
+            this.guardar.Size = new System.Drawing.Size(100, 32);
+            this.guardar.TabIndex = 77;
+            this.guardar.Text = "Guardar chofer";
+            this.guardar.UseVisualStyleBackColor = true;
+            this.guardar.Click += new System.EventHandler(this.crear_Click);
             // 
             // deptoChofer
             // 
@@ -263,7 +256,7 @@
             // 
             // limpiar
             // 
-            this.limpiar.Location = new System.Drawing.Point(191, 350);
+            this.limpiar.Location = new System.Drawing.Point(191, 416);
             this.limpiar.Name = "limpiar";
             this.limpiar.Size = new System.Drawing.Size(100, 32);
             this.limpiar.TabIndex = 85;
@@ -271,11 +264,31 @@
             this.limpiar.UseVisualStyleBackColor = true;
             this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
+            // habilitado
+            // 
+            this.habilitado.AutoSize = true;
+            this.habilitado.Location = new System.Drawing.Point(191, 353);
+            this.habilitado.Name = "habilitado";
+            this.habilitado.Size = new System.Drawing.Size(73, 17);
+            this.habilitado.TabIndex = 86;
+            this.habilitado.Text = "Habilitado";
+            this.habilitado.UseVisualStyleBackColor = true;
+            // 
+            // telefonoChofer
+            // 
+            this.telefonoChofer.Enabled = false;
+            this.telefonoChofer.Location = new System.Drawing.Point(36, 87);
+            this.telefonoChofer.Name = "telefonoChofer";
+            this.telefonoChofer.Size = new System.Drawing.Size(100, 20);
+            this.telefonoChofer.TabIndex = 87;
+            // 
             // Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(414, 470);
+            this.Controls.Add(this.telefonoChofer);
+            this.Controls.Add(this.habilitado);
             this.Controls.Add(this.limpiar);
             this.Controls.Add(this.fechaNacChofer);
             this.Controls.Add(this.localidadChofer);
@@ -283,14 +296,13 @@
             this.Controls.Add(this.usernameChofer);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.crear);
+            this.Controls.Add(this.guardar);
             this.Controls.Add(this.deptoChofer);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.nroPisoChofer);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.direccionChofer);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.telefonoChofer);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.mailChofer);
@@ -323,13 +335,12 @@
         private System.Windows.Forms.TextBox nombreChofer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label telefonoChofer;
         private System.Windows.Forms.TextBox localidadChofer;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.TextBox usernameChofer;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.Button crear;
+        private System.Windows.Forms.Button guardar;
         private System.Windows.Forms.TextBox deptoChofer;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TextBox nroPisoChofer;
@@ -338,5 +349,7 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker fechaNacChofer;
         private System.Windows.Forms.Button limpiar;
+        private System.Windows.Forms.CheckBox habilitado;
+        private System.Windows.Forms.TextBox telefonoChofer;
     }
 }

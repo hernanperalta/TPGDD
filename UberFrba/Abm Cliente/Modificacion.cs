@@ -24,7 +24,6 @@ namespace UberFrba.Abm_Cliente
             this.rol = rol;
             this.cliente = cliente;
             this.setCampos();
-            this.telefonoCliente.Text = this.cliente.telefono;
         }
 
         private void guardarCliente_Click(object sender, EventArgs e)
@@ -73,7 +72,7 @@ namespace UberFrba.Abm_Cliente
         private void validarCampos()
         {
             this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
-            this.validarCampo("Localidad", this.localidad.Text, 20, "^[a-zA-Z0-9- ]+$");
+            this.validarCampo("Localidad", this.localidadCliente.Text, 20, "^[a-zA-Z0-9- ]+$");
             this.validarCampo("Departamento", this.deptoCliente.Text, 3, "^[a-zA-Z0-9]+$");
             this.validarCampo("Direccion y calle", this.direccionCliente.Text, 255, "^[a-zA-Z0-9- ]+$");
             this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z-áéíóúÁÉÍÓÚ ]+$");
@@ -119,7 +118,7 @@ namespace UberFrba.Abm_Cliente
             }
         }
 
-        private void setCampos()
+        private void setCampos() 
         {
             this.nombreCliente.Text = this.cliente.nombre;
             this.apellidoCliente.Text = this.cliente.apellido;
@@ -129,13 +128,13 @@ namespace UberFrba.Abm_Cliente
             this.nroPiso.Text = this.cliente.nroPiso;
             this.deptoCliente.Text = this.cliente.departamento;
             this.codPostal.Text = this.cliente.codigoPostal;
-            this.localidad.Text = this.cliente.localidad;
+            this.localidadCliente.Text = this.cliente.localidad;
             this.usernameCliente.Text = this.cliente.username;
-            this.telefonoCliente.Text = this.cliente.telefono;
+            this.telefono.Text = this.cliente.telefono;
             string mes = this.cliente.fechaNac.Substring(0, 2);
             string dia = this.cliente.fechaNac.Substring(3, 2);
             string anio = this.cliente.fechaNac.Substring(6, 4);
-            this.fechaNacCli.Value = new DateTime(Convert.ToInt32(anio), Convert.ToInt32(mes), Convert.ToInt32(dia));
+            this.fechaNacCli.Value = new DateTime( Convert.ToInt32(anio), Convert.ToInt32(mes), Convert.ToInt32(dia) );
         }
 
         private void actualizarCliente()
@@ -145,27 +144,61 @@ namespace UberFrba.Abm_Cliente
                                           + "apellido = ' " + this.apellidoCliente.Text + "', "
                                           + "dni = ' " + this.dniCliente.Text + "', "
                                           + "mail = ' " + this.mailCliente.Text + "', "
-                                          + "localidad = ' " + this.localidad.Text + "', "
+                                          + "localidad = ' " + this.localidadCliente.Text + "', "
                                           + "direccion = ' " + this.direccionCliente.Text + "', "
                                           + "depto = ' " + this.deptoCliente.Text + "', "
                                           + "nro_piso = ' " + this.nroPiso.Text + "', "
                                           + "username = ' " + this.usernameCliente.Text + "', "
                                           + "codigo_postal = ' " + this.codPostal.Text + "'mama "
-                //           + "fecha_de_nacimiento = ' " + this.fechaNacCli.Text + "' "
+                               //           + "fecha_de_nacimiento = ' " + this.fechaNacCli.Text + "' "
                                       + "WHERE telefono = '" + cliente.telefono + "' ");
         }
 
         private void fechaNacCli_TextChanged(object sender, EventArgs e)
         {
-
+        }
+        private void label9_Click(object sender, EventArgs e)
+        {
         }
 
-        private void telefonoCliente_Click(object sender, EventArgs e)
+        private void label12_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+        }
+
+        private void apellidoCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void dniCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void Modificacion_Load(object sender, EventArgs e)
+        {
+        }
+
+        private void direccionCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void deptoCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void nombreCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void usernameCliente_TextChanged(object sender, EventArgs e)
         {
 
         }
 
-        private void guardarCliente_Click_1(object sender, EventArgs e)
+        private void fechaNacCli_ValueChanged(object sender, EventArgs e)
         {
 
         }

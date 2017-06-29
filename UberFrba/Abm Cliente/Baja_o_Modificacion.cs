@@ -28,30 +28,13 @@ namespace UberFrba.Abm_Cliente
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.setNombrePanel();
             this.noClientesLabel.Text = "";
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void volver_Click(object sender, EventArgs e)
-        {
-            Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
-            this.Close();
-        }
+        } 
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
         {
             if (this.clientesGrid.RowCount == 0)
             {
-                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
+                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar'");
                 return;
             }
             if (this.clientesGrid.SelectedRows.Count > 1)
@@ -75,51 +58,16 @@ namespace UberFrba.Abm_Cliente
                     this.deshabilitarCliente();
                     return;
                 }
-
+                
                 Form modificar = new Modificacion(this.username, this.rol, cliente);
                 modificar.Show();
             }
-            catch (ArgumentOutOfRangeException)
+            catch (ArgumentOutOfRangeException) 
             {
                 MessageBox.Show("Para elegir a un cliente debe oprimir la flecha que se encuentra a la izquierda de la fila");
                 return;
             }
 
-        }
-
-        private void Baja_o_Modificacion_Load(object sender, EventArgs e)
-        {
-
-        }
-        private void validarCampos()
-        {
-            this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
-            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z- ]+$");
-            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z- ]+$");
-        }
-
-        private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
-        {
-            this.validarExpresion(expresion, campo, campoError);
-            this.validarCantDigitos(cantLetras, campo, campoError);
-        }
-
-        private void validarExpresion(string expresion, string campo, string campoError)
-        {
-            if (campo == "")
-                return;
-            else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
-            {
-                errores += "El campo " + campoError + " posee caracteres invalidos\n";
-            }
-        }
-
-        private void validarCantDigitos(int cantLetras, string campo, string campoError)
-        {
-            if (campo.Length > cantLetras)
-            {
-                errores += "El campo " + campoError + " no puede exceder los " + cantLetras + " digitos\n";
-            }
         }
 
         private void limpiarCampos_Click(object sender, EventArgs e)
@@ -134,35 +82,32 @@ namespace UberFrba.Abm_Cliente
             }
         }
 
-        private void buscarTodosBTN_Click(object sender, EventArgs e)
+        private void buscarCliente_Click(object sender, EventArgs e)
         {
-            this.buscarTodos("", "", "");
+            this.buscarTodos("","","");
         }
 
-        private void noClientesLabel_Click(object sender, EventArgs e)
+        private void volver_Click(object sender, EventArgs e)
         {
-
+            Form menu = new Menu.Menu(this.username, this.rol);
+            menu.Show();
+            this.Close();
         }
 
-        private void clientesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
-        }
-
-        private void rehabilitar_Click_1(object sender, EventArgs e)
+        private void rehabilitar_Click(object sender, EventArgs e)
         {
             if (this.clientesGrid.RowCount == 0)
             {
                 MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
                 return;
             }
-            if (this.clientesGrid.SelectedRows.Count > 1)
-            {
-                MessageBox.Show("Debe seleccionar de a un cliente");
-                return;
-            }
             this.habilitarCliente();
         }
+
+
+
+
+
 
         private void deshabilitarCliente()
         {
@@ -203,11 +148,42 @@ namespace UberFrba.Abm_Cliente
             }
 
         }
+
+        private void validarCampos()
+        {
+            this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
+            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z- ]+$");
+            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z- ]+$");
+        }
+
+        private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
+        {
+            this.validarExpresion(expresion, campo, campoError);
+            this.validarCantDigitos(cantLetras, campo, campoError);
+        }
+
+        private void validarExpresion(string expresion, string campo, string campoError)
+        {
+            if (campo == "")
+                return;
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
+            {
+                errores += "El campo " + campoError + " posee caracteres invalidos\n";
+            }
+        }
+
+        private void validarCantDigitos(int cantLetras, string campo, string campoError)
+        {
+            if (campo.Length > cantLetras)
+            {
+                errores += "El campo " + campoError + " no puede exceder los " + cantLetras + " digitos\n";
+            }
+        }
         private void setCliente()
         {
             int i = this.clientesGrid.SelectedRows[0].Index;
             DataRow row = clientes.Rows[i];
-
+         
             cliente.nombre = row["Nombre"].ToString();
             cliente.apellido = row["Apellido"].ToString();
             cliente.dni = row["DNI"].ToString();
@@ -222,6 +198,7 @@ namespace UberFrba.Abm_Cliente
             cliente.username = row["USERNAME"].ToString();
             cliente.habilitado = Convert.ToBoolean(row["Habilitado"].ToString());
         }
+
         private void listarClientes(string nombre, string apellido, string dni)
         {
             clientes.Clear();
@@ -234,14 +211,14 @@ namespace UberFrba.Abm_Cliente
                                                      + "DNI LIKE '%" + dni + "%'"));
 
                 this.noClientesLabel.Text = "";
-            }
-            catch (SinRegistrosException)
+            } catch (SinRegistrosException)
             {
 
                 this.noClientesLabel.Text = "No se encontraron clientes";
                 return;
             }
         }
+
         private void setNombrePanel()
         {
             if (puedeDarDeBaja)
@@ -255,6 +232,7 @@ namespace UberFrba.Abm_Cliente
                 this.bajaOModificacion.Text = "Modificar";
             }
         }
+
         private void buscarTodos(string nombre, string apellido, string dni)
         {
             this.validarCampos();
@@ -267,6 +245,13 @@ namespace UberFrba.Abm_Cliente
             this.listarClientes(nombre, apellido, dni);
 
             this.clientesGrid.DataSource = clientes;
+        }
+
+        private void Baja_o_Modificacion_Load(object sender, EventArgs e)
+        {
+        }
+        private void clientesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
         }
 
         private void nombreCliente_TextChanged(object sender, EventArgs e)
@@ -282,6 +267,16 @@ namespace UberFrba.Abm_Cliente
         private void dniCliente_TextChanged(object sender, EventArgs e)
         {
             this.buscarTodos(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void noClientesLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

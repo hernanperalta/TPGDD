@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 namespace UberFrba.Abm_Chofer
 {
@@ -18,6 +19,7 @@ namespace UberFrba.Abm_Chofer
         private string rol;
         private bool puedeDarDeBaja;
         private string errores = "";
+        private DataTable choferes = new DataTable();
 
         public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
         {
@@ -25,6 +27,7 @@ namespace UberFrba.Abm_Chofer
             this.usernameActual = username;
             this.rol = rol;
             this.puedeDarDeBaja = puedeDarDeBaja;
+            this.noChoferesLabel.Text = "";
             if (puedeDarDeBaja)
             {
                 this.Text = "Baja Chofer";
@@ -49,42 +52,88 @@ namespace UberFrba.Abm_Chofer
         }
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
-        {            
-            /*foreach (DataGridViewRow row in this.choferesGrid.SelectedRows)
+        {
+            if (this.choferesGrid.RowCount == 0)
             {
-                string chofer = "";
-                for (int i = 0; i < 9; i++)
-                    chofer += row.Cells[i].Value.ToString() + "\n";
-
-                MessageBox.Show(chofer);
-            }*/
-            if (puedeDarDeBaja)
-            {
-                //baja
+                MessageBox.Show("Para llenar la lista de choferes disponibles haga click en el boton 'Buscar'");
+                return;
             }
-            else
+            if (this.choferesGrid.SelectedRows.Count > 1 && !puedeDarDeBaja)
             {
-                if (this.choferesGrid.SelectedRows.Count > 1)
-                {
-                    MessageBox.Show("Sólo puede modificar de a un cliente a la vez");
-                    return;
-                }
+                MessageBox.Show("Sólo puede modificar de a un chofer a la vez");
+                return;
+            }
+            if (this.choferesGrid.SelectedRows.Count <= 0)
+            {
+                MessageBox.Show("Primero debe seleccionar un chofer, tocando el la flecha a la izquierda de la fila");
+                return;
+            }
 
-                DataGridViewRow fila = this.choferesGrid.SelectedRows[0];
+            if (this.puedeDarDeBaja)
+            {
+                this.deshabilitarChoferes();
+                this.buscarChoferes();
+                return;
+            }
 
-                Domicilio domicilio = new Domicilio(fila.Cells[3].Value.ToString(), fila.Cells[4].Value.ToString(), fila.Cells[5].Value.ToString(), fila.Cells[6].Value.ToString());
-
-                Chofer choferSeleccionado = new Chofer(fila.Cells[0].Value as string, fila.Cells[1].Value as string, Int32.Parse(fila.Cells[2].Value.ToString()), domicilio, Int32.Parse(fila.Cells[7].Value.ToString()), fila.Cells[8].Value as string, (DateTime)fila.Cells[9].Value);
-                //Chofer choferSeleccionado = new Chofer(fila.Cells[0].Value as string, fila.Cells[1].Value as string, (int)fila.Cells[2].Value, domicilio, (int)fila.Cells[7].Value, fila.Cells[8].Value as string, (DateTime)fila.Cells[9].Value);
+            DataGridViewRow fila = this.choferesGrid.SelectedRows[0];
                 
-                //aca crear el objeto con los datos que selecciono del chofer y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
-                Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
-                modificar.Show();
-            }
+            Domicilio domicilio = new Domicilio(fila.Cells[3].Value.ToString(),
+                                                fila.Cells[4].Value.ToString(),
+                                                fila.Cells[5].Value.ToString(),
+                                                fila.Cells[6].Value.ToString());
+
+            Persona datos = new Persona(fila.Cells[0].Value.ToString(),
+                                        fila.Cells[1].Value.ToString(),
+                                        fila.Cells[2].Value.ToString(),
+                                        fila.Cells[8].Value.ToString(),
+                                        (DateTime)fila.Cells[9].Value);
+
+            Chofer choferSeleccionado = new Chofer(datos, domicilio,
+                                                    fila.Cells[7].Value.ToString(),
+                                                    fila.Cells[10].Value.ToString(),
+                                                    (bool)fila.Cells[11].Value);
+
+                
+
+            Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
+            modificar.Show();
+            
         }
 
-        private void buscar_Click(object sender, EventArgs e)
+        private void deshabilitarChoferes()
         {
+            string chofsDeshabilitados = "";
+
+            foreach(DataGridViewRow fila in this.choferesGrid.SelectedRows)
+            {
+                if ((bool)fila.Cells[11].Value)
+                {
+                    this.deshabilitarChofer(fila.Cells[7].Value.ToString());
+                    chofsDeshabilitados += fila.Cells[0].Value.ToString() + " " + fila.Cells[1].Value.ToString() + "\n";
+                }
+            }
+
+            if (chofsDeshabilitados.Equals(""))
+                MessageBox.Show("Todos los choferes seleccionados se encuentran habilitados");
+            else
+            { 
+                MessageBox.Show("Se deshabilitaron los siguientes choferes: \n" + chofsDeshabilitados);
+            }
+
+        }
+
+        private void deshabilitarChofer(string telefono)
+        {
+            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Chofer "
+                                        +"SET habilitado = 0 "
+                                     +"WHERE telefono = " + telefono);
+        }
+
+        private void buscarChoferes()
+        {
+            this.choferes.Clear();
+            this.noChoferesLabel.Text = "";
             this.validarTodosLosCamposNoVacios();
 
             if (!this.errores.Equals(""))
@@ -93,15 +142,27 @@ namespace UberFrba.Abm_Chofer
                 this.errores = "";
                 return;
             }
-
+           
             string query = this.agregarFiltros("SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
-                + "mail, fecha_de_nacimiento "
+                + "mail, fecha_de_nacimiento, username, habilitado "
                 + "FROM LOS_CHATADROIDES.Chofer");
 
-            DataTable choferes = new DataTable();
-            choferes.Load(DBConexion.ResolverQuery(query));
-            this.choferesGrid.DataSource = choferes;
-                      
+            try
+            {
+                SqlDataReader reader = DBConexion.ResolverQuery(query);
+                this.choferes.Load(reader);
+                this.choferesGrid.DataSource = choferes;
+            }
+            catch (SinRegistrosException)
+            {
+                this.noChoferesLabel.Text = "No se encontraron choferes";
+                this.choferes.Clear();
+            }
+        }
+
+        private void buscar_Click(object sender, EventArgs e)
+        {
+            this.buscarChoferes();   
         }
 
         private void validarTodosLosCamposNoVacios()
@@ -144,14 +205,14 @@ namespace UberFrba.Abm_Chofer
             int cantFiltrosPuestos = 0;
 
 
-            this.agregarCampoAQuery(ref ret, this.nombreChofer, "nombre", "'", ref cantFiltrosPuestos);
-            this.agregarCampoAQuery(ref ret, this.apellidoChofer, "apellido", "'", ref cantFiltrosPuestos);
-            this.agregarCampoAQuery(ref ret, this.dniChofer, "dni", "", ref cantFiltrosPuestos);
+            this.agregarCampoAQuery(ref ret, this.nombreChofer, "nombre", ref cantFiltrosPuestos);
+            this.agregarCampoAQuery(ref ret, this.apellidoChofer, "apellido", ref cantFiltrosPuestos);
+            this.agregarCampoAQuery(ref ret, this.dniChofer, "dni", ref cantFiltrosPuestos);
 
             return ret;
         }
 
-        private void agregarCampoAQuery(ref string query, Control campo, string nombreDeCampo, string wrap, ref int cantFiltrosPuestos)
+        private void agregarCampoAQuery(ref string query, Control campo, string nombreDeCampo, ref int cantFiltrosPuestos)
         {
             if (!this.campoVacio(campo))
             {
@@ -161,7 +222,7 @@ namespace UberFrba.Abm_Chofer
                     query += " where";
                 else prefijo = " and";
 
-                query += prefijo + " " + nombreDeCampo + " = " + wrap + campo.Text + wrap;
+                query += prefijo + " " + nombreDeCampo + " LIKE '%" + campo.Text + "%'";
                 cantFiltrosPuestos++;
             }
         }
@@ -174,6 +235,21 @@ namespace UberFrba.Abm_Chofer
         private bool estaVacio(string texto)
         {
             return texto.Equals("") || texto.Replace(" ", "").Equals("");
+        }
+
+        private void nombreChofer_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarChoferes();
+        }
+
+        private void apellidoChofer_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarChoferes();
+        }
+
+        private void dniChofer_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarChoferes();
         }
 
     }

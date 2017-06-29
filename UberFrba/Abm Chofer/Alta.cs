@@ -41,11 +41,6 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                 errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
             }
         }
-        /*
-        private bool estructuraSegun(string regex, string texto)
-        {
-            return Regex.IsMatch(texto, regex);
-        }*/
 
         private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
         {
@@ -93,10 +88,6 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
             if( !this.campoVacio(this.mailChofer) )
                 this.validarMail();
 
-            /* Si el username es opcional:
-             * if (!this.campoVacio(this.usernameChofer))
-                this.validarUsername();*/
-
         }
 
         private void validarFecha()
@@ -112,11 +103,13 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private bool hayCamposObligatoriosVacios() 
         {
-            return this.campoVacio(this.telefonoChofer) || this.campoVacio(this.apellidoChofer)
-                || this.campoVacio(this.nombreChofer) || this.campoVacio(this.fechaNacChofer)
-                || this.campoVacio(this.dniChofer) || this.campoVacio(this.direccionChofer)
-                || this.campoVacio(this.deptoChofer) || this.campoVacio(this.nroPisoChofer)
-                || this.campoVacio(this.usernameChofer) || this.campoVacio(this.localidadChofer);
+            foreach (Control control in this.Controls)
+                if (control is TextBox || control is DateTimePicker)
+                    if (control != this.mailChofer)
+                        if (this.campoVacio(control))
+                            return true;
+
+            return false;
         }
 
         private bool estaVacio(string texto)
@@ -143,7 +136,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
             
             try
             {
-                DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Dar_de_alta_chofer '" 
+                DBConexion.ResolverNonQuery("INSERT INTO LOS_CHATADROIDES.Chofer (localidad, direccion, nro_piso, depto, telefono, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES ('" 
                                            + this.localidadChofer.Text + "', '"
                                            + this.direccionChofer.Text + "', "
                                            + this.nroPisoChofer.Text + ", '"
@@ -154,7 +147,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                                            + this.dniChofer.Text + ", '"
                                            + this.fechaNacChofer.Value + "', "
                                            + (this.estaVacio(this.mailChofer.Text) ? "NULL" : "'" + this.mailChofer.Text + "'") + ", '"
-                                           + this.usernameChofer.Text + "'"
+                                           + this.usernameChofer.Text + "')"
                                            );
                 
                 MessageBox.Show("El chofer se creó con éxito!");
@@ -166,7 +159,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
                     if (ex.Message.Contains(this.entreParentesis(this.usernameChofer.Text)) )
                         MessageBox.Show("Ya existe un chofer con el usuario " + this.usernameChofer.Text);
-
+                    MessageBox.Show(ex.Message);
                 if( ex.Number == 547 )
                     MessageBox.Show("No existe un usuario de nombre " + this.usernameChofer.Text);
             }
@@ -205,7 +198,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         {
             foreach (Control ctrl in this.Controls)
                 if (ctrl is TextBox)
-                    ((TextBox)ctrl).Clear();
+                    (ctrl as TextBox).Clear();
         }
 
     }

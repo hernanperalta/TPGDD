@@ -97,9 +97,9 @@
             this.label9.AutoSize = true;
             this.label9.Location = new System.Drawing.Point(26, 26);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(177, 13);
+            this.label9.Size = new System.Drawing.Size(176, 13);
             this.label9.TabIndex = 39;
-            this.label9.Text = "Ingrese los datos del nuevo cliente :";
+            this.label9.Text = "Ingrese los datos del nuevo chofer :";
             // 
             // nroPisoChofer
             // 

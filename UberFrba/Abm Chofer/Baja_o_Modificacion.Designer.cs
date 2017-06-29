@@ -39,6 +39,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.volver = new System.Windows.Forms.Button();
+            this.noChoferesLabel = new System.Windows.Forms.Label();
             this.choferesGrid = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.choferesGrid)).BeginInit();
             this.SuspendLayout();
@@ -78,6 +79,7 @@
             this.dniChofer.Name = "dniChofer";
             this.dniChofer.Size = new System.Drawing.Size(100, 20);
             this.dniChofer.TabIndex = 44;
+            this.dniChofer.TextChanged += new System.EventHandler(this.dniChofer_TextChanged);
             // 
             // label3
             // 
@@ -94,6 +96,7 @@
             this.apellidoChofer.Name = "apellidoChofer";
             this.apellidoChofer.Size = new System.Drawing.Size(100, 20);
             this.apellidoChofer.TabIndex = 42;
+            this.apellidoChofer.TextChanged += new System.EventHandler(this.apellidoChofer_TextChanged);
             // 
             // label2
             // 
@@ -110,6 +113,7 @@
             this.nombreChofer.Name = "nombreChofer";
             this.nombreChofer.Size = new System.Drawing.Size(100, 20);
             this.nombreChofer.TabIndex = 40;
+            this.nombreChofer.TextChanged += new System.EventHandler(this.nombreChofer_TextChanged);
             // 
             // label1
             // 
@@ -139,20 +143,35 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
+            // noChoferesLabel
+            // 
+            this.noChoferesLabel.AutoSize = true;
+            this.noChoferesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.noChoferesLabel.Location = new System.Drawing.Point(234, 156);
+            this.noChoferesLabel.Name = "noChoferesLabel";
+            this.noChoferesLabel.Size = new System.Drawing.Size(206, 20);
+            this.noChoferesLabel.TabIndex = 55;
+            this.noChoferesLabel.Text = "No se encontraron choferes";
+            // 
             // choferesGrid
             // 
+            this.choferesGrid.AllowUserToAddRows = false;
+            this.choferesGrid.AllowUserToOrderColumns = true;
+            this.choferesGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.choferesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.choferesGrid.Location = new System.Drawing.Point(67, 197);
+            this.choferesGrid.Location = new System.Drawing.Point(67, 189);
             this.choferesGrid.Name = "choferesGrid";
-            this.choferesGrid.Size = new System.Drawing.Size(550, 150);
-            this.choferesGrid.TabIndex = 54;
+            this.choferesGrid.ReadOnly = true;
+            this.choferesGrid.Size = new System.Drawing.Size(550, 171);
+            this.choferesGrid.TabIndex = 56;
             // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(713, 418);
+            this.ClientSize = new System.Drawing.Size(693, 418);
             this.Controls.Add(this.choferesGrid);
+            this.Controls.Add(this.noChoferesLabel);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.buscar);
@@ -186,6 +205,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.Label noChoferesLabel;
         private System.Windows.Forms.DataGridView choferesGrid;
     }
 }

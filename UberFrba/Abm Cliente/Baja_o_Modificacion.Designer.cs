@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.nombreCliente = new System.Windows.Forms.TextBox();
             this.apellidoCliente = new System.Windows.Forms.TextBox();
@@ -36,19 +37,21 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.bajaOModificacion = new System.Windows.Forms.Button();
-            this.buscarTodosBTN = new System.Windows.Forms.Button();
+            this.BuscarCliente = new System.Windows.Forms.Button();
             this.limpiarCampos = new System.Windows.Forms.Button();
             this.clientesGrid = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
+            this.rhabilitar = new System.Windows.Forms.Button();
             this.noClientesLabel = new System.Windows.Forms.Label();
-            this.rehabilitar = new System.Windows.Forms.Button();
+            this.clienteBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(154, 49);
+            this.label1.Location = new System.Drawing.Point(257, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 0;
@@ -56,7 +59,7 @@
             // 
             // nombreCliente
             // 
-            this.nombreCliente.Location = new System.Drawing.Point(157, 71);
+            this.nombreCliente.Location = new System.Drawing.Point(260, 73);
             this.nombreCliente.Name = "nombreCliente";
             this.nombreCliente.Size = new System.Drawing.Size(100, 20);
             this.nombreCliente.TabIndex = 1;
@@ -64,7 +67,7 @@
             // 
             // apellidoCliente
             // 
-            this.apellidoCliente.Location = new System.Drawing.Point(300, 71);
+            this.apellidoCliente.Location = new System.Drawing.Point(403, 73);
             this.apellidoCliente.Name = "apellidoCliente";
             this.apellidoCliente.Size = new System.Drawing.Size(100, 20);
             this.apellidoCliente.TabIndex = 9;
@@ -73,7 +76,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(297, 49);
+            this.label2.Location = new System.Drawing.Point(400, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 8;
@@ -81,7 +84,7 @@
             // 
             // dniCliente
             // 
-            this.dniCliente.Location = new System.Drawing.Point(448, 71);
+            this.dniCliente.Location = new System.Drawing.Point(551, 73);
             this.dniCliente.Name = "dniCliente";
             this.dniCliente.Size = new System.Drawing.Size(100, 20);
             this.dniCliente.TabIndex = 11;
@@ -90,7 +93,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(445, 49);
+            this.label3.Location = new System.Drawing.Point(548, 51);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 10;
@@ -99,15 +102,16 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(249, 11);
+            this.label4.Location = new System.Drawing.Point(352, 13);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(216, 13);
             this.label4.TabIndex = 12;
             this.label4.Text = "Ingrese los campos por los que quiera filtrar :";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(478, 352);
+            this.bajaOModificacion.Location = new System.Drawing.Point(612, 354);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(117, 23);
             this.bajaOModificacion.TabIndex = 14;
@@ -115,19 +119,19 @@
             this.bajaOModificacion.UseVisualStyleBackColor = true;
             this.bajaOModificacion.Click += new System.EventHandler(this.bajaOModificacion_Click);
             // 
-            // buscarTodosBTN
+            // BuscarCliente
             // 
-            this.buscarTodosBTN.Location = new System.Drawing.Point(530, 131);
-            this.buscarTodosBTN.Name = "buscarTodosBTN";
-            this.buscarTodosBTN.Size = new System.Drawing.Size(101, 25);
-            this.buscarTodosBTN.TabIndex = 38;
-            this.buscarTodosBTN.Text = "Buscar todos";
-            this.buscarTodosBTN.UseVisualStyleBackColor = true;
-            this.buscarTodosBTN.Click += new System.EventHandler(this.buscarTodosBTN_Click);
+            this.BuscarCliente.Location = new System.Drawing.Point(633, 113);
+            this.BuscarCliente.Name = "BuscarCliente";
+            this.BuscarCliente.Size = new System.Drawing.Size(101, 25);
+            this.BuscarCliente.TabIndex = 38;
+            this.BuscarCliente.Text = "Buscar todos";
+            this.BuscarCliente.UseVisualStyleBackColor = true;
+            this.BuscarCliente.Click += new System.EventHandler(this.buscarCliente_Click);
             // 
             // limpiarCampos
             // 
-            this.limpiarCampos.Location = new System.Drawing.Point(81, 131);
+            this.limpiarCampos.Location = new System.Drawing.Point(182, 113);
             this.limpiarCampos.Name = "limpiarCampos";
             this.limpiarCampos.Size = new System.Drawing.Size(101, 25);
             this.limpiarCampos.TabIndex = 37;
@@ -141,16 +145,16 @@
             this.clientesGrid.AllowUserToOrderColumns = true;
             this.clientesGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.clientesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.clientesGrid.Location = new System.Drawing.Point(29, 176);
+            this.clientesGrid.Location = new System.Drawing.Point(24, 156);
             this.clientesGrid.Name = "clientesGrid";
             this.clientesGrid.ReadOnly = true;
-            this.clientesGrid.Size = new System.Drawing.Size(671, 149);
+            this.clientesGrid.Size = new System.Drawing.Size(878, 171);
             this.clientesGrid.TabIndex = 39;
             this.clientesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.clientesGrid_CellContentClick);
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(141, 352);
+            this.volver.Location = new System.Drawing.Point(260, 354);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 41;
@@ -158,37 +162,41 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
+            // rhabilitar
+            // 
+            this.rhabilitar.Location = new System.Drawing.Point(422, 354);
+            this.rhabilitar.Name = "rhabilitar";
+            this.rhabilitar.Size = new System.Drawing.Size(117, 23);
+            this.rhabilitar.TabIndex = 42;
+            this.rhabilitar.Text = "Rehabilitar";
+            this.rhabilitar.UseVisualStyleBackColor = true;
+            this.rhabilitar.Click += new System.EventHandler(this.rehabilitar_Click);
+            // 
             // noClientesLabel
             // 
             this.noClientesLabel.AutoSize = true;
             this.noClientesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.noClientesLabel.Location = new System.Drawing.Point(248, 153);
+            this.noClientesLabel.Location = new System.Drawing.Point(352, 125);
             this.noClientesLabel.Name = "noClientesLabel";
             this.noClientesLabel.Size = new System.Drawing.Size(198, 20);
-            this.noClientesLabel.TabIndex = 42;
+            this.noClientesLabel.TabIndex = 43;
             this.noClientesLabel.Text = "No se encontraron clientes";
             this.noClientesLabel.Click += new System.EventHandler(this.noClientesLabel_Click);
             // 
+            // clienteBindingSource
+            // 
+            this.clienteBindingSource.DataSource = typeof(UberFrba.Abm_Cliente.Cliente);
+            // 
             // rehabilitar
-            // 
-            this.rehabilitar.Location = new System.Drawing.Point(300, 352);
-            this.rehabilitar.Name = "rehabilitar";
-            this.rehabilitar.Size = new System.Drawing.Size(117, 23);
-            this.rehabilitar.TabIndex = 43;
-            this.rehabilitar.Text = "Rehabilitar";
-            this.rehabilitar.UseVisualStyleBackColor = true;
-            this.rehabilitar.Click += new System.EventHandler(this.rehabilitar_Click_1);
-            // 
-            // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(739, 396);
-            this.Controls.Add(this.rehabilitar);
+            this.ClientSize = new System.Drawing.Size(935, 396);
             this.Controls.Add(this.noClientesLabel);
+            this.Controls.Add(this.rhabilitar);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.clientesGrid);
-            this.Controls.Add(this.buscarTodosBTN);
+            this.Controls.Add(this.BuscarCliente);
             this.Controls.Add(this.limpiarCampos);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.label4);
@@ -198,10 +206,10 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nombreCliente);
             this.Controls.Add(this.label1);
-            this.Name = "Baja_o_Modificacion";
-            this.Text = "Selección de Cliente";
+            this.Name = "rehabilitar";
             this.Load += new System.EventHandler(this.Baja_o_Modificacion_Load);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -217,11 +225,12 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button bajaOModificacion;
-        private System.Windows.Forms.Button buscarTodosBTN;
+        private System.Windows.Forms.Button BuscarCliente;
         private System.Windows.Forms.Button limpiarCampos;
         private System.Windows.Forms.DataGridView clientesGrid;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.BindingSource clienteBindingSource;
+        private System.Windows.Forms.Button rhabilitar;
         private System.Windows.Forms.Label noClientesLabel;
-        private System.Windows.Forms.Button rehabilitar;
     }
 }

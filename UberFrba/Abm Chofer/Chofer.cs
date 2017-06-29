@@ -8,24 +8,23 @@ namespace UberFrba.Abm_Chofer
 {
     public partial class Chofer
     {
-        public string nombre;
-        public string apellido;
-        public int dni;
+        public Persona datos;
         public Domicilio domicilio;
-        public int telefono;
-        public string mail;
-        public DateTime fechaNac;
-        
-        public Chofer(string nombre, string apellido, int dni, Domicilio domicilio, int telefono, string mail, DateTime fechaNac) 
+        public string telefono;
+        public string username;
+        public bool habilitado;
+
+        //public Chofer(string nombre, string apellido, int dni, Domicilio domicilio, int telefono, string mail, DateTime fechaNac, string username, bool habilitado) 
+        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado) 
         {
-            this.nombre = nombre;
-            this.apellido = apellido;
-            this.dni = dni;
+            this.datos = datos;
             this.domicilio = domicilio;
             this.telefono = telefono;
-            this.mail = mail;
-            this.fechaNac = fechaNac;
+            this.username = username;
+            this.habilitado = habilitado;
         }
-        
+        public Chofer()
+        { }
+
     }
 }
