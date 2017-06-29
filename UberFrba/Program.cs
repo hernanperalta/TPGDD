@@ -26,9 +26,9 @@ namespace UberFrba
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
        
-            //new Listado_Estadistico.Listado_Estadistico("", "").Show();
+            new Listado_Estadistico.Listado_Estadistico("admin", "Administrador").Show();
 
-            new Abm_Cliente.Alta("admin", "Administrador").Show();
+            //new Abm_Cliente.Alta("admin", "Administrador").Show();
 
             Application.Run();
 

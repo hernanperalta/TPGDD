@@ -155,6 +155,7 @@
             this.nroPiso.Name = "nroPiso";
             this.nroPiso.Size = new System.Drawing.Size(100, 20);
             this.nroPiso.TabIndex = 89;
+            this.nroPiso.TextChanged += new System.EventHandler(this.nroPiso_TextChanged);
             // 
             // label5
             // 

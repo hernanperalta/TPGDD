@@ -202,5 +202,10 @@ namespace UberFrba.Abm_Cliente
         {
 
         }
+
+        private void nroPiso_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

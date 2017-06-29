@@ -99,12 +99,6 @@
       <DependentUpon>Baja_o_Modificacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Cliente\Cliente.cs" />
-    <Compile Include="Abm Cliente\Form1.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Abm Cliente\Form1.Designer.cs">
-      <DependentUpon>Form1.cs</DependentUpon>
-    </Compile>
     <Compile Include="Abm Cliente\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
