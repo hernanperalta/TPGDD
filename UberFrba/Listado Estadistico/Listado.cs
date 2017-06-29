@@ -32,7 +32,7 @@ namespace UberFrba.Listado_Estadistico
         {
 
             DataTable listado = new DataTable();
-            listado.Load(DBConexion.ResolverConsulta(this.query.Replace("anioSeleccionado", anio)
+            listado.Load(DBConexion.ResolverQuery(this.query.Replace("anioSeleccionado", anio)
                                                                .Replace("trimestreSeleccionado", trimestre)));
 
             return listado;

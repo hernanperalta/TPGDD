@@ -24,75 +24,11 @@ namespace UberFrba.Abm_Cliente
             this.rol = rol;
         }
 
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label11_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void volver_Click(object sender, EventArgs e)
         {
             Form menu = new Menu.Menu(this.username, this.rol);
             menu.Show();
             this.Close();
-        }
-
-        private void Alta_o_Modificacion_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void telefonoCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void nombreCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void apellidoCliente_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void dptoYlocalidad_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void nroPiso_TextChanged(object sender, EventArgs e)
-        {
-        }
-
-        private void calleYaltura_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void codPostal_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void mailCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void fechaNacCli_TextChanged(object sender, EventArgs e)
-        {
-          
-        }
-
-        private void dniCliente_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void crearCliente_Click(object sender, EventArgs e)
@@ -108,7 +44,7 @@ namespace UberFrba.Abm_Cliente
             try
             {
                 DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Dar_de_alta_cliente '" 
-                                           + this.localidadCliente.Text + "', '"
+                                           + this.localidad.Text + "', '"
                                            + this.direccionCliente.Text + "', "
                                            + this.nroPiso.Text + ", '"
                                            + this.deptoCliente.Text + "', "
@@ -152,7 +88,7 @@ namespace UberFrba.Abm_Cliente
         {
             this.validarCampo("telefono", this.telefonoCliente.Text, 18, "^[0-9]+$");
             this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
-            this.validarCampo("Localidad", this.localidadCliente.Text, 20, "^[a-zA-Z0-9- ]+$");
+            this.validarCampo("Localidad", this.localidad.Text, 20, "^[a-zA-Z0-9- ]+$");
             this.validarCampo("Departamento", this.deptoCliente.Text, 3, "^[a-zA-Z0-9]+$");
             this.validarCampo("Direccion y calle", this.direccionCliente.Text, 255, "^[a-zA-Z0-9- ]+$");
             this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z- ]+$");
@@ -203,6 +139,94 @@ namespace UberFrba.Abm_Cliente
             foreach (Control ctrl in this.Controls)
                 if (ctrl is TextBox)
                     ((TextBox)ctrl).Clear();
+        }
+
+        private void deptoCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label12_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label13_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fechaNacCli_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label11_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Alta_o_Modificacion_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void telefonoCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nombreCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void apellidoCliente_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void localidad_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void nroPiso_TextChanged(object sender, EventArgs e)
+        {
+        }
+
+        private void direccionCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void codPostal_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mailCliente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fechaNacCli_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void dniCliente_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
     }

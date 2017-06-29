@@ -33,7 +33,7 @@ namespace UberFrba.Conexion
             }
         }
 
-        public static SqlDataReader ResolverConsulta(String query)
+        public static SqlDataReader ResolverQuery(String query)
         {
             SqlCommand cmd = new SqlCommand(query, conexion);
 

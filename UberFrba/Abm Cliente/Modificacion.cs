@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UberFrba.Conexion;
 
 namespace UberFrba.Abm_Cliente
 {
@@ -15,37 +16,17 @@ namespace UberFrba.Abm_Cliente
         string errores = "";
         string username;
         string rol;
-        public Modificacion(string username, string rol)
+        Cliente cliente;
+        public Modificacion(string username, string rol, Cliente cliente)
         {
             InitializeComponent();
             this.username = username;
             this.rol = rol;
+            this.cliente = cliente;
+            this.setCampos();
+            this.telefonoCliente.Text = this.cliente.telefono;
         }
 
-        private void label9_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void apellidoCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dniCliente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
         private void guardarCliente_Click(object sender, EventArgs e)
         {
             this.validarCampos();
@@ -56,72 +37,11 @@ namespace UberFrba.Abm_Cliente
             }
             else
             {
-                MessageBox.Show("Alta de cliente exitosa");
+                this.actualizarCliente();
+                MessageBox.Show("Se ha actualizado el cliente correctamente");
+                this.Close();
             }
         }
-
-        private void validarCampos()
-        {
-            this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
-            this.validarCampo("Localidad Y dpto", this.dptoYlocalidad.Text, 20, "^[a-zA-Z0-9- ]+$");
-            this.validarCampo("Calle y altura", this.calleYaltura.Text, 255, "^[a-zA-Z0-9- ]+$");
-            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z- ]+$");
-            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z- ]+$");
-            this.validarCampo("Codigo Postal", this.codPostal.Text, 5, "^[0-9]+$");
-            this.validarCampo("Nro de Piso", this.nroPiso.Text, 5, "^[0-9]+$");
-            this.validarCampo("Mail", this.mailCliente.Text, 255, "^[a-zA-Z]+[a-zA-Z0-9]*@[a-zA-Z-.]*.[a-zA-Z]$");
-            this.validarCampo("Fecha", this.fechaNacCli.Text, 10, "^[0-9]{2}/[0-9]{2}/[0-9]{4}$");
-            if (this.fechaNacCli != null)
-                this.validarFecha(this.fechaNacCli.Text);
-
-        }
-
-        private void validarFecha(string fecha)
-        {
-
-            try
-            {
-                string dia = fecha.Substring(0, 2);
-                string mes = fecha.Substring(3, 2);
-                string anio = fecha.Substring(6, 4);
-                if (new DateTime(Convert.ToInt32(anio), Convert.ToInt32(mes), Convert.ToInt32(dia)) > new DateTime())
-                    errores += "La Fecha de nacimiento no puede ser mayor a la actual\n";
-            }
-            catch (System.ArgumentOutOfRangeException)
-            {
-                errores += "La Fecha de nacimiento tiene un formato invalido\n";
-            }
-            catch (System.FormatException)
-            {
-                errores += "La Fecha de nacimiento es invalida\n";
-            }
-        }
-
-        private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
-        {
-            this.validarExpresion(expresion, campo, campoError);
-            this.validarCantDigitos(cantLetras, campo, campoError);
-        }
-
-        private void validarExpresion(string expresion, string campo, string campoError)
-        {
-            if (campo == "")
-                errores += "El campo" + campoError + " esta vacio\n";
-            else
-                if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
-                {
-                    errores += "El campo" + campoError + " posee caracteres invalidos\n";
-                }
-        }
-
-        private void validarCantDigitos(int cantLetras, string campo, string campoError)
-        {
-            if (campo.Length > cantLetras)
-            {
-                errores += "El campo" + campoError + " no puede exceder los " + cantLetras + " digitos\n";
-            }
-        }
-
         private void limpiarCampos_Click(object sender, EventArgs e)
         {
             foreach (Control ctrl in this.Controls)
@@ -139,7 +59,113 @@ namespace UberFrba.Abm_Cliente
             this.Close();
         }
 
+
+        private string entreParentesis(string texto)
+        {
+            return "(" + texto + ")";
+        }
+
+        private bool estaVacio(string texto)
+        {
+            return texto.Equals("") || texto.Replace(" ", "").Equals("");
+        }
+
+        private void validarCampos()
+        {
+            this.validarCampo("DNI", this.dniCliente.Text, 18, "^[0-9]+$");
+            this.validarCampo("Localidad", this.localidad.Text, 20, "^[a-zA-Z0-9- ]+$");
+            this.validarCampo("Departamento", this.deptoCliente.Text, 3, "^[a-zA-Z0-9]+$");
+            this.validarCampo("Direccion y calle", this.direccionCliente.Text, 255, "^[a-zA-Z0-9- ]+$");
+            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z-áéíóúÁÉÍÓÚ ]+$");
+            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z-áéíóúÁÉÍÓÚ ]+$");
+            this.validarCampo("Codigo Postal", this.codPostal.Text, 5, "^[0-9]+$");
+            this.validarCampo("Nro de Piso", this.nroPiso.Text, 5, "^[0-9]+$");
+            if (!this.estaVacio(this.mailCliente.Text))
+                this.validarCampo("Mail", this.mailCliente.Text, 255, "^[a-zA-Z]+[a-zA-Z0-9-._]*@[a-zA-Z]+(.[a-zA-Z]+)+$");
+            this.validarFecha();
+            this.validarCampo("Nombre de usuario", this.usernameCliente.Text, 50, "^[a-zA-Z-_.0-9áéíóúÁÉÍÓÚ ]+$");
+        }
+
+        private void validarFecha()
+        {
+
+            if (this.fechaNacCli.Value > DateTime.Today)
+                errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
+        }
+
+
+        private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
+        {
+            this.validarExpresion(expresion, campo, campoError);
+            this.validarCantDigitos(cantLetras, campo, campoError);
+        }
+
+        private void validarExpresion(string expresion, string campo, string campoError)
+        {
+            if (campo == "")
+                errores += "El campo " + campoError + " esta vacio\n";
+
+            else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
+            {
+                errores += "El campo " + campoError + " posee caracteres invalidos\n";
+            }
+        }
+
+        private void validarCantDigitos(int cantLetras, string campo, string campoError)
+        {
+            if (campo.Length > cantLetras)
+            {
+                errores += "El campo " + campoError + " no puede exceder los " + cantLetras + " digitos\n";
+            }
+        }
+
+        private void setCampos()
+        {
+            this.nombreCliente.Text = this.cliente.nombre;
+            this.apellidoCliente.Text = this.cliente.apellido;
+            this.dniCliente.Text = this.cliente.dni;
+            this.mailCliente.Text = this.cliente.mail;
+            this.direccionCliente.Text = this.cliente.direccion;
+            this.nroPiso.Text = this.cliente.nroPiso;
+            this.deptoCliente.Text = this.cliente.departamento;
+            this.codPostal.Text = this.cliente.codigoPostal;
+            this.localidad.Text = this.cliente.localidad;
+            this.usernameCliente.Text = this.cliente.username;
+            this.telefonoCliente.Text = this.cliente.telefono;
+            string mes = this.cliente.fechaNac.Substring(0, 2);
+            string dia = this.cliente.fechaNac.Substring(3, 2);
+            string anio = this.cliente.fechaNac.Substring(6, 4);
+            this.fechaNacCli.Value = new DateTime(Convert.ToInt32(anio), Convert.ToInt32(mes), Convert.ToInt32(dia));
+        }
+
+        private void actualizarCliente()
+        {
+            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Cliente "
+                                      + "SET nombre = '" + this.nombreCliente.Text + "', "
+                                          + "apellido = ' " + this.apellidoCliente.Text + "', "
+                                          + "dni = ' " + this.dniCliente.Text + "', "
+                                          + "mail = ' " + this.mailCliente.Text + "', "
+                                          + "localidad = ' " + this.localidad.Text + "', "
+                                          + "direccion = ' " + this.direccionCliente.Text + "', "
+                                          + "depto = ' " + this.deptoCliente.Text + "', "
+                                          + "nro_piso = ' " + this.nroPiso.Text + "', "
+                                          + "username = ' " + this.usernameCliente.Text + "', "
+                                          + "codigo_postal = ' " + this.codPostal.Text + "'mama "
+                //           + "fecha_de_nacimiento = ' " + this.fechaNacCli.Text + "' "
+                                      + "WHERE telefono = '" + cliente.telefono + "' ");
+        }
+
         private void fechaNacCli_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void telefonoCliente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void guardarCliente_Click_1(object sender, EventArgs e)
         {
 
         }

@@ -72,7 +72,7 @@ namespace UberFrba.Login_Usuario
         
         private SqlDataReader leerRoles()
         {
-            return DBConexion.ResolverConsulta("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = '" + username + "'");
+            return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = '" + username + "'");
         }
     }
 }

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using UberFrba.Conexion;
 
 namespace UberFrba.Abm_Cliente
 {
@@ -16,6 +17,8 @@ namespace UberFrba.Abm_Cliente
         private string username;
         private string rol;
         private bool puedeDarDeBaja;
+        Cliente cliente = new Cliente();
+        DataTable clientes = new DataTable();
 
         public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
         {
@@ -23,16 +26,8 @@ namespace UberFrba.Abm_Cliente
             this.username = username;
             this.rol = rol;
             this.puedeDarDeBaja = puedeDarDeBaja;
-            if (puedeDarDeBaja)
-            {
-                this.Text = "Baja Cliente";
-                this.bajaOModificacion.Text = "Dar de baja";
-            }
-            else
-            {
-                this.Text = "Modificar Cliente";
-                this.bajaOModificacion.Text = "Modificar";
-            }
+            this.setNombrePanel();
+            this.noClientesLabel.Text = "";
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -54,21 +49,42 @@ namespace UberFrba.Abm_Cliente
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
         {
+            if (this.clientesGrid.RowCount == 0)
+            {
+                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
+                return;
+            }
+            if (this.clientesGrid.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("Debe seleccionar de a un cliente");
+                return;
+            }
             this.validarCampos();
             if (this.errores != "")
             {
                 MessageBox.Show(errores);
                 this.errores = "";
+                return;
             }
-            else
+            try
             {
-                /*aca crear el objeto con los datos que selecciono del cliente y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar*/
-                Form modificar = new Modificacion(this.username, this.rol);
+                this.setCliente();
+
+                if (this.puedeDarDeBaja)
+                {
+                    this.deshabilitarCliente();
+                    return;
+                }
+
+                Form modificar = new Modificacion(this.username, this.rol, cliente);
                 modificar.Show();
-                /*aca crear el objeto con los datos que selecciono del cliente y pasarselo a la ventana siguiente para que lo pueda ver antes de modificar
-                Form modificar = new Modificacion(clienteSeleccionado, this.username, this.rol);
-                modificar.Show();*/
             }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Para elegir a un cliente debe oprimir la flecha que se encuentra a la izquierda de la fila");
+                return;
+            }
+
         }
 
         private void Baja_o_Modificacion_Load(object sender, EventArgs e)
@@ -91,7 +107,7 @@ namespace UberFrba.Abm_Cliente
         private void validarExpresion(string expresion, string campo, string campoError)
         {
             if (campo == "")
-                errores += "El campo" + campoError + " esta vacio\n";
+                return;
             else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
             {
                 errores += "El campo " + campoError + " posee caracteres invalidos\n";
@@ -116,6 +132,156 @@ namespace UberFrba.Abm_Cliente
                     text.Clear();
                 }
             }
+        }
+
+        private void buscarTodosBTN_Click(object sender, EventArgs e)
+        {
+            this.buscarTodos("", "", "");
+        }
+
+        private void noClientesLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void clientesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void rehabilitar_Click_1(object sender, EventArgs e)
+        {
+            if (this.clientesGrid.RowCount == 0)
+            {
+                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
+                return;
+            }
+            if (this.clientesGrid.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("Debe seleccionar de a un cliente");
+                return;
+            }
+            this.habilitarCliente();
+        }
+
+        private void deshabilitarCliente()
+        {
+            if (cliente.habilitado)
+            {
+                DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Cliente "
+                                           + "SET habilitado = 0 "
+                                           + "WHERE telefono = '" + cliente.telefono + "'");
+                this.listarClientes(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
+                MessageBox.Show("El cliente " + cliente.apellido + ", " + cliente.nombre + "\n" + "Tel: " + cliente.telefono + " \n" + "Ha sido dado de baja");
+                return;
+            }
+            MessageBox.Show("El cliente " + cliente.apellido + ", " + cliente.nombre + "\n" + "Tel: " + cliente.telefono + "\n" + "Ya se encuentra deshabilitado");
+            return;
+        }
+
+        private void habilitarCliente()
+        {
+            try
+            {
+                this.setCliente();
+                if (!cliente.habilitado)
+                {
+                    DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Cliente "
+                                               + "SET habilitado = 1 "
+                                               + "WHERE telefono = '" + cliente.telefono + "'");
+                    this.listarClientes(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
+                    MessageBox.Show("El cliente " + cliente.apellido + ", " + cliente.nombre + "\n" + "Tel: " + cliente.telefono + " \n" + "Ha sido rehabilitado");
+                    return;
+                }
+                MessageBox.Show("El cliente " + cliente.apellido + ", " + cliente.nombre + "\n" + "Tel: " + cliente.telefono + "\n" + "Ya se encuentra habilitado");
+                return;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Para elegir a un cliente debe oprimir la flecha que se encuentra a la izquierda de la fila");
+                return;
+            }
+
+        }
+        private void setCliente()
+        {
+            int i = this.clientesGrid.SelectedRows[0].Index;
+            DataRow row = clientes.Rows[i];
+
+            cliente.nombre = row["Nombre"].ToString();
+            cliente.apellido = row["Apellido"].ToString();
+            cliente.dni = row["DNI"].ToString();
+            cliente.mail = row["Mail"].ToString();
+            cliente.telefono = row["Telefono"].ToString();
+            cliente.direccion = row["Direccion"].ToString();
+            cliente.codigoPostal = row["Codigo postal"].ToString();
+            cliente.fechaNac = row["Fecha de nacimiento"].ToString();
+            cliente.departamento = row["Departamento"].ToString();
+            cliente.nroPiso = row["Numero de piso"].ToString();
+            cliente.localidad = row["Localidad"].ToString();
+            cliente.username = row["USERNAME"].ToString();
+            cliente.habilitado = Convert.ToBoolean(row["Habilitado"].ToString());
+        }
+        private void listarClientes(string nombre, string apellido, string dni)
+        {
+            clientes.Clear();
+            try
+            {
+                clientes.Load(DBConexion.ResolverQuery("SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad, codigo_postal AS 'Codigo postal',fecha_de_nacimiento AS 'Fecha de nacimiento' "
+                                            + "FROM LOS_CHATADROIDES.Cliente "
+                                            + "WHERE nombre LIKE '%" + nombre + "%' AND "
+                                                     + "apellido LIKE '%" + apellido + "%' AND "
+                                                     + "DNI LIKE '%" + dni + "%'"));
+
+                this.noClientesLabel.Text = "";
+            }
+            catch (SinRegistrosException)
+            {
+
+                this.noClientesLabel.Text = "No se encontraron clientes";
+                return;
+            }
+        }
+        private void setNombrePanel()
+        {
+            if (puedeDarDeBaja)
+            {
+                this.Text = "Baja Cliente";
+                this.bajaOModificacion.Text = "Dar de baja";
+            }
+            else
+            {
+                this.Text = "Modificar Cliente";
+                this.bajaOModificacion.Text = "Modificar";
+            }
+        }
+        private void buscarTodos(string nombre, string apellido, string dni)
+        {
+            this.validarCampos();
+            if (this.errores != "")
+            {
+                MessageBox.Show(errores);
+                this.errores = "";
+                return;
+            }
+            this.listarClientes(nombre, apellido, dni);
+
+            this.clientesGrid.DataSource = clientes;
+        }
+
+        private void nombreCliente_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarTodos(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
+        }
+
+        private void apellidoCliente_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarTodos(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
+        }
+
+        private void dniCliente_TextChanged(object sender, EventArgs e)
+        {
+            this.buscarTodos(this.nombreCliente.Text, this.apellidoCliente.Text, this.dniCliente.Text);
         }
     }
 }

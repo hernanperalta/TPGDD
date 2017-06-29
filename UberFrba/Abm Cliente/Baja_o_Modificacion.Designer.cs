@@ -36,22 +36,13 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.bajaOModificacion = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buscarTodosBTN = new System.Windows.Forms.Button();
             this.limpiarCampos = new System.Windows.Forms.Button();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.nombre = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.apellido = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dni = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.mail = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.telefono = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.direccion = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.codigoPostal = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.fechaNacimiento = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.depto = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.nroPiso = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.clientesGrid = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.noClientesLabel = new System.Windows.Forms.Label();
+            this.rehabilitar = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -69,6 +60,7 @@
             this.nombreCliente.Name = "nombreCliente";
             this.nombreCliente.Size = new System.Drawing.Size(100, 20);
             this.nombreCliente.TabIndex = 1;
+            this.nombreCliente.TextChanged += new System.EventHandler(this.nombreCliente_TextChanged);
             // 
             // apellidoCliente
             // 
@@ -76,6 +68,7 @@
             this.apellidoCliente.Name = "apellidoCliente";
             this.apellidoCliente.Size = new System.Drawing.Size(100, 20);
             this.apellidoCliente.TabIndex = 9;
+            this.apellidoCliente.TextChanged += new System.EventHandler(this.apellidoCliente_TextChanged);
             // 
             // label2
             // 
@@ -92,6 +85,7 @@
             this.dniCliente.Name = "dniCliente";
             this.dniCliente.Size = new System.Drawing.Size(100, 20);
             this.dniCliente.TabIndex = 11;
+            this.dniCliente.TextChanged += new System.EventHandler(this.dniCliente_TextChanged);
             // 
             // label3
             // 
@@ -113,7 +107,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(404, 352);
+            this.bajaOModificacion.Location = new System.Drawing.Point(478, 352);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(117, 23);
             this.bajaOModificacion.TabIndex = 14;
@@ -121,14 +115,15 @@
             this.bajaOModificacion.UseVisualStyleBackColor = true;
             this.bajaOModificacion.Click += new System.EventHandler(this.bajaOModificacion_Click);
             // 
-            // button4
+            // buscarTodosBTN
             // 
-            this.button4.Location = new System.Drawing.Point(530, 131);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(101, 25);
-            this.button4.TabIndex = 38;
-            this.button4.Text = "Buscar";
-            this.button4.UseVisualStyleBackColor = true;
+            this.buscarTodosBTN.Location = new System.Drawing.Point(530, 131);
+            this.buscarTodosBTN.Name = "buscarTodosBTN";
+            this.buscarTodosBTN.Size = new System.Drawing.Size(101, 25);
+            this.buscarTodosBTN.TabIndex = 38;
+            this.buscarTodosBTN.Text = "Buscar todos";
+            this.buscarTodosBTN.UseVisualStyleBackColor = true;
+            this.buscarTodosBTN.Click += new System.EventHandler(this.buscarTodosBTN_Click);
             // 
             // limpiarCampos
             // 
@@ -140,85 +135,22 @@
             this.limpiarCampos.UseVisualStyleBackColor = true;
             this.limpiarCampos.Click += new System.EventHandler(this.limpiarCampos_Click);
             // 
-            // dataGridView2
+            // clientesGrid
             // 
-            this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.nombre,
-            this.apellido,
-            this.dni,
-            this.mail,
-            this.telefono,
-            this.direccion,
-            this.codigoPostal,
-            this.fechaNacimiento,
-            this.depto,
-            this.nroPiso,
-            this.dataGridViewButtonColumn1});
-            this.dataGridView2.Location = new System.Drawing.Point(29, 176);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(671, 149);
-            this.dataGridView2.TabIndex = 39;
-            // 
-            // nombre
-            // 
-            this.nombre.HeaderText = "Nombre";
-            this.nombre.Name = "nombre";
-            // 
-            // apellido
-            // 
-            this.apellido.HeaderText = "Apellido";
-            this.apellido.Name = "apellido";
-            // 
-            // dni
-            // 
-            this.dni.HeaderText = "DNI";
-            this.dni.Name = "dni";
-            // 
-            // mail
-            // 
-            this.mail.HeaderText = "Mail";
-            this.mail.Name = "mail";
-            // 
-            // telefono
-            // 
-            this.telefono.HeaderText = "Telefono";
-            this.telefono.Name = "telefono";
-            // 
-            // direccion
-            // 
-            this.direccion.HeaderText = "Direccion";
-            this.direccion.Name = "direccion";
-            // 
-            // codigoPostal
-            // 
-            this.codigoPostal.HeaderText = "Codigo postal";
-            this.codigoPostal.Name = "codigoPostal";
-            // 
-            // fechaNacimiento
-            // 
-            this.fechaNacimiento.HeaderText = "Fecha de nacimiento";
-            this.fechaNacimiento.Name = "fechaNacimiento";
-            // 
-            // depto
-            // 
-            this.depto.HeaderText = "Depto";
-            this.depto.Name = "depto";
-            // 
-            // nroPiso
-            // 
-            this.nroPiso.HeaderText = "Numero Piso";
-            this.nroPiso.Name = "nroPiso";
-            // 
-            // dataGridViewButtonColumn1
-            // 
-            this.dataGridViewButtonColumn1.HeaderText = "Seleccionar";
-            this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn1";
+            this.clientesGrid.AllowUserToAddRows = false;
+            this.clientesGrid.AllowUserToOrderColumns = true;
+            this.clientesGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.clientesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.clientesGrid.Location = new System.Drawing.Point(29, 176);
+            this.clientesGrid.Name = "clientesGrid";
+            this.clientesGrid.ReadOnly = true;
+            this.clientesGrid.Size = new System.Drawing.Size(671, 149);
+            this.clientesGrid.TabIndex = 39;
+            this.clientesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.clientesGrid_CellContentClick);
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(252, 352);
+            this.volver.Location = new System.Drawing.Point(141, 352);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 41;
@@ -226,14 +158,37 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
+            // noClientesLabel
+            // 
+            this.noClientesLabel.AutoSize = true;
+            this.noClientesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.noClientesLabel.Location = new System.Drawing.Point(248, 153);
+            this.noClientesLabel.Name = "noClientesLabel";
+            this.noClientesLabel.Size = new System.Drawing.Size(198, 20);
+            this.noClientesLabel.TabIndex = 42;
+            this.noClientesLabel.Text = "No se encontraron clientes";
+            this.noClientesLabel.Click += new System.EventHandler(this.noClientesLabel_Click);
+            // 
+            // rehabilitar
+            // 
+            this.rehabilitar.Location = new System.Drawing.Point(300, 352);
+            this.rehabilitar.Name = "rehabilitar";
+            this.rehabilitar.Size = new System.Drawing.Size(117, 23);
+            this.rehabilitar.TabIndex = 43;
+            this.rehabilitar.Text = "Rehabilitar";
+            this.rehabilitar.UseVisualStyleBackColor = true;
+            this.rehabilitar.Click += new System.EventHandler(this.rehabilitar_Click_1);
+            // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(739, 396);
+            this.Controls.Add(this.rehabilitar);
+            this.Controls.Add(this.noClientesLabel);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.dataGridView2);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.clientesGrid);
+            this.Controls.Add(this.buscarTodosBTN);
             this.Controls.Add(this.limpiarCampos);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.label4);
@@ -246,7 +201,7 @@
             this.Name = "Baja_o_Modificacion";
             this.Text = "Selección de Cliente";
             this.Load += new System.EventHandler(this.Baja_o_Modificacion_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -262,20 +217,11 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button bajaOModificacion;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buscarTodosBTN;
         private System.Windows.Forms.Button limpiarCampos;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nombre;
-        private System.Windows.Forms.DataGridViewTextBoxColumn apellido;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dni;
-        private System.Windows.Forms.DataGridViewTextBoxColumn mail;
-        private System.Windows.Forms.DataGridViewTextBoxColumn telefono;
-        private System.Windows.Forms.DataGridViewTextBoxColumn direccion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn codigoPostal;
-        private System.Windows.Forms.DataGridViewTextBoxColumn fechaNacimiento;
-        private System.Windows.Forms.DataGridViewTextBoxColumn depto;
-        private System.Windows.Forms.DataGridViewTextBoxColumn nroPiso;
-        private System.Windows.Forms.DataGridViewButtonColumn dataGridViewButtonColumn1;
+        private System.Windows.Forms.DataGridView clientesGrid;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.Label noClientesLabel;
+        private System.Windows.Forms.Button rehabilitar;
     }
 }

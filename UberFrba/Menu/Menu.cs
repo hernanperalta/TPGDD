@@ -73,7 +73,7 @@ namespace UberFrba.Menu
 
         private SqlDataReader leerFuncionalidades()
         {
-            return DBConexion.ResolverConsulta("SELECT F.codigo_funcionalidad" 
+            return DBConexion.ResolverQuery("SELECT F.codigo_funcionalidad" 
                                              + " FROM LOS_CHATADROIDES.Funcionalidad_X_Rol FXR JOIN LOS_CHATADROIDES.Funcionalidad F" 
                                              + " ON(FXR.codigo_funcionalidad = F.codigo_funcionalidad)"
                                              + " WHERE FXR.nombre_del_rol = '" + this.rol + "'");

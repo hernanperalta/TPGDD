@@ -121,7 +121,7 @@ namespace UberFrba.Abm_Automovil
             
             try
             {
-                SqlDataReader readerTurnos = DBConexion.ResolverConsulta("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno");
+                SqlDataReader readerTurnos = DBConexion.ResolverQuery("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno");
 
                 while (readerTurnos.Read())
                 {

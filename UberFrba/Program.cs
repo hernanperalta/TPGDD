@@ -34,8 +34,8 @@ namespace UberFrba
             //MessageBox.Show(s);
             //new Login_Usuario.Login().Show();
             //new Abm_Chofer.Baja_o_Modificacion(false, "admin", "Administrador").Show();
-            new Listado_Estadistico.Listado_Estadistico("", "").Show();
-            //new Abm_Chofer.Alta("", "").Show();
+            //new Listado_Estadistico.Listado_Estadistico("", "").Show();
+            new Abm_Cliente.Baja_o_Modificacion(false, "admin", "Administrador").Show();
             Application.Run();
 
             

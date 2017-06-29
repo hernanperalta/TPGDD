@@ -99,7 +99,7 @@ namespace UberFrba.Abm_Chofer
                 + "FROM LOS_CHATADROIDES.Chofer");
 
             DataTable choferes = new DataTable();
-            choferes.Load(DBConexion.ResolverConsulta(query));
+            choferes.Load(DBConexion.ResolverQuery(query));
             this.choferesGrid.DataSource = choferes;
                       
         }
