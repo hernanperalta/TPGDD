@@ -25,8 +25,8 @@ namespace UberFrba.Menu
                 new Funcionalidad(2, "Registro de Usuario", new Alta_de_Usuario.Alta_de_Usuario(this.username, this.rol)),
                 new Funcionalidad(6, "Registro de Viajes", new Registro_Viajes.Registro_Viajes(this.username, this.rol)),
                 new Funcionalidad(7, "Rendicion de cuenta del Chofer", new Rendicion_Al_Chofer.Rendicion_Al_Chofer(this.username, this.rol)),
-                new Funcionalidad(8, "Listado Estadistico", new Facturacion_Cliente.Listado_Estadistico(this.username, this.rol)),
-                new Funcionalidad(9, "Facturacion a Cliente", new Facturacion_Cliente.Facturacion_Cliente(this.username, this.rol))
+                new Funcionalidad(8, "Listado Estadistico", new Listado_Estadistico.Listado_Estadistico(this.username, this.rol)),
+                new Funcionalidad(9, "Facturacion a Cliente", new Listado_Estadistico.Facturacion_Cliente(this.username, this.rol))
             };
         }
 

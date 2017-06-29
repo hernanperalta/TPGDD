@@ -28,72 +28,33 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.volver = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.textBox9 = new System.Windows.Forms.TextBox();
-            this.label10 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.textBox5 = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.textBox6 = new System.Windows.Forms.TextBox();
+            this.mailChofer = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.textBox7 = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.textBox8 = new System.Windows.Forms.TextBox();
+            this.apellidoChofer = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
-            this.textBox4 = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.dniChofer = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.nombreChofer = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
-            this.telefono = new System.Windows.Forms.Label();
+            this.telefonoChofer = new System.Windows.Forms.Label();
+            this.localidadChofer = new System.Windows.Forms.TextBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.usernameChofer = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.volver = new System.Windows.Forms.Button();
+            this.crear = new System.Windows.Forms.Button();
+            this.deptoChofer = new System.Windows.Forms.TextBox();
+            this.label10 = new System.Windows.Forms.Label();
+            this.nroPisoChofer = new System.Windows.Forms.TextBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.direccionChofer = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.fechaNacChofer = new System.Windows.Forms.DateTimePicker();
+            this.limpiar = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // volver
-            // 
-            this.volver.Location = new System.Drawing.Point(44, 372);
-            this.volver.Name = "volver";
-            this.volver.Size = new System.Drawing.Size(92, 32);
-            this.volver.TabIndex = 68;
-            this.volver.Text = "Volver";
-            this.volver.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(188, 372);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 32);
-            this.button2.TabIndex = 67;
-            this.button2.Text = "Limpiar";
-            this.button2.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(188, 303);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(112, 54);
-            this.button1.TabIndex = 66;
-            this.button1.Text = "Guardar chofer";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // textBox9
-            // 
-            this.textBox9.Location = new System.Drawing.Point(191, 263);
-            this.textBox9.Name = "textBox9";
-            this.textBox9.Size = new System.Drawing.Size(100, 20);
-            this.textBox9.TabIndex = 65;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(188, 238);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(98, 13);
-            this.label10.TabIndex = 64;
-            this.label10.Text = "Depto. y localidad :";
             // 
             // label9
             // 
@@ -104,28 +65,12 @@
             this.label9.TabIndex = 63;
             this.label9.Text = "Ingrese los datos del chofer a modificar :";
             // 
-            // textBox5
+            // mailChofer
             // 
-            this.textBox5.Location = new System.Drawing.Point(36, 321);
-            this.textBox5.Name = "textBox5";
-            this.textBox5.Size = new System.Drawing.Size(100, 20);
-            this.textBox5.TabIndex = 62;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(33, 296);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(87, 13);
-            this.label5.TabIndex = 61;
-            this.label5.Text = "Número de piso :";
-            // 
-            // textBox6
-            // 
-            this.textBox6.Location = new System.Drawing.Point(191, 202);
-            this.textBox6.Name = "textBox6";
-            this.textBox6.Size = new System.Drawing.Size(100, 20);
-            this.textBox6.TabIndex = 60;
+            this.mailChofer.Location = new System.Drawing.Point(191, 202);
+            this.mailChofer.Name = "mailChofer";
+            this.mailChofer.Size = new System.Drawing.Size(100, 20);
+            this.mailChofer.TabIndex = 60;
             // 
             // label6
             // 
@@ -136,13 +81,6 @@
             this.label6.TabIndex = 59;
             this.label6.Text = "Fecha de nacimiento :";
             // 
-            // textBox7
-            // 
-            this.textBox7.Location = new System.Drawing.Point(191, 145);
-            this.textBox7.Name = "textBox7";
-            this.textBox7.Size = new System.Drawing.Size(100, 20);
-            this.textBox7.TabIndex = 58;
-            // 
             // label7
             // 
             this.label7.AutoSize = true;
@@ -152,12 +90,12 @@
             this.label7.TabIndex = 57;
             this.label7.Text = "Mail (opcional) :";
             // 
-            // textBox8
+            // apellidoChofer
             // 
-            this.textBox8.Location = new System.Drawing.Point(191, 87);
-            this.textBox8.Name = "textBox8";
-            this.textBox8.Size = new System.Drawing.Size(100, 20);
-            this.textBox8.TabIndex = 56;
+            this.apellidoChofer.Location = new System.Drawing.Point(191, 87);
+            this.apellidoChofer.Name = "apellidoChofer";
+            this.apellidoChofer.Size = new System.Drawing.Size(100, 20);
+            this.apellidoChofer.TabIndex = 56;
             // 
             // label8
             // 
@@ -168,28 +106,12 @@
             this.label8.TabIndex = 55;
             this.label8.Text = "Apellido :";
             // 
-            // textBox4
+            // dniChofer
             // 
-            this.textBox4.Location = new System.Drawing.Point(36, 263);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(100, 20);
-            this.textBox4.TabIndex = 54;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(33, 238);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(70, 13);
-            this.label4.TabIndex = 53;
-            this.label4.Text = "Calle y altura:";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Location = new System.Drawing.Point(36, 203);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 20);
-            this.textBox2.TabIndex = 50;
+            this.dniChofer.Location = new System.Drawing.Point(36, 203);
+            this.dniChofer.Name = "dniChofer";
+            this.dniChofer.Size = new System.Drawing.Size(100, 20);
+            this.dniChofer.TabIndex = 50;
             // 
             // label2
             // 
@@ -200,12 +122,12 @@
             this.label2.TabIndex = 49;
             this.label2.Text = "DNI :";
             // 
-            // textBox1
+            // nombreChofer
             // 
-            this.textBox1.Location = new System.Drawing.Point(36, 145);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 48;
+            this.nombreChofer.Location = new System.Drawing.Point(36, 145);
+            this.nombreChofer.Name = "nombreChofer";
+            this.nombreChofer.Size = new System.Drawing.Size(100, 20);
+            this.nombreChofer.TabIndex = 48;
             // 
             // label1
             // 
@@ -225,44 +147,164 @@
             this.label3.TabIndex = 69;
             this.label3.Text = "Telefono";
             // 
-            // telefono
+            // telefonoChofer
             // 
-            this.telefono.AutoSize = true;
-            this.telefono.Location = new System.Drawing.Point(62, 87);
-            this.telefono.Name = "telefono";
-            this.telefono.Size = new System.Drawing.Size(45, 13);
-            this.telefono.TabIndex = 70;
-            this.telefono.Text = "telefono";
+            this.telefonoChofer.AutoSize = true;
+            this.telefonoChofer.Location = new System.Drawing.Point(62, 87);
+            this.telefonoChofer.Name = "telefonoChofer";
+            this.telefonoChofer.Size = new System.Drawing.Size(45, 13);
+            this.telefonoChofer.TabIndex = 70;
+            this.telefonoChofer.Text = "telefono";
+            // 
+            // localidadChofer
+            // 
+            this.localidadChofer.Location = new System.Drawing.Point(191, 317);
+            this.localidadChofer.Name = "localidadChofer";
+            this.localidadChofer.Size = new System.Drawing.Size(100, 20);
+            this.localidadChofer.TabIndex = 83;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(188, 292);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(59, 13);
+            this.label12.TabIndex = 82;
+            this.label12.Text = "Localidad :";
+            // 
+            // usernameChofer
+            // 
+            this.usernameChofer.Location = new System.Drawing.Point(36, 378);
+            this.usernameChofer.Name = "usernameChofer";
+            this.usernameChofer.Size = new System.Drawing.Size(100, 20);
+            this.usernameChofer.TabIndex = 81;
+            // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(33, 353);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(102, 13);
+            this.label11.TabIndex = 80;
+            this.label11.Text = "Nombre de usuario :";
+            // 
+            // volver
+            // 
+            this.volver.Location = new System.Drawing.Point(36, 413);
+            this.volver.Name = "volver";
+            this.volver.Size = new System.Drawing.Size(100, 32);
+            this.volver.TabIndex = 79;
+            this.volver.Text = "Volver";
+            this.volver.UseVisualStyleBackColor = true;
+            // 
+            // crear
+            // 
+            this.crear.Location = new System.Drawing.Point(191, 391);
+            this.crear.Name = "crear";
+            this.crear.Size = new System.Drawing.Size(100, 32);
+            this.crear.TabIndex = 77;
+            this.crear.Text = "Guardar chofer";
+            this.crear.UseVisualStyleBackColor = true;
+            // 
+            // deptoChofer
+            // 
+            this.deptoChofer.Location = new System.Drawing.Point(191, 259);
+            this.deptoChofer.Name = "deptoChofer";
+            this.deptoChofer.Size = new System.Drawing.Size(100, 20);
+            this.deptoChofer.TabIndex = 76;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(188, 234);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(80, 13);
+            this.label10.TabIndex = 75;
+            this.label10.Text = "Departamento :";
+            // 
+            // nroPisoChofer
+            // 
+            this.nroPisoChofer.Location = new System.Drawing.Point(36, 317);
+            this.nroPisoChofer.Name = "nroPisoChofer";
+            this.nroPisoChofer.Size = new System.Drawing.Size(100, 20);
+            this.nroPisoChofer.TabIndex = 74;
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(33, 292);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(87, 13);
+            this.label5.TabIndex = 73;
+            this.label5.Text = "Número de piso :";
+            // 
+            // direccionChofer
+            // 
+            this.direccionChofer.Location = new System.Drawing.Point(36, 259);
+            this.direccionChofer.Name = "direccionChofer";
+            this.direccionChofer.Size = new System.Drawing.Size(100, 20);
+            this.direccionChofer.TabIndex = 72;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(33, 234);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(88, 13);
+            this.label4.TabIndex = 71;
+            this.label4.Text = "Direccion y calle:";
+            // 
+            // fechaNacChofer
+            // 
+            this.fechaNacChofer.Location = new System.Drawing.Point(191, 145);
+            this.fechaNacChofer.Name = "fechaNacChofer";
+            this.fechaNacChofer.Size = new System.Drawing.Size(200, 20);
+            this.fechaNacChofer.TabIndex = 84;
+            // 
+            // limpiar
+            // 
+            this.limpiar.Location = new System.Drawing.Point(191, 350);
+            this.limpiar.Name = "limpiar";
+            this.limpiar.Size = new System.Drawing.Size(100, 32);
+            this.limpiar.TabIndex = 85;
+            this.limpiar.Text = "Limpiar";
+            this.limpiar.UseVisualStyleBackColor = true;
+            this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
             // Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(350, 440);
-            this.Controls.Add(this.telefono);
-            this.Controls.Add(this.label3);
+            this.ClientSize = new System.Drawing.Size(414, 470);
+            this.Controls.Add(this.limpiar);
+            this.Controls.Add(this.fechaNacChofer);
+            this.Controls.Add(this.localidadChofer);
+            this.Controls.Add(this.label12);
+            this.Controls.Add(this.usernameChofer);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox9);
+            this.Controls.Add(this.crear);
+            this.Controls.Add(this.deptoChofer);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.label9);
-            this.Controls.Add(this.textBox5);
+            this.Controls.Add(this.nroPisoChofer);
             this.Controls.Add(this.label5);
-            this.Controls.Add(this.textBox6);
-            this.Controls.Add(this.label6);
-            this.Controls.Add(this.textBox7);
-            this.Controls.Add(this.label7);
-            this.Controls.Add(this.textBox8);
-            this.Controls.Add(this.label8);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.direccionChofer);
             this.Controls.Add(this.label4);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.telefonoChofer);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.label9);
+            this.Controls.Add(this.mailChofer);
+            this.Controls.Add(this.label6);
+            this.Controls.Add(this.label7);
+            this.Controls.Add(this.apellidoChofer);
+            this.Controls.Add(this.label8);
+            this.Controls.Add(this.dniChofer);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.nombreChofer);
             this.Controls.Add(this.label1);
             this.Name = "Modificacion";
             this.Text = "Modificacion de Chofer";
+            this.Load += new System.EventHandler(this.Modificacion_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -270,27 +312,31 @@
 
         #endregion
 
-        private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TextBox textBox9;
-        private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.TextBox textBox5;
-        private System.Windows.Forms.Label label5;
-        private System.Windows.Forms.TextBox textBox6;
+        private System.Windows.Forms.TextBox mailChofer;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.TextBox textBox7;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox textBox8;
+        private System.Windows.Forms.TextBox apellidoChofer;
         private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.TextBox textBox4;
-        private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox dniChofer;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox nombreChofer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label telefono;
+        private System.Windows.Forms.Label telefonoChofer;
+        private System.Windows.Forms.TextBox localidadChofer;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.TextBox usernameChofer;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.Button crear;
+        private System.Windows.Forms.TextBox deptoChofer;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox nroPisoChofer;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox direccionChofer;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.DateTimePicker fechaNacChofer;
+        private System.Windows.Forms.Button limpiar;
     }
 }

@@ -78,6 +78,7 @@
       <DependentUpon>Baja_o_Modificacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Chofer\Chofer.cs" />
+    <Compile Include="Abm Chofer\Domicilio.cs" />
     <Compile Include="Abm Chofer\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -145,6 +146,7 @@
       <DependentUpon>Alta de Usuario.cs</DependentUpon>
     </Compile>
     <Compile Include="Conexion\DBConexion.cs" />
+    <Compile Include="Conexion\SinRegistrosException.cs" />
     <Compile Include="Facturacion\Facturar a un Cliente.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -157,6 +159,7 @@
     <Compile Include="Listado Estadistico\Listado Estadistico.Designer.cs">
       <DependentUpon>Listado Estadistico.cs</DependentUpon>
     </Compile>
+    <Compile Include="Listado Estadistico\Listado.cs" />
     <Compile Include="Login Usuario\Login.cs">
       <SubType>Form</SubType>
     </Compile>

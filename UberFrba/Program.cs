@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using UberFrba.Conexion;
+using UberFrba.Listado_Estadistico;
 
 namespace UberFrba
 {
@@ -31,8 +32,9 @@ namespace UberFrba
             //MessageBox.Show(s);
             //String s = (String) DBConexion.ResolverFuncion("SELECT LOS_CHATADROIDES.Hashear_Password('lihue')");
             //MessageBox.Show(s);
-            new Login_Usuario.Login().Show();
-            //new Abm_Chofer.Baja_o_Modificacion(true, "", "").Show();
+            //new Login_Usuario.Login().Show();
+            //new Abm_Chofer.Baja_o_Modificacion(false, "admin", "Administrador").Show();
+            new Listado_Estadistico.Listado_Estadistico("", "").Show();
             //new Abm_Chofer.Alta("", "").Show();
             Application.Run();
 

@@ -42,7 +42,7 @@ namespace UberFrba.Conexion
             if (!reader.HasRows)
             {
                 reader.Close();
-                throw new Exception("No se encontraron registros");
+                throw new SinRegistrosException("No se encontraron registros");
             }
 
             return reader;

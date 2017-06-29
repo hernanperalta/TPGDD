@@ -33,7 +33,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         
         private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
         {
-           if (!this.estructuraSegun(regex, texto))
+           if (!Regex.IsMatch(texto, regex))
             {
                 errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
             }
@@ -41,11 +41,11 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                 errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
             }
         }
-
+        /*
         private bool estructuraSegun(string regex, string texto)
         {
             return Regex.IsMatch(texto, regex);
-        }
+        }*/
 
         private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
         {

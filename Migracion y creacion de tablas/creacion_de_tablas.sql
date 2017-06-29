@@ -11,9 +11,9 @@ CREATE TABLE LOS_CHATADROIDES.Domicilio
 (
 	localidad VARCHAR(20),
 	direccion VARCHAR(255),
-	nro_piso SMALLINT,
-	depto VARCHAR(3),
-	PRIMARY KEY (localidad, direccion)
+	depto VARCHAR(3) DEFAULT 'NA',
+	nro_piso VARCHAR(3) DEFAULT 'NA',
+	PRIMARY KEY (localidad, direccion, depto, nro_piso)
 );
 
 CREATE TABLE LOS_CHATADROIDES.Turno
@@ -58,10 +58,12 @@ CREATE TABLE LOS_CHATADROIDES.Cliente
 	dni NUMERIC(18,0) NOT NULL,
 	fecha_de_nacimiento DATETIME NOT NULL,
 	mail VARCHAR(255),
-	codigo_postal SMALLINT NOT NULL DEFAULT 0,
+	codigo_postal VARCHAR(5) NOT NULL DEFAULT 'NA',
+	depto VARCHAR(3) DEFAULT 'NA',
+	nro_piso VARCHAR(3) DEFAULT 'NA',
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
 	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion)
+	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
 );
 
 CREATE TABLE LOS_CHATADROIDES.Chofer
@@ -74,9 +76,11 @@ CREATE TABLE LOS_CHATADROIDES.Chofer
 	dni NUMERIC(18,0) NOT NULL,
 	fecha_de_nacimiento DATETIME NOT NULL,
 	mail VARCHAR(50),
+	depto VARCHAR(3) DEFAULT 'NA',
+	nro_piso VARCHAR(3) DEFAULT 'NA',
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
 	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion)
+	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
 );
 
 CREATE TABLE LOS_CHATADROIDES.Administrador
@@ -84,6 +88,8 @@ CREATE TABLE LOS_CHATADROIDES.Administrador
 	telefono NUMERIC(18,0) PRIMARY KEY,
 	localidad VARCHAR(20) NOT NULL DEFAULT 'Sin Especificar',
 	direccion VARCHAR(255) NOT NULL,
+	depto VARCHAR(3) DEFAULT 'NA',
+	nro_piso VARCHAR(3) DEFAULT 'NA',
 	nombre VARCHAR(255) NOT NULL,
 	apellido VARCHAR(255) NOT NULL,
 	dni NUMERIC(18,0) NOT NULL,
@@ -91,7 +97,7 @@ CREATE TABLE LOS_CHATADROIDES.Administrador
 	mail VARCHAR(50),
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
 	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion)
+	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
 );
 
 
@@ -182,7 +188,7 @@ BEGIN
 
 	  WHILE (@@FETCH_STATUS = 0)
 		BEGIN	
-			INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion) VALUES ('Sin Especificar', @direccion_x_registro);
+			INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, depto, nro_piso) VALUES ('Sin Especificar', @direccion_x_registro, 'NA', 'NA');
 			FETCH direccion INTO @direccion_x_registro;
 		END 
 
@@ -695,6 +701,44 @@ BEGIN
 END
 GO
 
+
+EXEC LOS_CHATADROIDES.Migrar_Domicilios;
+EXEC LOS_CHATADROIDES.Migrar_Turnos;
+
+INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Chofer');
+INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Cliente');
+INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Administrador');
+
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Rol');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Usuario');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Cliente');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Automovil');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Chofer');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Viajes');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Rendicion de cuenta del Chofer');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Listado Estadistico');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Facturacion a Cliente');
+
+EXEC LOS_CHATADROIDES.Cargar_Funcionalidades_X_Rol;
+EXEC LOS_CHATADROIDES.Migrar_Clientes;
+EXEC LOS_CHATADROIDES.Migrar_Choferes;
+
+INSERT INTO LOS_CHATADROIDES.Usuario
+	(username, password) VALUES ('admin', 'w23e')
+
+INSERT INTO LOS_CHATADROIDES.Administrador 
+	(telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES
+		(1, '25 de Mayo 5619', 'Quique', 'Reinosa', 1, '1966-01-01', 'chakl@hotmail.com', 'admin')
+	
+EXEC LOS_CHATADROIDES.Cargar_Roles_X_Usuarios;
+EXEC LOS_CHATADROIDES.Migrar_Autos;
+EXEC LOS_CHATADROIDES.Migrar_Auto_X_Turno;
+EXEC LOS_CHATADROIDES.Migrar_Rendicion;
+EXEC LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe; 
+EXEC LOS_CHATADROIDES.Migrar_Viajes;
+EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
+GO
+
 CREATE PROCEDURE LOS_CHATADROIDES.Insertar_domicilio_si_no_existe
 @localidad VARCHAR(20), @direccion VARCHAR(255),
 @nro_piso SMALLINT, @depto VARCHAR(3)
@@ -796,39 +840,3 @@ BEGIN
 	END
 END
 GO
-
-EXEC LOS_CHATADROIDES.Migrar_Domicilios;
-EXEC LOS_CHATADROIDES.Migrar_Turnos;
-
-INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Chofer');
-INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Cliente');
-INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Administrador');
-
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Rol');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Usuario');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Cliente');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Automovil');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Chofer');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Viajes');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Rendicion de cuenta del Chofer');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Listado Estadistico');
-INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Facturacion a Cliente');
-
-EXEC LOS_CHATADROIDES.Cargar_Funcionalidades_X_Rol;
-EXEC LOS_CHATADROIDES.Migrar_Clientes;
-EXEC LOS_CHATADROIDES.Migrar_Choferes;
-
-INSERT INTO LOS_CHATADROIDES.Usuario
-	(username, password) VALUES ('admin', 'w23e')
-
-INSERT INTO LOS_CHATADROIDES.Administrador 
-	(telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES
-		(1, '25 de Mayo 5619', 'Quique', 'Reinosa', 1, '1966-01-01', 'chakl@hotmail.com', 'admin')
-	
-EXEC LOS_CHATADROIDES.Cargar_Roles_X_Usuarios;
-EXEC LOS_CHATADROIDES.Migrar_Autos;
-EXEC LOS_CHATADROIDES.Migrar_Auto_X_Turno;
-EXEC LOS_CHATADROIDES.Migrar_Rendicion;
-EXEC LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe; 
-EXEC LOS_CHATADROIDES.Migrar_Viajes;
-EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;

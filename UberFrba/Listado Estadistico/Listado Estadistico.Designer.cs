@@ -1,4 +1,4 @@
-﻿namespace UberFrba.Facturacion_Cliente
+﻿namespace UberFrba.Listado_Estadistico
 {
     partial class Listado_Estadistico
     {
@@ -29,17 +29,16 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
+            this.trimestre = new System.Windows.Forms.NumericUpDown();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.listados = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.dataGridView2 = new System.Windows.Forms.DataGridView();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.listadoEstadistico = new System.Windows.Forms.DataGridView();
+            this.consultar = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            this.anio = new System.Windows.Forms.DateTimePicker();
+            ((System.ComponentModel.ISupportInitialize)(this.trimestre)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listadoEstadistico)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -51,38 +50,46 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Ingrese un año ";
             // 
-            // comboBox1
+            // trimestre
             // 
-            this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(343, 26);
-            this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 2;
-            // 
-            // numericUpDown1
-            // 
-            this.numericUpDown1.Location = new System.Drawing.Point(343, 83);
-            this.numericUpDown1.Name = "numericUpDown1";
-            this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 3;
-            this.numericUpDown1.ValueChanged += new System.EventHandler(this.numericUpDown1_ValueChanged);
+            this.trimestre.Location = new System.Drawing.Point(343, 79);
+            this.trimestre.Maximum = new decimal(new int[] {
+            4,
+            0,
+            0,
+            0});
+            this.trimestre.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.trimestre.Name = "trimestre";
+            this.trimestre.ReadOnly = true;
+            this.trimestre.Size = new System.Drawing.Size(181, 20);
+            this.trimestre.TabIndex = 3;
+            this.trimestre.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.trimestre.ValueChanged += new System.EventHandler(this.trimestre_ValueChanged);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(172, 85);
+            this.label2.Location = new System.Drawing.Point(172, 84);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 4;
             this.label2.Text = "Seleccione un trimestre";
             // 
-            // comboBox2
+            // listados
             // 
-            this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(343, 133);
-            this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(121, 21);
-            this.comboBox2.TabIndex = 5;
+            this.listados.FormattingEnabled = true;
+            this.listados.Location = new System.Drawing.Point(343, 133);
+            this.listados.Name = "listados";
+            this.listados.Size = new System.Drawing.Size(181, 21);
+            this.listados.TabIndex = 5;
             // 
             // label3
             // 
@@ -93,36 +100,32 @@
             this.label3.TabIndex = 6;
             this.label3.Text = "Seleccione un tipo de listado";
             // 
-            // dataGridView2
+            // listadoEstadistico
             // 
-            this.dataGridView2.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView2.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView2.Location = new System.Drawing.Point(40, 231);
-            this.dataGridView2.Name = "dataGridView2";
-            this.dataGridView2.Size = new System.Drawing.Size(559, 149);
-            this.dataGridView2.TabIndex = 53;
+            this.listadoEstadistico.AllowUserToAddRows = false;
+            this.listadoEstadistico.AllowUserToDeleteRows = false;
+            this.listadoEstadistico.AllowUserToOrderColumns = true;
+            this.listadoEstadistico.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.listadoEstadistico.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.listadoEstadistico.Location = new System.Drawing.Point(40, 231);
+            this.listadoEstadistico.Name = "listadoEstadistico";
+            this.listadoEstadistico.ReadOnly = true;
+            this.listadoEstadistico.Size = new System.Drawing.Size(559, 149);
+            this.listadoEstadistico.TabIndex = 53;
             // 
-            // button1
+            // consultar
             // 
-            this.button1.Location = new System.Drawing.Point(272, 183);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 54;
-            this.button1.Text = "Limpiar";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(398, 183);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 55;
-            this.button2.Text = "Consultar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.consultar.Location = new System.Drawing.Point(343, 183);
+            this.consultar.Name = "consultar";
+            this.consultar.Size = new System.Drawing.Size(75, 23);
+            this.consultar.TabIndex = 55;
+            this.consultar.Text = "Consultar";
+            this.consultar.UseVisualStyleBackColor = true;
+            this.consultar.Click += new System.EventHandler(this.consultar_Click);
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(155, 183);
+            this.volver.Location = new System.Drawing.Point(214, 183);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 56;
@@ -130,26 +133,33 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
+            // anio
+            // 
+            this.anio.Location = new System.Drawing.Point(343, 27);
+            this.anio.Name = "anio";
+            this.anio.Size = new System.Drawing.Size(181, 20);
+            this.anio.TabIndex = 57;
+            this.anio.ValueChanged += new System.EventHandler(this.anio_ValueChanged);
+            // 
             // Listado_Estadistico
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(673, 404);
+            this.ClientSize = new System.Drawing.Size(638, 404);
+            this.Controls.Add(this.anio);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.dataGridView2);
+            this.Controls.Add(this.consultar);
+            this.Controls.Add(this.listadoEstadistico);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.comboBox2);
+            this.Controls.Add(this.listados);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.numericUpDown1);
-            this.Controls.Add(this.comboBox1);
+            this.Controls.Add(this.trimestre);
             this.Controls.Add(this.label1);
             this.Name = "Listado_Estadistico";
             this.Text = "Listado Estadistico";
             this.Load += new System.EventHandler(this.Form2_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.numericUpDown1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.trimestre)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listadoEstadistico)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -158,14 +168,13 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox1;
-        private System.Windows.Forms.NumericUpDown numericUpDown1;
+        private System.Windows.Forms.NumericUpDown trimestre;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.ComboBox listados;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.DataGridView dataGridView2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.DataGridView listadoEstadistico;
+        private System.Windows.Forms.Button consultar;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.DateTimePicker anio;
     }
 }

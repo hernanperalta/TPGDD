@@ -6,34 +6,26 @@ using System.Threading.Tasks;
 
 namespace UberFrba.Abm_Chofer
 {
-    public class Chofer
+    public partial class Chofer
     {
-        /*
-         telefono NUMERIC(18,0) PRIMARY KEY,
-	    localidad VARCHAR(20) NOT NULL DEFAULT 'Sin Especificar',
-	    direccion VARCHAR(255) NOT NULL,
-	    nombre VARCHAR(255) NOT NULL,
-	    apellido VARCHAR(255) NOT NULL,
-	    dni NUMERIC(18,0) NOT NULL,
-	    fecha_de_nacimiento DATETIME NOT NULL,
-	    mail VARCHAR(50),
-	    username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
-	    habilitado BIT NOT NULL DEFAULT 1,
-         */
-        public int telefono;
-        public string localidad;
-        public string direccion;
         public string nombre;
         public string apellido;
         public int dni;
-        public DateTime fechaNac;
+        public Domicilio domicilio;
+        public int telefono;
         public string mail;
-        public short nroPiso;
-
-        public Chofer() 
+        public DateTime fechaNac;
+        
+        public Chofer(string nombre, string apellido, int dni, Domicilio domicilio, int telefono, string mail, DateTime fechaNac) 
         {
-                 
+            this.nombre = nombre;
+            this.apellido = apellido;
+            this.dni = dni;
+            this.domicilio = domicilio;
+            this.telefono = telefono;
+            this.mail = mail;
+            this.fechaNac = fechaNac;
         }
-
+        
     }
 }

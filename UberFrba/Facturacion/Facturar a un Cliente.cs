@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UberFrba.Facturacion_Cliente
+namespace UberFrba.Listado_Estadistico
 {
     public partial class Facturacion_Cliente : Form
     {

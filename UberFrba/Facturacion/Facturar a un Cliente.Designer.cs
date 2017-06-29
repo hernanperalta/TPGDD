@@ -1,4 +1,4 @@
-﻿namespace UberFrba.Facturacion_Cliente
+﻿namespace UberFrba.Listado_Estadistico
 {
     partial class Facturacion_Cliente
     {
