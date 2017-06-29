@@ -44,7 +44,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(172, 29);
+            this.label1.Location = new System.Drawing.Point(136, 29);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(81, 13);
             this.label1.TabIndex = 0;
@@ -52,7 +52,7 @@
             // 
             // trimestre
             // 
-            this.trimestre.Location = new System.Drawing.Point(343, 79);
+            this.trimestre.Location = new System.Drawing.Point(307, 79);
             this.trimestre.Maximum = new decimal(new int[] {
             4,
             0,
@@ -77,7 +77,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(172, 84);
+            this.label2.Location = new System.Drawing.Point(136, 84);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(117, 13);
             this.label2.TabIndex = 4;
@@ -86,7 +86,7 @@
             // listados
             // 
             this.listados.FormattingEnabled = true;
-            this.listados.Location = new System.Drawing.Point(343, 133);
+            this.listados.Location = new System.Drawing.Point(307, 133);
             this.listados.Name = "listados";
             this.listados.Size = new System.Drawing.Size(181, 21);
             this.listados.TabIndex = 5;
@@ -94,7 +94,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(172, 136);
+            this.label3.Location = new System.Drawing.Point(136, 136);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(143, 13);
             this.label3.TabIndex = 6;
@@ -135,7 +135,7 @@
             // 
             // anio
             // 
-            this.anio.Location = new System.Drawing.Point(343, 27);
+            this.anio.Location = new System.Drawing.Point(307, 27);
             this.anio.Name = "anio";
             this.anio.Size = new System.Drawing.Size(181, 20);
             this.anio.TabIndex = 57;
