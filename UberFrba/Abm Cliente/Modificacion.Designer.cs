@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.telefono = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.volver = new System.Windows.Forms.Button();
@@ -56,16 +55,8 @@
             this.label1 = new System.Windows.Forms.Label();
             this.usernameCliente = new System.Windows.Forms.TextBox();
             this.label9 = new System.Windows.Forms.Label();
+            this.telefonoCliente = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
-            // 
-            // telefono
-            // 
-            this.telefono.AutoSize = true;
-            this.telefono.Location = new System.Drawing.Point(55, 198);
-            this.telefono.Name = "telefono";
-            this.telefono.Size = new System.Drawing.Size(45, 13);
-            this.telefono.TabIndex = 72;
-            this.telefono.Text = "telefono";
             // 
             // label3
             // 
@@ -302,11 +293,20 @@
             this.label9.TabIndex = 101;
             this.label9.Text = "Nombre de usuario :";
             // 
+            // telefonoCliente
+            // 
+            this.telefonoCliente.Location = new System.Drawing.Point(33, 191);
+            this.telefonoCliente.Name = "telefonoCliente";
+            this.telefonoCliente.Size = new System.Drawing.Size(100, 20);
+            this.telefonoCliente.TabIndex = 103;
+            this.telefonoCliente.TextChanged += new System.EventHandler(this.telefonoCliente_TextChanged);
+            // 
             // Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(409, 491);
+            this.Controls.Add(this.telefonoCliente);
             this.Controls.Add(this.usernameCliente);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.localidadCliente);
@@ -333,7 +333,6 @@
             this.Controls.Add(this.nombreCliente);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.label12);
-            this.Controls.Add(this.telefono);
             this.Controls.Add(this.label3);
             this.Name = "Modificacion";
             this.Text = "Modificacion";
@@ -345,7 +344,6 @@
 
         #endregion
 
-        private System.Windows.Forms.Label telefono;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.Button volver;
@@ -373,6 +371,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox usernameCliente;
         private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.TextBox telefonoCliente;
 
     }
 }

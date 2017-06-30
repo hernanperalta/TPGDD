@@ -130,7 +130,7 @@ namespace UberFrba.Abm_Cliente
             this.codPostal.Text = this.cliente.codigoPostal;
             this.localidadCliente.Text = this.cliente.localidad;
             this.usernameCliente.Text = this.cliente.username;
-            this.telefono.Text = this.cliente.telefono;
+            this.telefonoCliente.Text = this.cliente.telefono;
             string mes = this.cliente.fechaNac.Substring(0, 2);
             string dia = this.cliente.fechaNac.Substring(3, 2);
             string anio = this.cliente.fechaNac.Substring(6, 4);
@@ -139,19 +139,19 @@ namespace UberFrba.Abm_Cliente
 
         private void actualizarCliente()
         {
-            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Cliente "
-                                      + "SET nombre = '" + this.nombreCliente.Text + "', "
-                                          + "apellido = ' " + this.apellidoCliente.Text + "', "
-                                          + "dni = ' " + this.dniCliente.Text + "', "
-                                          + "mail = ' " + this.mailCliente.Text + "', "
-                                          + "localidad = ' " + this.localidadCliente.Text + "', "
-                                          + "direccion = ' " + this.direccionCliente.Text + "', "
-                                          + "depto = ' " + this.deptoCliente.Text + "', "
-                                          + "nro_piso = ' " + this.nroPiso.Text + "', "
-                                          + "username = ' " + this.usernameCliente.Text + "', "
-                                          + "codigo_postal = ' " + this.codPostal.Text + "'mama "
-                               //           + "fecha_de_nacimiento = ' " + this.fechaNacCli.Text + "' "
-                                      + "WHERE telefono = '" + cliente.telefono + "' ");
+            DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Actualizar_Cliente "
+                                      + "'" + this.nombreCliente.Text + "', "
+                                          + "'" + this.apellidoCliente.Text + "', "
+                                          + "'" + this.telefonoCliente.Text + "', "
+                                          + "'" + this.dniCliente.Text + "', "
+                                          + "'" + this.mailCliente.Text + "', "
+                                          + "'" + this.localidadCliente.Text + "', "
+                                          + "'" + this.direccionCliente.Text + "', "
+                                          + "'" + this.deptoCliente.Text + "', "
+                                          + "'" + this.nroPiso.Text + "', "
+                                          + "'" + this.codPostal.Text + "', "
+                                          + "'" + this.fechaNacCli.Value.ToString() + "', "
+                                          + "'" + this.cliente.telefono + "' ");
         }
 
         private void fechaNacCli_TextChanged(object sender, EventArgs e)
@@ -204,6 +204,11 @@ namespace UberFrba.Abm_Cliente
         }
 
         private void nroPiso_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void telefonoCliente_TextChanged(object sender, EventArgs e)
         {
 
         }

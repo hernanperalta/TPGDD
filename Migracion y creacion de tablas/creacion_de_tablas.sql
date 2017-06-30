@@ -7,14 +7,6 @@ CREATE TABLE LOS_CHATADROIDES.Usuario
 	habilitado BIT NOT NULL DEFAULT 1
 );
 
-CREATE TABLE LOS_CHATADROIDES.Domicilio
-(
-	localidad VARCHAR(20),
-	direccion VARCHAR(255),
-	depto VARCHAR(3) DEFAULT 'NA',
-	nro_piso VARCHAR(3) DEFAULT 'NA',
-	PRIMARY KEY (localidad, direccion, depto, nro_piso)
-);
 
 CREATE TABLE LOS_CHATADROIDES.Turno
 (
@@ -62,8 +54,7 @@ CREATE TABLE LOS_CHATADROIDES.Cliente
 	depto VARCHAR(3) DEFAULT 'NA',
 	nro_piso VARCHAR(3) DEFAULT 'NA',
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
-	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
+	habilitado BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE LOS_CHATADROIDES.Chofer
@@ -79,8 +70,7 @@ CREATE TABLE LOS_CHATADROIDES.Chofer
 	depto VARCHAR(3) DEFAULT 'NA',
 	nro_piso VARCHAR(3) DEFAULT 'NA',
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
-	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
+	habilitado BIT NOT NULL DEFAULT 1
 );
 
 CREATE TABLE LOS_CHATADROIDES.Administrador
@@ -96,8 +86,7 @@ CREATE TABLE LOS_CHATADROIDES.Administrador
 	fecha_de_nacimiento DATETIME NOT NULL,
 	mail VARCHAR(50),
 	username VARCHAR(50) UNIQUE NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Usuario(username),
-	habilitado BIT NOT NULL DEFAULT 1,
-	FOREIGN KEY (localidad, direccion, depto, nro_piso) REFERENCES LOS_CHATADROIDES.Domicilio(localidad, direccion, depto, nro_piso)
+	habilitado BIT NOT NULL DEFAULT 1
 );
 
 
@@ -171,31 +160,6 @@ CREATE TABLE LOS_CHATADROIDES.Viaje
 );
 GO
 
-CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Domicilios
-AS
-BEGIN 
-	 DECLARE direccion CURSOR FOR 
-	 SELECT Cliente_Direccion as dir
-	 FROM gd_esquema.Maestra
-     UNION
-	 SELECT Chofer_Direccion
-	 FROM gd_esquema.Maestra
-	 
-	 DECLARE @direccion_x_registro VARCHAR(255);
-
-	 OPEN direccion;
-	 FETCH direccion INTO @direccion_x_registro;
-
-	  WHILE (@@FETCH_STATUS = 0)
-		BEGIN	
-			INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, depto, nro_piso) VALUES ('Sin Especificar', @direccion_x_registro, 'NA', 'NA');
-			FETCH direccion INTO @direccion_x_registro;
-		END 
-
-	 CLOSE direccion;
-	 DEALLOCATE direccion;
-END
-GO 
 
 CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Turnos
 AS
@@ -701,8 +665,6 @@ BEGIN
 END
 GO
 
-
-EXEC LOS_CHATADROIDES.Migrar_Domicilios;
 EXEC LOS_CHATADROIDES.Migrar_Turnos;
 
 INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Chofer');
@@ -737,19 +699,6 @@ EXEC LOS_CHATADROIDES.Migrar_Rendicion;
 EXEC LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe; 
 EXEC LOS_CHATADROIDES.Migrar_Viajes;
 EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
-GO
-
-CREATE PROCEDURE LOS_CHATADROIDES.Insertar_domicilio_si_no_existe
-@localidad VARCHAR(20), @direccion VARCHAR(255),
-@nro_piso SMALLINT, @depto VARCHAR(3)
-AS
-BEGIN
-	IF( NOT EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Domicilio WHERE localidad = @localidad AND direccion = @direccion) )
-	BEGIN
-		INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, nro_piso, depto) 
-			VALUES (@localidad, @direccion, @nro_piso, @depto)
-	END
-END
 GO
 
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_chofer
@@ -792,8 +741,6 @@ AS
 BEGIN
 	BEGIN TRY
 		BEGIN TRANSACTION
-			EXEC LOS_CHATADROIDES.Insertar_domicilio_si_no_existe @localidad, @direccion, @nro_piso, @depto
-
 			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal)
 				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username, @codigo_postal)
 		COMMIT TRANSACTION
@@ -840,7 +787,36 @@ BEGIN
 	END
 END
 GO
+CREATE PROCEDURE LOS_CHATADROIDES.Actualizar_Cliente
+	 @nombre VARCHAR(255),
+	 @apellido VARCHAR(255),
+	 @telefono NUMERIC(18,0),
+	 @dni NUMERIC(18,0),
+	 @mail VARCHAR(255),
+	 @localidad VARCHAR(20),	
+	 @direccion VARCHAR(255),
+	 @depto VARCHAR(3),
+	 @nro_piso VARCHAR(3),
+	 @codPostal VARCHAR(5),
+	 @fecha_de_nac DATETIME, 
+	 @telAnterior NUMERIC(18,0)
+AS
+BEGIN
 
+	UPDATE LOS_CHATADROIDES.Cliente
+	SET telefono = @telefono, @direccion = direccion, @dni = dni, @mail = mail, @fecha_de_nac = fecha_de_nacimiento,
+			@nombre = nombre, @apellido = apellido, @localidad = localidad, @nro_piso = nro_piso, @depto = depto, @codPostal = codigo_postal
+	WHERE telefono = @telAnterior
+
+		UPDATE LOS_CHATADROIDES.Factura
+	SET telefono_cliente = @telefono
+	WHERE telefono_cliente = @telAnterior
+
+	UPDATE LOS_CHATADROIDES.Viaje
+	SET telefono_cliente = @telefono
+	WHERE telefono_cliente = @telAnterior
+
+END
 
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_automovil
 @patente varchar(10), @numero_chofer numeric(18,0), 

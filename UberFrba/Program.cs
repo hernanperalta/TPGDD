@@ -28,9 +28,9 @@ namespace UberFrba
        
             //new Listado_Estadistico.Listado_Estadistico("admin", "Administrador").Show();
             //new Alta_de_Usuario.Alta_de_Usuario("admin", "Administrador").Show();
-            //new Abm_Cliente.Alta("admin", "Administrador").Show();
+            new Abm_Cliente.Baja_o_Modificacion(false,"admin", "Administrador").Show();
 
-            new Facturacion.Facturacion_Cliente("admin", "Administrador").Show();
+            //new Facturacion.Facturacion_Cliente("admin", "Administrador").Show();
 
             Application.Run();
 
