@@ -26,8 +26,9 @@ namespace UberFrba.Listado_Estadistico
             anio.Format = DateTimePickerFormat.Custom;
             anio.CustomFormat = "yyyy";
             anio.ShowUpDown = true;
+            this.listados.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this.listados.Items.Add(new Listado("Chóferes con mayor recaudación", "SELECT TOP 5 C.telefono, nombre, apellido, dni, SUM(importe_total) "
+            this.listados.Items.Add(new Listado("Chóferes con mayor recaudación", "SELECT TOP 5 C.telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, SUM(importe_total) as Recaudacion "
                                                                                 + "FROM LOS_CHATADROIDES.Chofer C JOIN LOS_CHATADROIDES.Viaje V "
 	                                                                            + "ON(C.telefono = V.telefono_chofer) "
 	                                                                            + "JOIN LOS_CHATADROIDES.Rendicion R "
@@ -37,12 +38,31 @@ namespace UberFrba.Listado_Estadistico
                                                                                 + "GROUP BY telefono, nombre, apellido, dni "
                                                                                 + "ORDER BY 5 DESC"));
 
-            this.listados.Items.Add(new Listado("Choferes con el viaje más largo realizado", "SELECT TOP 5 telefono, nombre, apellido, dni, numero_viaje, kilometros_del_viaje "
+            this.listados.Items.Add(new Listado("Choferes con el viaje más largo realizado", "SELECT TOP 5 telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, numero_viaje as 'Numero viaje', kilometros_del_viaje as 'Kilometros de viaje' "
                                                                                             + "FROM LOS_CHATADROIDES.Chofer C JOIN LOS_CHATADROIDES.Viaje V "
 	                                                                                        + "ON(C.telefono = V.telefono_chofer) "
                                                                                             + "WHERE YEAR(V.fecha_y_hora_inicio_viaje) = anioSeleccionado "
                                                                                             + "AND LOS_CHATADROIDES.Esta_en_trimestre(MONTH(fecha_y_hora_inicio_viaje), trimestreSeleccionado) = 1 "
                                                                                             + "ORDER BY 6 DESC"));
+
+
+            this.listados.Items.Add(new Listado("Clientes con mayor consumo", "SELECT TOP 5 telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, COUNT(numero_viaje) 'Cantidad de viajes' "
+                                                                            + "FROM LOS_CHATADROIDES.Cliente C JOIN LOS_CHATADROIDES.Viaje V "
+                                                                            + "ON(C.telefono = V.telefono_cliente) "
+                                                                            + "WHERE YEAR(V.fecha_y_hora_inicio_viaje) = anioSeleccionado "
+                                                                            + "AND LOS_CHATADROIDES.Esta_en_trimestre(MONTH(fecha_y_hora_inicio_viaje), trimestreSeleccionado) = 1 "
+                                                                            + "GROUP BY telefono, nombre, apellido, dni "
+                                                                            + "ORDER BY 5 DESC"));
+
+      
+            this.listados.Items.Add(new Listado("Cliente que utilizo más veces el mismo automóvil en los viajes que ha realizado", "SELECT TOP 5 telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, COUNT(DISTINCT patente) as 'Veces que uso el mismo auto' "
+                                                                                                                                + "FROM LOS_CHATADROIDES.Cliente C JOIN LOS_CHATADROIDES.Viaje V "
+                                                                                                                                + "ON(C.telefono = V.telefono_cliente) "
+                                                                                                                                + "WHERE YEAR(V.fecha_y_hora_inicio_viaje) = anioSeleccionado "
+                                                                                                                                + "AND LOS_CHATADROIDES.Esta_en_trimestre(MONTH(fecha_y_hora_inicio_viaje), trimestreSeleccionado) = 1 "
+                                                                                                                                + "GROUP BY telefono, nombre, apellido, dni "
+                                                                                                                                + "ORDER BY 5 DESC"));
+
         }
 
         private void trimestre_ValueChanged(object sender, EventArgs e)
@@ -74,13 +94,14 @@ namespace UberFrba.Listado_Estadistico
 
         private void consultar_Click(object sender, EventArgs e)
         {
-            //this.listadoEstadistico.DataSource = (this.listados.SelectedItem as Listado).obtenerListado(this.anio.Value.Year.ToString(), this.trimestre.Text);
-            /*listado.Clear();
-            listado = (this.listados.SelectedItem as Listado).obtenerListado(this.anio.Value.Year.ToString(), this.trimestre.Text);
-            this.listadoEstadistico.DataSource = listado;*/
-
+           
             listado.Clear();
-
+            if (this.listados.SelectedItem == null)
+            {
+                MessageBox.Show("Seleccione un tipo de listado para continuar.");
+                return;
+            }
+     
             try
             {
                 listado = (this.listados.SelectedItem as Listado).obtenerListado(this.anio.Value.Year.ToString(), this.trimestre.Text);
@@ -91,6 +112,8 @@ namespace UberFrba.Listado_Estadistico
                 MessageBox.Show("No hay registros para el trimestre y año seleccionado");
                 return;
             }
+      
+            
 
         } 
     }

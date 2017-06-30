@@ -30,10 +30,10 @@
         {
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
+            this.usernameTB = new System.Windows.Forms.TextBox();
+            this.passwordTB = new System.Windows.Forms.TextBox();
+            this.registrarUsuario = new System.Windows.Forms.Button();
+            this.roles = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
             this.button2 = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
@@ -57,42 +57,40 @@
             this.label2.TabIndex = 1;
             this.label2.Text = "Nueva Contraseña";
             // 
-            // textBox1
+            // usernameTB
             // 
-            this.textBox1.Location = new System.Drawing.Point(115, 53);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(221, 20);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.usernameTB.Location = new System.Drawing.Point(115, 53);
+            this.usernameTB.Name = "usernameTB";
+            this.usernameTB.Size = new System.Drawing.Size(221, 20);
+            this.usernameTB.TabIndex = 3;
+            this.usernameTB.TextChanged += new System.EventHandler(this.usernameTB_TextChanged);
             // 
-            // textBox2
+            // passwordTB
             // 
-            this.textBox2.Location = new System.Drawing.Point(115, 119);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(221, 20);
-            this.textBox2.TabIndex = 4;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            this.passwordTB.Location = new System.Drawing.Point(115, 119);
+            this.passwordTB.Name = "passwordTB";
+            this.passwordTB.Size = new System.Drawing.Size(221, 20);
+            this.passwordTB.TabIndex = 4;
+            this.passwordTB.TextChanged += new System.EventHandler(this.passwordTB_TextChanged);
             // 
-            // button1
+            // registrarUsuario
             // 
-            this.button1.Location = new System.Drawing.Point(264, 258);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(120, 23);
-            this.button1.TabIndex = 5;
-            this.button1.Text = "Registrar Usuario";
-            this.button1.UseVisualStyleBackColor = true;
+            this.registrarUsuario.Location = new System.Drawing.Point(264, 258);
+            this.registrarUsuario.Name = "registrarUsuario";
+            this.registrarUsuario.Size = new System.Drawing.Size(120, 23);
+            this.registrarUsuario.TabIndex = 5;
+            this.registrarUsuario.Text = "Registrar Usuario";
+            this.registrarUsuario.UseVisualStyleBackColor = true;
+            this.registrarUsuario.Click += new System.EventHandler(this.registrarUsuario_Click);
             // 
-            // checkedListBox1
+            // roles
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
-            "Administrador",
-            "Chofer",
-            "Cliente"});
-            this.checkedListBox1.Location = new System.Drawing.Point(157, 187);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 49);
-            this.checkedListBox1.TabIndex = 6;
+            this.roles.FormattingEnabled = true;
+            this.roles.Location = new System.Drawing.Point(157, 187);
+            this.roles.Name = "roles";
+            this.roles.Size = new System.Drawing.Size(120, 49);
+            this.roles.TabIndex = 6;
+            this.roles.SelectedIndexChanged += new System.EventHandler(this.roles_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -114,7 +112,7 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(58, 258);
+            this.volver.Location = new System.Drawing.Point(67, 258);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 15;
@@ -130,10 +128,10 @@
             this.Controls.Add(this.volver);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.checkedListBox1);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.textBox2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.roles);
+            this.Controls.Add(this.registrarUsuario);
+            this.Controls.Add(this.passwordTB);
+            this.Controls.Add(this.usernameTB);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Name = "Alta_de_Usuario";
@@ -148,10 +146,10 @@
 
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.TextBox textBox2;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
+        private System.Windows.Forms.TextBox usernameTB;
+        private System.Windows.Forms.TextBox passwordTB;
+        private System.Windows.Forms.Button registrarUsuario;
+        private System.Windows.Forms.CheckedListBox roles;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button volver;

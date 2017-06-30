@@ -51,6 +51,7 @@
     <Compile Include="Abm Automovil\Alta.Designer.cs">
       <DependentUpon>Alta.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Automovil\Automovil.cs" />
     <Compile Include="Abm Automovil\Baja o Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +59,7 @@
       <DependentUpon>Baja o Modificacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Automovil\Error.cs" />
+    <Compile Include="Abm Automovil\Filtro.cs" />
     <Compile Include="Abm Automovil\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>

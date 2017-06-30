@@ -252,5 +252,10 @@ namespace UberFrba.Abm_Chofer
             this.buscarChoferes();
         }
 
+        private void choferesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
     }
 }

@@ -164,6 +164,7 @@
             this.choferesGrid.ReadOnly = true;
             this.choferesGrid.Size = new System.Drawing.Size(550, 171);
             this.choferesGrid.TabIndex = 56;
+            this.choferesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.choferesGrid_CellContentClick);
             // 
             // Baja_o_Modificacion
             // 

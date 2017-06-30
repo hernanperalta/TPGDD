@@ -37,18 +37,12 @@
             this.label2 = new System.Windows.Forms.Label();
             this.marcaBM = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button3 = new System.Windows.Forms.Button();
+            this.limpiar = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.patente = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.modelo = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.marca = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.numeroChofer = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.habilitado = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.seleccionar = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.tablaAutomovil = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
             this.bajaOModificacion = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablaAutomovil)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
@@ -66,6 +60,7 @@
             this.numeroChoferBM.Name = "numeroChoferBM";
             this.numeroChoferBM.Size = new System.Drawing.Size(100, 20);
             this.numeroChoferBM.TabIndex = 32;
+            this.numeroChoferBM.TextChanged += new System.EventHandler(this.numeroChoferBM_TextChanged);
             // 
             // label6
             // 
@@ -82,6 +77,7 @@
             this.patenteBM.Name = "patenteBM";
             this.patenteBM.Size = new System.Drawing.Size(100, 20);
             this.patenteBM.TabIndex = 30;
+            this.patenteBM.TextChanged += new System.EventHandler(this.patenteBM_TextChanged);
             // 
             // label1
             // 
@@ -115,7 +111,7 @@
             this.marcaBM.Name = "marcaBM";
             this.marcaBM.Size = new System.Drawing.Size(100, 20);
             this.marcaBM.TabIndex = 26;
-            this.marcaBM.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            this.marcaBM.TextChanged += new System.EventHandler(this.marcaBM_TextChanged);
             // 
             // label3
             // 
@@ -126,15 +122,15 @@
             this.label3.TabIndex = 25;
             this.label3.Text = "Marca :";
             // 
-            // button3
+            // limpiar
             // 
-            this.button3.Location = new System.Drawing.Point(57, 132);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(101, 25);
-            this.button3.TabIndex = 34;
-            this.button3.Text = "Limpiar";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.limpiar.Location = new System.Drawing.Point(57, 132);
+            this.limpiar.Name = "limpiar";
+            this.limpiar.Size = new System.Drawing.Size(101, 25);
+            this.limpiar.TabIndex = 34;
+            this.limpiar.Text = "Limpiar";
+            this.limpiar.UseVisualStyleBackColor = true;
+            this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
             // button4
             // 
@@ -142,54 +138,22 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(101, 25);
             this.button4.TabIndex = 35;
-            this.button4.Text = "Buscar";
+            this.button4.Text = "Buscar todos";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
-            // dataGridView1
+            // tablaAutomovil
             // 
-            this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
-            this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.patente,
-            this.modelo,
-            this.marca,
-            this.numeroChofer,
-            this.habilitado,
-            this.seleccionar});
-            this.dataGridView1.Location = new System.Drawing.Point(22, 187);
-            this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(643, 149);
-            this.dataGridView1.TabIndex = 37;
-            // 
-            // patente
-            // 
-            this.patente.HeaderText = "Patente";
-            this.patente.Name = "patente";
-            // 
-            // modelo
-            // 
-            this.modelo.HeaderText = "Modelo";
-            this.modelo.Name = "modelo";
-            // 
-            // marca
-            // 
-            this.marca.HeaderText = "Marca";
-            this.marca.Name = "marca";
-            // 
-            // numeroChofer
-            // 
-            this.numeroChofer.HeaderText = "Numero de chofer";
-            this.numeroChofer.Name = "numeroChofer";
-            // 
-            // habilitado
-            // 
-            this.habilitado.HeaderText = "Habilitado";
-            this.habilitado.Name = "habilitado";
-            // 
-            // seleccionar
-            // 
-            this.seleccionar.HeaderText = "Seleccionar";
-            this.seleccionar.Name = "seleccionar";
+            this.tablaAutomovil.AllowUserToAddRows = false;
+            this.tablaAutomovil.AllowUserToDeleteRows = false;
+            this.tablaAutomovil.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
+            this.tablaAutomovil.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.tablaAutomovil.Location = new System.Drawing.Point(22, 187);
+            this.tablaAutomovil.Name = "tablaAutomovil";
+            this.tablaAutomovil.ReadOnly = true;
+            this.tablaAutomovil.Size = new System.Drawing.Size(643, 149);
+            this.tablaAutomovil.TabIndex = 37;
+            this.tablaAutomovil.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // volver
             // 
@@ -211,16 +175,16 @@
             this.bajaOModificacion.UseVisualStyleBackColor = true;
             this.bajaOModificacion.Click += new System.EventHandler(this.bajaOModificacion_Click);
             // 
-            // Baja
+            // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(717, 405);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.dataGridView1);
+            this.Controls.Add(this.tablaAutomovil);
             this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.limpiar);
             this.Controls.Add(this.numeroChoferBM);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.patenteBM);
@@ -230,10 +194,10 @@
             this.Controls.Add(this.marcaBM);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
-            this.Name = "Baja";
+            this.Name = "Baja_o_Modificacion";
             this.Text = "Selección de Automóvil";
             this.Load += new System.EventHandler(this.Baja_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.tablaAutomovil)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -251,15 +215,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox marcaBM;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button limpiar;
         private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn patente;
-        private System.Windows.Forms.DataGridViewTextBoxColumn modelo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn marca;
-        private System.Windows.Forms.DataGridViewTextBoxColumn numeroChofer;
-        private System.Windows.Forms.DataGridViewTextBoxColumn habilitado;
-        private System.Windows.Forms.DataGridViewButtonColumn seleccionar;
+        private System.Windows.Forms.DataGridView tablaAutomovil;
         private System.Windows.Forms.Button volver;
         private System.Windows.Forms.Button bajaOModificacion;
     }

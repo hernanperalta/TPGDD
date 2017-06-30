@@ -65,7 +65,7 @@
             0});
             this.trimestre.Name = "trimestre";
             this.trimestre.ReadOnly = true;
-            this.trimestre.Size = new System.Drawing.Size(181, 20);
+            this.trimestre.Size = new System.Drawing.Size(272, 20);
             this.trimestre.TabIndex = 3;
             this.trimestre.Value = new decimal(new int[] {
             1,
@@ -85,10 +85,9 @@
             // 
             // listados
             // 
-            this.listados.FormattingEnabled = true;
             this.listados.Location = new System.Drawing.Point(307, 133);
             this.listados.Name = "listados";
-            this.listados.Size = new System.Drawing.Size(181, 21);
+            this.listados.Size = new System.Drawing.Size(272, 21);
             this.listados.TabIndex = 5;
             // 
             // label3
@@ -110,7 +109,7 @@
             this.listadoEstadistico.Location = new System.Drawing.Point(40, 231);
             this.listadoEstadistico.Name = "listadoEstadistico";
             this.listadoEstadistico.ReadOnly = true;
-            this.listadoEstadistico.Size = new System.Drawing.Size(559, 149);
+            this.listadoEstadistico.Size = new System.Drawing.Size(604, 196);
             this.listadoEstadistico.TabIndex = 53;
             // 
             // consultar
@@ -137,7 +136,7 @@
             // 
             this.anio.Location = new System.Drawing.Point(307, 27);
             this.anio.Name = "anio";
-            this.anio.Size = new System.Drawing.Size(181, 20);
+            this.anio.Size = new System.Drawing.Size(272, 20);
             this.anio.TabIndex = 57;
             this.anio.ValueChanged += new System.EventHandler(this.anio_ValueChanged);
             // 
@@ -145,7 +144,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(638, 404);
+            this.ClientSize = new System.Drawing.Size(704, 464);
             this.Controls.Add(this.anio);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.consultar);

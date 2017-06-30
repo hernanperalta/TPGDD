@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using UberFrba.Conexion;
-using UberFrba.Listado_Estadistico;
+using UberFrba.Facturacion;
 
 namespace UberFrba
 {
@@ -26,9 +26,11 @@ namespace UberFrba
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
        
-            new Listado_Estadistico.Listado_Estadistico("admin", "Administrador").Show();
-
+            //new Listado_Estadistico.Listado_Estadistico("admin", "Administrador").Show();
+            //new Alta_de_Usuario.Alta_de_Usuario("admin", "Administrador").Show();
             //new Abm_Cliente.Alta("admin", "Administrador").Show();
+
+            new Facturacion.Facturacion_Cliente("admin", "Administrador").Show();
 
             Application.Run();
 
