@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
-
+using System.Data.SqlClient;
 namespace UberFrba.Abm_Cliente
 {
     public partial class Modificacion : Form
@@ -36,9 +36,17 @@ namespace UberFrba.Abm_Cliente
             }
             else
             {
-                this.actualizarCliente();
-                MessageBox.Show("Se ha actualizado el cliente correctamente");
-                this.Close();
+                try
+                {
+                    this.actualizarCliente();
+                    MessageBox.Show("Se ha actualizado el cliente correctamente");
+                    this.Close();
+
+                }
+                catch (SqlException ex)
+                {
+                    MessageBox.Show("Ha habido un error en la actualización");
+                }
             }
         }
         private void limpiarCampos_Click(object sender, EventArgs e)
@@ -139,18 +147,19 @@ namespace UberFrba.Abm_Cliente
 
         private void actualizarCliente()
         {
-            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Actualizar_Cliente "
-                                        + "SET nombre = '" + this.nombreCliente.Text + "', "
-                                        + "apellido '" + this.apellidoCliente.Text + "', "
-                                        + "telefono = " + this.telefonoCliente.Text + ", "
-                                        + "dni = " + this.dniCliente.Text + ", "
-                                        + "mail ='" + this.mailCliente.Text + "', "
-                                        + "localidad = '" + this.localidadCliente.Text + "', "
-                                        + "direccion = '" + this.direccionCliente.Text + "', "
-                                        + "depto = '" + this.deptoCliente.Text + "', "
-                                        + "nro_piso = '" + this.nroPiso.Text + "', "
-                                        + "codigo_postal = '" + this.codPostal.Text + "', "
-                                        + "fecha_de_nacimiento = '" + this.fechaNacCli.Value + "'");
+            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Cliente "
+                                            + "SET nombre = '" + this.nombreCliente.Text + "', "
+                                            + "apellido = '" + this.apellidoCliente.Text + "', "
+                                            + "telefono = " + this.telefonoCliente.Text + ", "
+                                            + "dni = " + this.dniCliente.Text + ", "
+                                            + "mail ='" + this.mailCliente.Text + "', "
+                                            + "localidad = '" + this.localidadCliente.Text + "', "
+                                            + "direccion = '" + this.direccionCliente.Text + "', "
+                                            + "depto = '" + this.deptoCliente.Text + "', "
+                                            + "nro_piso = '" + this.nroPiso.Text + "', "
+                                            + "codigo_postal = '" + this.codPostal.Text + "', "
+                                            + "fecha_de_nacimiento = '" + this.fechaNacCli.Value + "' " 
+                                            +"WHERE telefono = " + this.cliente.telefono);
         }
 
         private void fechaNacCli_TextChanged(object sender, EventArgs e)
@@ -194,7 +203,6 @@ namespace UberFrba.Abm_Cliente
 
         private void usernameCliente_TextChanged(object sender, EventArgs e)
         {
-
         }
 
         private void fechaNacCli_ValueChanged(object sender, EventArgs e)

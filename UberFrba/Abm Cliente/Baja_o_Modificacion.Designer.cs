@@ -111,7 +111,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(612, 354);
+            this.bajaOModificacion.Location = new System.Drawing.Point(605, 354);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(117, 23);
             this.bajaOModificacion.TabIndex = 14;
@@ -154,7 +154,7 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(260, 354);
+            this.volver.Location = new System.Drawing.Point(275, 354);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 41;
@@ -164,7 +164,7 @@
             // 
             // rhabilitar
             // 
-            this.rhabilitar.Location = new System.Drawing.Point(422, 354);
+            this.rhabilitar.Location = new System.Drawing.Point(419, 354);
             this.rhabilitar.Name = "rhabilitar";
             this.rhabilitar.Size = new System.Drawing.Size(117, 23);
             this.rhabilitar.TabIndex = 42;
@@ -187,7 +187,7 @@
             // 
             this.clienteBindingSource.DataSource = typeof(UberFrba.Abm_Cliente.Cliente);
             // 
-            // rehabilitar
+            // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -206,7 +206,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.nombreCliente);
             this.Controls.Add(this.label1);
-            this.Name = "rehabilitar";
+            this.Name = "Baja_o_Modificacion";
             this.Load += new System.EventHandler(this.Baja_o_Modificacion_Load);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).EndInit();

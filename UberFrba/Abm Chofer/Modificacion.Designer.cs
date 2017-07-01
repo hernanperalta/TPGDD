@@ -51,8 +51,9 @@
             this.label4 = new System.Windows.Forms.Label();
             this.fechaNacChofer = new System.Windows.Forms.DateTimePicker();
             this.limpiar = new System.Windows.Forms.Button();
-            this.habilitado = new System.Windows.Forms.CheckBox();
             this.telefonoChofer = new System.Windows.Forms.TextBox();
+            this.label11 = new System.Windows.Forms.Label();
+            this.usernameChofer = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // label9
@@ -173,7 +174,7 @@
             // 
             // guardar
             // 
-            this.guardar.Location = new System.Drawing.Point(178, 376);
+            this.guardar.Location = new System.Drawing.Point(177, 403);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(100, 32);
             this.guardar.TabIndex = 77;
@@ -246,17 +247,6 @@
             this.limpiar.UseVisualStyleBackColor = true;
             this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
-            // habilitado
-            // 
-            this.habilitado.AutoSize = true;
-            this.habilitado.Location = new System.Drawing.Point(178, 342);
-            this.habilitado.Name = "habilitado";
-            this.habilitado.Size = new System.Drawing.Size(73, 17);
-            this.habilitado.TabIndex = 86;
-            this.habilitado.Text = "Habilitado";
-            this.habilitado.UseVisualStyleBackColor = true;
-            this.habilitado.CheckedChanged += new System.EventHandler(this.habilitado_CheckedChanged);
-            // 
             // telefonoChofer
             // 
             this.telefonoChofer.Location = new System.Drawing.Point(23, 72);
@@ -264,13 +254,32 @@
             this.telefonoChofer.Size = new System.Drawing.Size(100, 20);
             this.telefonoChofer.TabIndex = 87;
             // 
+            // label11
+            // 
+            this.label11.AutoSize = true;
+            this.label11.Location = new System.Drawing.Point(175, 338);
+            this.label11.Name = "label11";
+            this.label11.Size = new System.Drawing.Size(102, 13);
+            this.label11.TabIndex = 88;
+            this.label11.Text = "Nombre de usuario :";
+            // 
+            // usernameChofer
+            // 
+            this.usernameChofer.Location = new System.Drawing.Point(178, 366);
+            this.usernameChofer.Name = "usernameChofer";
+            this.usernameChofer.ReadOnly = true;
+            this.usernameChofer.Size = new System.Drawing.Size(100, 20);
+            this.usernameChofer.TabIndex = 89;
+            this.usernameChofer.TextChanged += new System.EventHandler(this.usernameChofer_TextChanged);
+            // 
             // Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(398, 427);
+            this.ClientSize = new System.Drawing.Size(398, 454);
+            this.Controls.Add(this.usernameChofer);
+            this.Controls.Add(this.label11);
             this.Controls.Add(this.telefonoChofer);
-            this.Controls.Add(this.habilitado);
             this.Controls.Add(this.limpiar);
             this.Controls.Add(this.fechaNacChofer);
             this.Controls.Add(this.localidadChofer);
@@ -327,7 +336,8 @@
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.DateTimePicker fechaNacChofer;
         private System.Windows.Forms.Button limpiar;
-        private System.Windows.Forms.CheckBox habilitado;
         private System.Windows.Forms.TextBox telefonoChofer;
+        private System.Windows.Forms.Label label11;
+        private System.Windows.Forms.TextBox usernameChofer;
     }
 }

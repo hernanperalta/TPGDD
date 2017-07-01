@@ -34,7 +34,7 @@ namespace UberFrba.Abm_Cliente
         {
             if (this.clientesGrid.RowCount == 0)
             {
-                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar'");
+                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
                 return;
             }
             if (this.clientesGrid.SelectedRows.Count > 1)
@@ -179,11 +179,12 @@ namespace UberFrba.Abm_Cliente
                 errores += "El campo " + campoError + " no puede exceder los " + cantLetras + " digitos\n";
             }
         }
+
         private void setCliente()
         {
             int i = this.clientesGrid.SelectedRows[0].Index;
             DataRow row = clientes.Rows[i];
-         
+
             cliente.nombre = row["Nombre"].ToString();
             cliente.apellido = row["Apellido"].ToString();
             cliente.dni = row["DNI"].ToString();
@@ -225,6 +226,7 @@ namespace UberFrba.Abm_Cliente
             {
                 this.Text = "Baja Cliente";
                 this.bajaOModificacion.Text = "Dar de baja";
+                this.rhabilitar.Visible = false;
             }
             else
             {

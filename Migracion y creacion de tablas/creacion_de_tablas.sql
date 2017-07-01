@@ -213,6 +213,57 @@ BEGIN
 END
 GO
 
+CREATE FUNCTION LOS_CHATADROIDES.Quitar_espacios_y_tildes
+(@cadena VARCHAR(50))
+RETURNS VARCHAR(50)
+AS
+BEGIN
+	RETURN REPLACE(
+  			REPLACE(
+				REPLACE(
+				  REPLACE(
+					REPLACE(
+					  REPLACE(
+						REPLACE(
+						  REPLACE(
+							REPLACE(
+							  REPLACE(
+								  REPLACE(@cadena COLLATE Latin1_General_BIN,
+									'á','a'),
+									  'Á', 'A'), 
+										'é', 'e'), 
+										  'É', 'E'), 
+											'í', 'i'), 
+											  'Í', 'I'),
+												'ó', 'o'),
+													'Ó','O'),
+													  'ú','u'),
+														'Ú', 'U'),
+														  ' ', '_')
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Encriptar_Password
+ON LOS_CHATADROIDES.Usuario
+INSTEAD OF INSERT
+AS 
+BEGIN    
+	DECLARE @password VARCHAR(64)
+	DECLARE @username VARCHAR(50)
+
+	SELECT @username = username, @password = password FROM inserted
+
+	INSERT INTO LOS_CHATADROIDES.Usuario (username, password) VALUES ( @username,  LOS_CHATADROIDES.Hashear_Password(@password)) 
+END 
+GO
+
+CREATE FUNCTION LOS_CHATADROIDES.Hashear_Password
+(@password VARCHAR(64))
+RETURNS VARCHAR(64)
+BEGIN
+  RETURN CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', @password), 2)  
+END
+GO
 
 CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Clientes
 AS
@@ -235,14 +286,18 @@ BEGIN
 	
 	WHILE (@@FETCH_STATUS = 0)
 	BEGIN
+		DECLARE @nuevoUsername VARCHAR(50)
+
+		SET @nuevoUsername = LOS_CHATADROIDES.Quitar_espacios_y_tildes(@nombre + '_' + @apellido)
+
 		IF( NOT EXISTS (SELECT username FROM LOS_CHATADROIDES.Usuario WHERE username = @nombre + '_' + @apellido) )
 			BEGIN
 				INSERT INTO LOS_CHATADROIDES.Usuario (username, password)
-					VALUES (@nombre + '_' + @apellido, @nombre + '_' + @apellido);
+					VALUES (@nuevoUsername, @nuevoUsername);
 			END;
 
 		INSERT INTO LOS_CHATADROIDES.Cliente (telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username)
-			   VALUES (@telefono, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @nombre + '_' + @apellido);
+			   VALUES (@telefono, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, LOS_CHATADROIDES.Quitar_espacios_y_tildes(@mail), @nuevoUsername);
 		
 		FETCH clientes_cursor INTO @apellido, @nombre, @direccion, @dni, @mail, @fecha_de_nac, @telefono;
 		
@@ -275,14 +330,18 @@ BEGIN
 	
 	WHILE (@@FETCH_STATUS = 0)
 	BEGIN
+		DECLARE @nuevoUsername VARCHAR(50)
+
+		SET @nuevoUsername = LOS_CHATADROIDES.Quitar_espacios_y_tildes(@nombre+'_'+@apellido)
+
 		IF( NOT EXISTS (SELECT username FROM LOS_CHATADROIDES.Usuario WHERE username = @nombre + '_' + @apellido) )
 			BEGIN
 				INSERT INTO LOS_CHATADROIDES.Usuario (username, password)
-					VALUES (@nombre + '_' + @apellido, @nombre + '_' + @apellido);
+					VALUES (@nuevoUsername, @nuevoUsername);
 			END;
 
 		INSERT INTO LOS_CHATADROIDES.Chofer (telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username)
-				VALUES (@telefono, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @nombre + '_' + @apellido);
+				VALUES (@telefono, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, LOS_CHATADROIDES.Quitar_espacios_y_tildes(@mail), @nuevoUsername);
 
 		FETCH choferes_cursor INTO @apellido, @nombre, @direccion, @dni, @fecha_de_nac, @telefono, @mail;
 	END
@@ -546,28 +605,6 @@ END
 GO
 
 
-CREATE TRIGGER LOS_CHATADROIDES.Encriptar_Password
-ON LOS_CHATADROIDES.Usuario
-INSTEAD OF INSERT
-AS 
-BEGIN    
-	DECLARE @password VARCHAR(64)
-	DECLARE @username VARCHAR(50)
-
-	SELECT @username = username, @password = password FROM inserted
-
-	INSERT INTO LOS_CHATADROIDES.Usuario (username, password) VALUES ( @username,  LOS_CHATADROIDES.Hashear_Password(@password)) 
-END 
-GO
-
-CREATE FUNCTION LOS_CHATADROIDES.Hashear_Password
-(@password VARCHAR(64))
-RETURNS VARCHAR(64)
-BEGIN
-  RETURN CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', @password), 2)  
-END
-GO
-
 CREATE FUNCTION LOS_CHATADROIDES.calcular_importe_total 
 (@mes_factura INTEGER,
 @telefono_cliente NUMERIC(18,0))
@@ -784,43 +821,7 @@ BEGIN
 	END
 END
 GO
-/*
-CREATE TRIGGER LOS_CHATADROIDES.Actualizar_Cliente
-ON LOS_CHATADROIDES.Cliente
-INSTEAD OF UPDATE
-AS
-BEGIN
-	DECLARE @nombre VARCHAR(255),
-			@apellido VARCHAR(255),
-			@telefono NUMERIC(18,0),
-			@dni NUMERIC(18,0),
-			@mail VARCHAR(255),
-			@localidad VARCHAR(20),	
-			@direccion VARCHAR(255),
-			@depto VARCHAR(3),
-			@nro_piso VARCHAR(3),
-			@codPostal VARCHAR(5),
-			@fecha_de_nac DATETIME
 
-	SELECT @nombre = nombre, @apellido = apellido, @telefono = telefono, @dni = dni, @mail = mail, @localidad = localidad, @direccion = direccion, 
-		@depto = depto, @nro_piso = nro_piso, @codPostal = codigo_postal, @fecha_de_nac = fecha_de_nacimiento 
-	FROM inserted
-
-	UPDATE LOS_CHATADROIDES.Factura
-		SET telefono_cliente = @telefono
-	WHERE telefono_cliente = (SELECT telefono FROM deleted)
-
-	UPDATE LOS_CHATADROIDES.Viaje
-		SET telefono_cliente = @telefono
-	WHERE telefono_cliente = (SELECT telefono FROM deleted)
-
-	UPDATE LOS_CHATADROIDES.Cliente
-		SET telefono = @telefono, @direccion = direccion, @dni = dni, @mail = mail, @fecha_de_nac = fecha_de_nacimiento,
-			@nombre = nombre, @apellido = apellido, @localidad = localidad, @nro_piso = nro_piso, @depto = depto, @codPostal = codigo_postal
-	WHERE telefono = (SELECT telefono FROM deleted)
-END
-GO
-*/
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_automovil
 @patente varchar(10), @numero_chofer numeric(18,0), 
 @marca varchar(255), @modelo varchar(255),

@@ -34,14 +34,14 @@ namespace UberFrba.Abm_Chofer
             this.telefonoChofer.Text = choferAModificar.telefono;
             this.apellidoChofer.Text = choferAModificar.datos.apellido;
             this.nombreChofer.Text = choferAModificar.datos.nombre;
-            this.fechaNacChofer.Value = choferAModificar.datos.fechaNac;
+            this.fechaNacChofer.Text = choferAModificar.datos.fechaNac;
             this.dniChofer.Text = choferAModificar.datos.dni;
             this.mailChofer.Text = choferAModificar.datos.mail;
             this.direccionChofer.Text = choferAModificar.domicilio.direccion;
             this.deptoChofer.Text = choferAModificar.domicilio.depto;
             this.nroPisoChofer.Text = choferAModificar.domicilio.nroPiso;
             this.localidadChofer.Text = choferAModificar.domicilio.localidad;
-            this.habilitado.Checked = choferAModificar.habilitado;
+            this.usernameChofer.Text = choferAModificar.username;
         }
 
         private void Modificacion_Load(object sender, EventArgs e)
@@ -94,9 +94,22 @@ namespace UberFrba.Abm_Chofer
                     if (!this.estaVacio((ctrl as TextBox).Text))
                         losTBEstanVacios = false;
 
-            return this.habilitado.Checked == this.choferAModificar.habilitado 
-                && this.fechaNacChofer.Value == this.choferAModificar.datos.fechaNac 
+            return this.fechaNacChofer.Value.ToString() == this.choferAModificar.datos.fechaNac 
                 && losTBEstanVacios;
+        }
+
+        private void setearUpdates()
+        {
+            this.setearUpdateSiCambioCampo("telefono", this.telefonoChofer.Text, this.choferAModificar.telefono, "");
+            this.setearUpdateSiCambioCampo("apellido", this.apellidoChofer.Text, this.choferAModificar.datos.apellido, "'");
+            this.setearUpdateSiCambioCampo("nombre", this.nombreChofer.Text, this.choferAModificar.datos.nombre, "'");
+            this.setearUpdateSiCambioCampo("fecha_de_nacimiento", this.fechaNacChofer.Value.ToString(), this.choferAModificar.datos.fechaNac.ToString(), "'");
+            this.setearUpdateSiCambioCampo("dni", this.dniChofer.Text, this.choferAModificar.datos.dni, "");
+            this.setearUpdateSiCambioCampo("mail", this.mailChofer.Text, this.choferAModificar.datos.mail, "'");
+            this.setearUpdateSiCambioCampo("direccion", this.direccionChofer.Text, this.choferAModificar.domicilio.direccion, "'");
+            this.setearUpdateSiCambioCampo("depto", this.deptoChofer.Text, this.choferAModificar.domicilio.depto, "'");
+            this.setearUpdateSiCambioCampo("nro_piso", this.nroPisoChofer.Text, this.choferAModificar.domicilio.nroPiso, "'");
+            this.setearUpdateSiCambioCampo("localidad", this.localidadChofer.Text, this.choferAModificar.domicilio.localidad, "'");
         }
 
         private void guardar_Click(object sender, EventArgs e)
@@ -115,18 +128,8 @@ namespace UberFrba.Abm_Chofer
                 this.errores = "";
                 return;
             }
-            
-            this.setearUpdateSiCambioCampo("telefono", this.telefonoChofer.Text, this.choferAModificar.telefono, "");
-            this.setearUpdateSiCambioCampo("apellido", this.apellidoChofer.Text, this.choferAModificar.datos.apellido, "'");
-            this.setearUpdateSiCambioCampo("nombre", this.nombreChofer.Text, this.choferAModificar.datos.nombre, "'");
-            this.setearUpdateSiCambioCampo("fecha_de_nacimiento", this.fechaNacChofer.Value.ToString(), this.choferAModificar.datos.fechaNac.ToString(), "'");
-            this.setearUpdateSiCambioCampo("dni", this.dniChofer.Text, this.choferAModificar.datos.dni, "");
-            this.setearUpdateSiCambioCampo("mail", this.mailChofer.Text, this.choferAModificar.datos.mail, "'");
-            this.setearUpdateSiCambioCampo("direccion", this.direccionChofer.Text, this.choferAModificar.domicilio.direccion, "'");
-            this.setearUpdateSiCambioCampo("depto", this.deptoChofer.Text, this.choferAModificar.domicilio.depto, "'");
-            this.setearUpdateSiCambioCampo("nro_piso", this.nroPisoChofer.Text, this.choferAModificar.domicilio.nroPiso, "'");
-            this.setearUpdateSiCambioCampo("localidad", this.localidadChofer.Text, this.choferAModificar.domicilio.localidad, "'");
-            this.setearUpdateSiCambioCampo("habilitado", this.deBoolABit(this.habilitado.Checked), this.deBoolABit(this.choferAModificar.habilitado), "'");
+
+            this.setearUpdates();
 
             if(!this.updateBuilder.tieneSetsAgregados())
             {
@@ -144,7 +147,6 @@ namespace UberFrba.Abm_Chofer
             }
             catch (SqlException ex)
             {
-                MessageBox.Show(ex.Message);
                 if (ex.Number == 2627)
                     if (ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)))
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
@@ -218,6 +220,11 @@ namespace UberFrba.Abm_Chofer
 
         private void habilitado_CheckedChanged(object sender, EventArgs e)
         {
+        }
+
+        private void usernameChofer_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
     }

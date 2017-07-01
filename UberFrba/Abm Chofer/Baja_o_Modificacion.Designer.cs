@@ -41,6 +41,7 @@
             this.volver = new System.Windows.Forms.Button();
             this.noChoferesLabel = new System.Windows.Forms.Label();
             this.choferesGrid = new System.Windows.Forms.DataGridView();
+            this.rehabilitar = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.choferesGrid)).BeginInit();
             this.SuspendLayout();
             // 
@@ -65,7 +66,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(381, 371);
+            this.bajaOModificacion.Location = new System.Drawing.Point(467, 371);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(119, 23);
             this.bajaOModificacion.TabIndex = 45;
@@ -135,7 +136,7 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(263, 371);
+            this.volver.Location = new System.Drawing.Point(182, 370);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(93, 23);
             this.volver.TabIndex = 53;
@@ -166,11 +167,22 @@
             this.choferesGrid.TabIndex = 56;
             this.choferesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.choferesGrid_CellContentClick);
             // 
+            // rehabilitar
+            // 
+            this.rehabilitar.Location = new System.Drawing.Point(325, 371);
+            this.rehabilitar.Name = "rehabilitar";
+            this.rehabilitar.Size = new System.Drawing.Size(100, 23);
+            this.rehabilitar.TabIndex = 57;
+            this.rehabilitar.Text = "Rehabilitar";
+            this.rehabilitar.UseVisualStyleBackColor = true;
+            this.rehabilitar.Click += new System.EventHandler(this.rehabilitar_Click);
+            // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(754, 418);
+            this.Controls.Add(this.rehabilitar);
             this.Controls.Add(this.choferesGrid);
             this.Controls.Add(this.noChoferesLabel);
             this.Controls.Add(this.volver);
@@ -208,5 +220,6 @@
         private System.Windows.Forms.Button volver;
         private System.Windows.Forms.Label noChoferesLabel;
         private System.Windows.Forms.DataGridView choferesGrid;
+        private System.Windows.Forms.Button rehabilitar;
     }
 }

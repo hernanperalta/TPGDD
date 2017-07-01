@@ -280,6 +280,7 @@
             // 
             this.usernameCliente.Location = new System.Drawing.Point(188, 368);
             this.usernameCliente.Name = "usernameCliente";
+            this.usernameCliente.ReadOnly = true;
             this.usernameCliente.Size = new System.Drawing.Size(100, 20);
             this.usernameCliente.TabIndex = 102;
             this.usernameCliente.TextChanged += new System.EventHandler(this.usernameCliente_TextChanged);

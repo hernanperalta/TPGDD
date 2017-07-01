@@ -20,9 +20,8 @@ namespace UberFrba.Abm_Chofer
         private bool puedeDarDeBaja;
         private string errores = "";
         private DataTable choferes = new DataTable();
-        private string query = "SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
-                             + "mail, fecha_de_nacimiento, username, habilitado "
-                             + "FROM LOS_CHATADROIDES.Chofer";
+        private string query = "SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad,fecha_de_nacimiento AS 'Fecha de nacimiento'  "
+                             + " FROM LOS_CHATADROIDES.Chofer";
 
         public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
         {
@@ -36,6 +35,7 @@ namespace UberFrba.Abm_Chofer
             {
                 this.Text = "Baja Chofer";
                 this.bajaOModificacion.Text = "Dar de baja";
+                this.rehabilitar.Visible = false;
             }
             else
             {
@@ -82,29 +82,35 @@ namespace UberFrba.Abm_Chofer
                 this.buscarChoferes();
                 return;
             }
-
-            DataGridViewRow fila = this.choferesGrid.SelectedRows[0];
-                
-            Domicilio domicilio = new Domicilio(fila.Cells[3].Value.ToString(),
-                                                fila.Cells[4].Value.ToString(),
-                                                fila.Cells[5].Value.ToString(),
-                                                fila.Cells[6].Value.ToString());
-
-            Persona datos = new Persona(fila.Cells[0].Value.ToString(),
-                                        fila.Cells[1].Value.ToString(),
-                                        fila.Cells[2].Value.ToString(),
-                                        fila.Cells[8].Value.ToString(),
-                                        (DateTime)fila.Cells[9].Value);
-
-            Chofer choferSeleccionado = new Chofer(datos, domicilio,
-                                                    fila.Cells[7].Value.ToString(),
-                                                    fila.Cells[10].Value.ToString(),
-                                                    (bool)fila.Cells[11].Value);
-
-                
+            
+            Chofer choferSeleccionado = this.setChofer();
 
             Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
             modificar.Show();
+        }
+
+        private Chofer setChofer()
+        {
+            int index = this.choferesGrid.SelectedRows[0].Index;
+            DataRow row = choferes.Rows[index];
+
+            Domicilio domicilio = new Domicilio(row["Direccion"].ToString(),
+                                                row["Numero de piso"].ToString(),
+                                                row["Departamento"].ToString(),
+                                                row["Localidad"].ToString());
+
+            Persona datos = new Persona(row["Nombre"].ToString(),
+                                        row["Apellido"].ToString(),
+                                        row["DNI"].ToString(),
+                                        row["Mail"].ToString(),
+                                        row["Fecha de nacimiento"].ToString());
+
+            Chofer choferSeleccionado = new Chofer(datos, domicilio,
+                                                    row["Telefono"].ToString(),
+                                                    row["USERNAME"].ToString(),
+                                                    Convert.ToBoolean(row["Habilitado"].ToString()));
+
+            return choferSeleccionado;
         }
 
         private void deshabilitarChoferes()
@@ -292,6 +298,49 @@ namespace UberFrba.Abm_Chofer
 
         private void choferesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+
+        }
+
+        private void rehabilitar_Click(object sender, EventArgs e)
+        {
+            if (this.choferesGrid.SelectedRows.Count > 1)
+            {
+                MessageBox.Show("Sólo puede rehabilitar de a un chofer a la vez");
+                return;
+            }
+            if (this.choferesGrid.RowCount == 0)
+            {
+                MessageBox.Show("Para llenar la lista de clientes disponibles haga click en el boton 'Buscar todos'");
+                return;
+            }
+            this.habilitarCliente();
+        }
+
+
+        private void habilitarCliente()
+        {
+            try
+            {
+                Chofer chofer = this.setChofer();
+                if (!chofer.habilitado)
+                {
+                    DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Chofer "
+                                               + "SET habilitado = 1 "
+                                               + "WHERE telefono = " + chofer.telefono);
+
+                    this.buscarChoferesSegun(this.agregarFiltrosAQuery());
+
+                    MessageBox.Show("El chofer " + chofer.datos.apellido + ", " + chofer.datos.nombre + "\n" + "Tel: " + chofer.telefono + " \n" + "Ha sido rehabilitado");
+                    return;
+                }
+                MessageBox.Show("El chofer " + chofer.datos.apellido + ", " + chofer.datos.nombre + "\n" + "Tel: " + chofer.telefono + "\n" + "Ya se encuentra habilitado");
+                return;
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                MessageBox.Show("Para elegir a un chofer debe oprimir la flecha que se encuentra a la izquierda de la fila");
+                return;
+            }
 
         }
 

@@ -12,9 +12,9 @@ namespace UberFrba.Abm_Chofer
         public string apellido;
         public string dni;
         public string mail;
-        public DateTime fechaNac;
+        public string fechaNac;
 
-        public Persona(string nombre, string apellido, string dni, string mail, DateTime fechaNac)
+        public Persona(string nombre, string apellido, string dni, string mail, string fechaNac)
         {
             this.nombre = nombre;
             this.apellido = apellido;
