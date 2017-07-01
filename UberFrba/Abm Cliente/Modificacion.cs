@@ -139,19 +139,18 @@ namespace UberFrba.Abm_Cliente
 
         private void actualizarCliente()
         {
-            DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Actualizar_Cliente "
-                                      + "'" + this.nombreCliente.Text + "', "
-                                          + "'" + this.apellidoCliente.Text + "', "
-                                          + "'" + this.telefonoCliente.Text + "', "
-                                          + "'" + this.dniCliente.Text + "', "
-                                          + "'" + this.mailCliente.Text + "', "
-                                          + "'" + this.localidadCliente.Text + "', "
-                                          + "'" + this.direccionCliente.Text + "', "
-                                          + "'" + this.deptoCliente.Text + "', "
-                                          + "'" + this.nroPiso.Text + "', "
-                                          + "'" + this.codPostal.Text + "', "
-                                          + "'" + this.fechaNacCli.Value.ToString() + "', "
-                                          + "'" + this.cliente.telefono + "' ");
+            DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Actualizar_Cliente "
+                                        + "SET nombre = '" + this.nombreCliente.Text + "', "
+                                        + "apellido '" + this.apellidoCliente.Text + "', "
+                                        + "telefono = " + this.telefonoCliente.Text + ", "
+                                        + "dni = " + this.dniCliente.Text + ", "
+                                        + "mail ='" + this.mailCliente.Text + "', "
+                                        + "localidad = '" + this.localidadCliente.Text + "', "
+                                        + "direccion = '" + this.direccionCliente.Text + "', "
+                                        + "depto = '" + this.deptoCliente.Text + "', "
+                                        + "nro_piso = '" + this.nroPiso.Text + "', "
+                                        + "codigo_postal = '" + this.codPostal.Text + "', "
+                                        + "fecha_de_nacimiento = '" + this.fechaNacCli.Value + "'");
         }
 
         private void fechaNacCli_TextChanged(object sender, EventArgs e)

@@ -249,7 +249,7 @@
             // habilitado
             // 
             this.habilitado.AutoSize = true;
-            this.habilitado.Location = new System.Drawing.Point(178, 338);
+            this.habilitado.Location = new System.Drawing.Point(178, 342);
             this.habilitado.Name = "habilitado";
             this.habilitado.Size = new System.Drawing.Size(73, 17);
             this.habilitado.TabIndex = 86;

@@ -59,10 +59,9 @@ namespace UberFrba.Abm_Cliente
                         MessageBox.Show("Ya existe un cliente con el teléfono " + this.telefonoCliente.Text);
                     if (ex.Message.Contains(this.entreParentesis(this.usernameCliente.Text)) )
                         MessageBox.Show("Ya existe un cliente con el usuario " + this.usernameCliente.Text);
-                    
+                
                 if( ex.Number == 547 )
                     MessageBox.Show("No existe un usuario de nombre " + this.usernameCliente.Text);
-             
             }
 
         }

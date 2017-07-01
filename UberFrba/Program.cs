@@ -27,7 +27,7 @@ namespace UberFrba
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
 
-            new Abm_Chofer.Baja_o_Modificacion(false, "", "").Show();
+            new Abm_Cliente.Alta("admin", "Administrador").Show();
             
             Application.Run();
 

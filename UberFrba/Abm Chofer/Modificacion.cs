@@ -63,9 +63,7 @@ namespace UberFrba.Abm_Chofer
                     (ctrl as TextBox).Clear();
         }
 
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-        }
+     
 
         private void setearUpdateSiCambioCampo(string nombreDeCampo, string valorSegunUsuario, string valorOriginal, string wrap)
         {
@@ -90,6 +88,7 @@ namespace UberFrba.Abm_Chofer
         private bool todosLosCamposEstanVacios()
         { 
             bool losTBEstanVacios = true;
+
             foreach (Control ctrl in this.Controls)
                 if (ctrl is TextBox)
                     if (!this.estaVacio((ctrl as TextBox).Text))
@@ -135,27 +134,20 @@ namespace UberFrba.Abm_Chofer
                 return;
             }
 
-            MessageBox.Show(this.updateBuilder.obtenerUpdate());
-            //this.updateBuilder = new UpdateBuilder("LOS_CHATADROIDES.Chofer", "WHERE telefono = " + this.telefonoChofer.Text);
-
             try
             {
                 DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
 
                 MessageBox.Show("El chofer se actualizó con éxito!");
+
+                this.Close();
             }
-            catch (SqlException ex) // TODO
+            catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message);
-                /*
                 if (ex.Number == 2627)
                     if (ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)))
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
-                if (ex.Message.Contains(this.entreParentesis(this.usernameChofer.Text)))
-                    MessageBox.Show("Ya existe un chofer con el usuario " + this.usernameChofer.Text);
-
-                if (ex.Number == 547)
-                    MessageBox.Show("No existe un usuario de nombre " + this.usernameChofer.Text);*/
             }
         }
 
@@ -180,8 +172,6 @@ namespace UberFrba.Abm_Chofer
         {
             this.validarCampoSegunTipo(tamanio, "^[0-9]+$", texto, nombreDeCampo, "sólo debe tener números");
         }
-
-        
 
         private void validarFecha()
         {

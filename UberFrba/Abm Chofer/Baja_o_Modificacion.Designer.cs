@@ -46,11 +46,11 @@
             // 
             // buscar
             // 
-            this.buscar.Location = new System.Drawing.Point(516, 151);
+            this.buscar.Location = new System.Drawing.Point(578, 150);
             this.buscar.Name = "buscar";
             this.buscar.Size = new System.Drawing.Size(101, 25);
             this.buscar.TabIndex = 49;
-            this.buscar.Text = "Buscar";
+            this.buscar.Text = "Buscar todos";
             this.buscar.UseVisualStyleBackColor = true;
             this.buscar.Click += new System.EventHandler(this.buscar_Click);
             // 
@@ -65,7 +65,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(358, 374);
+            this.bajaOModificacion.Location = new System.Drawing.Point(381, 371);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(119, 23);
             this.bajaOModificacion.TabIndex = 45;
@@ -75,7 +75,7 @@
             // 
             // dniChofer
             // 
-            this.dniChofer.Location = new System.Drawing.Point(434, 106);
+            this.dniChofer.Location = new System.Drawing.Point(473, 106);
             this.dniChofer.Name = "dniChofer";
             this.dniChofer.Size = new System.Drawing.Size(100, 20);
             this.dniChofer.TabIndex = 44;
@@ -84,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(431, 84);
+            this.label3.Location = new System.Drawing.Point(470, 84);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 43;
@@ -92,7 +92,7 @@
             // 
             // apellidoChofer
             // 
-            this.apellidoChofer.Location = new System.Drawing.Point(286, 106);
+            this.apellidoChofer.Location = new System.Drawing.Point(325, 106);
             this.apellidoChofer.Name = "apellidoChofer";
             this.apellidoChofer.Size = new System.Drawing.Size(100, 20);
             this.apellidoChofer.TabIndex = 42;
@@ -101,7 +101,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(283, 84);
+            this.label2.Location = new System.Drawing.Point(322, 84);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 41;
@@ -109,7 +109,7 @@
             // 
             // nombreChofer
             // 
-            this.nombreChofer.Location = new System.Drawing.Point(143, 106);
+            this.nombreChofer.Location = new System.Drawing.Point(182, 106);
             this.nombreChofer.Name = "nombreChofer";
             this.nombreChofer.Size = new System.Drawing.Size(100, 20);
             this.nombreChofer.TabIndex = 40;
@@ -118,7 +118,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(140, 84);
+            this.label1.Location = new System.Drawing.Point(179, 84);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 39;
@@ -127,7 +127,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(218, 42);
+            this.label4.Location = new System.Drawing.Point(261, 40);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(216, 13);
             this.label4.TabIndex = 50;
@@ -135,7 +135,7 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(240, 374);
+            this.volver.Location = new System.Drawing.Point(263, 371);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(93, 23);
             this.volver.TabIndex = 53;
@@ -147,7 +147,7 @@
             // 
             this.noChoferesLabel.AutoSize = true;
             this.noChoferesLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.noChoferesLabel.Location = new System.Drawing.Point(234, 156);
+            this.noChoferesLabel.Location = new System.Drawing.Point(260, 155);
             this.noChoferesLabel.Name = "noChoferesLabel";
             this.noChoferesLabel.Size = new System.Drawing.Size(206, 20);
             this.noChoferesLabel.TabIndex = 55;
@@ -162,7 +162,7 @@
             this.choferesGrid.Location = new System.Drawing.Point(67, 189);
             this.choferesGrid.Name = "choferesGrid";
             this.choferesGrid.ReadOnly = true;
-            this.choferesGrid.Size = new System.Drawing.Size(550, 171);
+            this.choferesGrid.Size = new System.Drawing.Size(612, 171);
             this.choferesGrid.TabIndex = 56;
             this.choferesGrid.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.choferesGrid_CellContentClick);
             // 
@@ -170,7 +170,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(693, 418);
+            this.ClientSize = new System.Drawing.Size(754, 418);
             this.Controls.Add(this.choferesGrid);
             this.Controls.Add(this.noChoferesLabel);
             this.Controls.Add(this.volver);

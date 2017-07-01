@@ -20,6 +20,9 @@ namespace UberFrba.Abm_Chofer
         private bool puedeDarDeBaja;
         private string errores = "";
         private DataTable choferes = new DataTable();
+        private string query = "SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
+                             + "mail, fecha_de_nacimiento, username, habilitado "
+                             + "FROM LOS_CHATADROIDES.Chofer";
 
         public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
         {
@@ -28,6 +31,7 @@ namespace UberFrba.Abm_Chofer
             this.rol = rol;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.noChoferesLabel.Text = "";
+
             if (puedeDarDeBaja)
             {
                 this.Text = "Baja Chofer";
@@ -39,6 +43,7 @@ namespace UberFrba.Abm_Chofer
                 this.bajaOModificacion.Text = "Modificar";
             }
         }
+
         private void Baja_y_Modificacion_Load(object sender, EventArgs e)
         {
 
@@ -58,11 +63,13 @@ namespace UberFrba.Abm_Chofer
                 MessageBox.Show("Para llenar la lista de choferes disponibles haga click en el boton 'Buscar'");
                 return;
             }
+
             if (this.choferesGrid.SelectedRows.Count > 1 && !puedeDarDeBaja)
             {
                 MessageBox.Show("Sólo puede modificar de a un chofer a la vez");
                 return;
             }
+
             if (this.choferesGrid.SelectedRows.Count <= 0)
             {
                 MessageBox.Show("Primero debe seleccionar un chofer, tocando la flecha a la izquierda de la fila");
@@ -98,7 +105,6 @@ namespace UberFrba.Abm_Chofer
 
             Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
             modificar.Show();
-            
         }
 
         private void deshabilitarChoferes()
@@ -132,6 +138,8 @@ namespace UberFrba.Abm_Chofer
 
         private void buscarChoferes()
         {
+            
+            /*
             this.choferes.Clear();
             this.noChoferesLabel.Text = "";
             this.validarTodosLosCamposNoVacios();
@@ -142,7 +150,7 @@ namespace UberFrba.Abm_Chofer
                 this.errores = "";
                 return;
             }
-           
+            
             string query = this.agregarFiltros("SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
                 + "mail, fecha_de_nacimiento, username, habilitado "
                 + "FROM LOS_CHATADROIDES.Chofer");
@@ -157,12 +165,43 @@ namespace UberFrba.Abm_Chofer
             {
                 this.noChoferesLabel.Text = "No se encontraron choferes";
                 this.choferes.Clear();
+            }*/
+        }
+
+        private void buscarChoferesSegun(string select)
+        {
+            this.choferes.Clear();
+            this.noChoferesLabel.Text = "";
+            this.validarTodosLosCamposNoVacios();
+
+            if (!this.errores.Equals(""))
+            {
+                MessageBox.Show(this.errores);
+                this.errores = "";
+                return;
+            }
+            /*
+            string query = this.agregarFiltros("SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
+                + "mail, fecha_de_nacimiento, username, habilitado "
+                + "FROM LOS_CHATADROIDES.Chofer");*/
+
+            try
+            {
+                SqlDataReader reader = DBConexion.ResolverQuery(select);
+                this.choferes.Load(reader);
+                this.choferesGrid.DataSource = choferes;
+            }
+            catch (SinRegistrosException)
+            {
+                this.noChoferesLabel.Text = "No se encontraron choferes";
+                this.choferes.Clear();
             }
         }
 
         private void buscar_Click(object sender, EventArgs e)
         {
-            this.buscarChoferes();   
+            //this.buscarChoferes();   
+            this.buscarChoferesSegun(this.query);   
         }
 
         private void validarTodosLosCamposNoVacios()
@@ -199,11 +238,10 @@ namespace UberFrba.Abm_Chofer
             }
         }
 
-        private string agregarFiltros(string query)
+        private string agregarFiltrosAQuery()
         {
-            string ret = query;
+            string ret = this.query;
             int cantFiltrosPuestos = 0;
-
 
             this.agregarCampoAQuery(ref ret, this.nombreChofer, "nombre", ref cantFiltrosPuestos);
             this.agregarCampoAQuery(ref ret, this.apellidoChofer, "apellido", ref cantFiltrosPuestos);
@@ -222,7 +260,7 @@ namespace UberFrba.Abm_Chofer
                     query += " where";
                 else prefijo = " and";
 
-                query += prefijo + " " + nombreDeCampo + " LIKE '%" + campo.Text + "%'";
+                query += prefijo + " " + nombreDeCampo + " LIKE '" + campo.Text + "%'";
                 cantFiltrosPuestos++;
             }
         }
@@ -239,14 +277,17 @@ namespace UberFrba.Abm_Chofer
 
         private void nombreChofer_TextChanged(object sender, EventArgs e)
         {
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
         }
 
         private void apellidoChofer_TextChanged(object sender, EventArgs e)
         {
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
         }
 
         private void dniChofer_TextChanged(object sender, EventArgs e)
         {
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
         }
 
         private void choferesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)

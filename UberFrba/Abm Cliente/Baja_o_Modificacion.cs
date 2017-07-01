@@ -206,9 +206,9 @@ namespace UberFrba.Abm_Cliente
             {
                 clientes.Load(DBConexion.ResolverQuery("SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad, codigo_postal AS 'Codigo postal',fecha_de_nacimiento AS 'Fecha de nacimiento' "
                                             + "FROM LOS_CHATADROIDES.Cliente "
-                                            + "WHERE nombre LIKE '%" + nombre + "%' AND "
-                                                     + "apellido LIKE '%" + apellido + "%' AND "
-                                                     + "DNI LIKE '%" + dni + "%'"));
+                                            + "WHERE nombre LIKE '" + nombre + "%' AND "
+                                                     + "apellido LIKE '" + apellido + "%' AND "
+                                                     + "DNI LIKE '" + dni + "%'"));
 
                 this.noClientesLabel.Text = "";
             } catch (SinRegistrosException)
