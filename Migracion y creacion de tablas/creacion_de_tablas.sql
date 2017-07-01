@@ -603,7 +603,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe
 AS
 BEGIN
@@ -728,7 +727,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_cliente
 @localidad VARCHAR(20), @direccion VARCHAR(255),
 @nro_piso SMALLINT, @depto VARCHAR(3),
@@ -786,37 +784,43 @@ BEGIN
 	END
 END
 GO
-CREATE PROCEDURE LOS_CHATADROIDES.Actualizar_Cliente
-	 @nombre VARCHAR(255),
-	 @apellido VARCHAR(255),
-	 @telefono NUMERIC(18,0),
-	 @dni NUMERIC(18,0),
-	 @mail VARCHAR(255),
-	 @localidad VARCHAR(20),	
-	 @direccion VARCHAR(255),
-	 @depto VARCHAR(3),
-	 @nro_piso VARCHAR(3),
-	 @codPostal VARCHAR(5),
-	 @fecha_de_nac DATETIME, 
-	 @telAnterior NUMERIC(18,0)
+/*
+CREATE TRIGGER LOS_CHATADROIDES.Actualizar_Cliente
+ON LOS_CHATADROIDES.Cliente
+INSTEAD OF UPDATE
 AS
 BEGIN
+	DECLARE @nombre VARCHAR(255),
+			@apellido VARCHAR(255),
+			@telefono NUMERIC(18,0),
+			@dni NUMERIC(18,0),
+			@mail VARCHAR(255),
+			@localidad VARCHAR(20),	
+			@direccion VARCHAR(255),
+			@depto VARCHAR(3),
+			@nro_piso VARCHAR(3),
+			@codPostal VARCHAR(5),
+			@fecha_de_nac DATETIME
 
-	UPDATE LOS_CHATADROIDES.Cliente
-	SET telefono = @telefono, @direccion = direccion, @dni = dni, @mail = mail, @fecha_de_nac = fecha_de_nacimiento,
-			@nombre = nombre, @apellido = apellido, @localidad = localidad, @nro_piso = nro_piso, @depto = depto, @codPostal = codigo_postal
-	WHERE telefono = @telAnterior
+	SELECT @nombre = nombre, @apellido = apellido, @telefono = telefono, @dni = dni, @mail = mail, @localidad = localidad, @direccion = direccion, 
+		@depto = depto, @nro_piso = nro_piso, @codPostal = codigo_postal, @fecha_de_nac = fecha_de_nacimiento 
+	FROM inserted
 
-		UPDATE LOS_CHATADROIDES.Factura
-	SET telefono_cliente = @telefono
-	WHERE telefono_cliente = @telAnterior
+	UPDATE LOS_CHATADROIDES.Factura
+		SET telefono_cliente = @telefono
+	WHERE telefono_cliente = (SELECT telefono FROM deleted)
 
 	UPDATE LOS_CHATADROIDES.Viaje
-	SET telefono_cliente = @telefono
-	WHERE telefono_cliente = @telAnterior
+		SET telefono_cliente = @telefono
+	WHERE telefono_cliente = (SELECT telefono FROM deleted)
 
+	UPDATE LOS_CHATADROIDES.Cliente
+		SET telefono = @telefono, @direccion = direccion, @dni = dni, @mail = mail, @fecha_de_nac = fecha_de_nacimiento,
+			@nombre = nombre, @apellido = apellido, @localidad = localidad, @nro_piso = nro_piso, @depto = depto, @codPostal = codigo_postal
+	WHERE telefono = (SELECT telefono FROM deleted)
 END
-
+GO
+*/
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_automovil
 @patente varchar(10), @numero_chofer numeric(18,0), 
 @marca varchar(255), @modelo varchar(255),
@@ -843,43 +847,6 @@ BEGIN
 END
 GO
 
-
-
-/*
-CREATE TABLE LOS_CHATADROIDES.Automovil
-(
-	patente VARCHAR(10) PRIMARY KEY,
-	telefono_chofer NUMERIC(18,0) NOT NULL FOREIGN KEY REFERENCES LOS_CHATADROIDES.Chofer(telefono),
-	marca VARCHAR(255) NOT NULL,
-	modelo VARCHAR(255) NOT NULL,
-	licencia VARCHAR(26),
-	rodado VARCHAR(10),
-	habilitado BIT NOT NULL DEFAULT 1
-);
-
-
-CREATE TABLE LOS_CHATADROIDES.Auto_X_Turno
-(
-	hora_inicio_turno NUMERIC(18,0),
-	hora_fin_turno NUMERIC(18,0),
-	patente VARCHAR(10) FOREIGN KEY REFERENCES LOS_CHATADROIDES.Automovil(patente),
-	FOREIGN KEY (hora_inicio_turno, hora_fin_turno) REFERENCES LOS_CHATADROIDES.Turno(hora_inicio_turno, hora_fin_turno),
-	PRIMARY KEY (hora_inicio_turno, hora_fin_turno, patente)
-);
-
-
-
-
- auto.patente + ", "
-+ auto.telefono_chofer + ", "
-+ auto.marca + ", "
-+ auto.modelo + ", "
-+ auto.licencia + ", "
-+ auto.rodado + ", "
-+ auto.habilitado 
-
-*/
-
 CREATE TRIGGER LOS_CHATADROIDES.Dar_de_baja_automovil 
 ON LOS_CHATADROIDES.Automovil
 INSTEAD OF DELETE
@@ -905,7 +872,6 @@ BEGIN
 END
 GO
 
-
 CREATE FUNCTION LOS_CHATADROIDES.Esta_en_trimestre
 (@mes INTEGER, @trimestre INTEGER)
 RETURNS BIT
@@ -919,23 +885,6 @@ BEGIN
 	RETURN 0
 END
 GO
-
-
-
-
-
-
-
-SELECT TOP 5 telefono, nombre, apellido, dni, COUNT(DISTINCT patente) as 'Veces que uso el mis auto'
-FROM LOS_CHATADROIDES.Cliente C
-JOIN LOS_CHATADROIDES.Viaje V
-	ON(C.telefono = V.telefono_cliente)
-WHERE YEAR(V.fecha_y_hora_inicio_viaje) = 2015
-	AND LOS_CHATADROIDES.Esta_en_trimestre(MONTH(fecha_y_hora_inicio_viaje), 1) = 1
-GROUP BY telefono, nombre, apellido, dni
-ORDER BY 5 DESC
-GO
-
 
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_usuario
 @username VARCHAR(50), @password VARCHAR(64), @rol VARCHAR(25)
@@ -954,10 +903,6 @@ BEGIN
 END
 GO
 
-
-
-
-
 CREATE FUNCTION LOS_CHATADROIDES.Ultima_factura()
 RETURNS NUMERIC(18,0)
 AS
@@ -969,7 +914,6 @@ BEGIN
 RETURN @ultimaFactura + 1 
 END
 GO
-
 
 CREATE PROCEDURE LOS_CHATADROIDES.Crear_factura
 @telefono NUMERIC(18,0), @importeTotal FLOAT, @fecha_facturacion VARCHAR(20),
@@ -996,18 +940,6 @@ UPDATE LOS_CHATADROIDES.Viaje
 		   Id_factura IS NULL
 END
 GO
-/*
-CREATE FUNCTION LOS_CHATADROIDES.Ultimo_telefono_chofer()
-RETURNS NUMERIC(18,0)
-AS
-BEGIN
-	DECLARE @telefono_mas_grande NUMERIC(18,0)
-
-	SET @telefono_mas_grande = (SELECT MAX(telefono) FROM LOS_CHATADROIDES.Chofer)
-
-	RETURN @telefono_mas_grande
-END
-GO*/
 
 CREATE TRIGGER LOS_CHATADROIDES.Actualizar_telefono_chofer
 ON LOS_CHATADROIDES.Chofer
@@ -1015,19 +947,7 @@ INSTEAD OF UPDATE
 AS
 BEGIN
 	DECLARE @telefono_viejo NUMERIC(18,0),
-			@nombre_viejo VARCHAR(255),
-			@apellido_viejo VARCHAR(255),
-			@fecha_nac_vieja DATETIME,
-			@dni_viejo NUMERIC(18,0),
-			@mail_viejo VARCHAR(50),
-			@dir_vieja VARCHAR(255),
-			@depto_viejo VARCHAR(3),
-			@nro_piso_viejo VARCHAR(3),
-			@localidad_vieja VARCHAR(20),
-			@usuario_viejo VARCHAR(50),
-			@habilitado_viejo BIT
-
-	DECLARE @telefono_nuevo NUMERIC(18,0),
+			@telefono_nuevo NUMERIC(18,0),
 			@nombre_nuevo VARCHAR(255),
 			@apellido_nuevo VARCHAR(255),
 			@fecha_nac_nueva DATETIME,
@@ -1040,19 +960,15 @@ BEGIN
 			@usuario_nuevo VARCHAR(50),
 			@habilitado_nuevo BIT
 
-	SELECT @telefono_nuevo = telefono, @nombre_nuevo = nombre, @apellido_nuevo = apellido, 
-		@fecha_nac_nueva = fecha_de_nacimiento, @dni_nuevo = dni, @mail_nuevo = mail, @dir_nueva = direccion,
-		@nro_piso_nuevo = nro_piso, @localidad_nueva = localidad, @usuario_nuevo = username, @habilitado_nuevo = habilitado
+	SELECT @telefono_nuevo = telefono, @nombre_nuevo = nombre, @apellido_nuevo = apellido, @fecha_nac_nueva = fecha_de_nacimiento, 
+		@dni_nuevo = dni, @mail_nuevo = mail, @dir_nueva = direccion, @depto_nuevo = depto, @nro_piso_nuevo = nro_piso, 
+		@localidad_nueva = localidad, @usuario_nuevo = username, @habilitado_nuevo = habilitado
 	FROM inserted
-
-	SELECT @telefono_viejo = telefono, @nombre_viejo = nombre, @apellido_viejo = apellido, 
-		@fecha_nac_vieja = fecha_de_nacimiento, @dni_viejo = dni, @mail_viejo = mail, @dir_vieja = direccion,
-		@nro_piso_viejo = nro_piso, @localidad_vieja = localidad, @usuario_viejo = username, @habilitado_viejo = habilitado
-	FROM deleted
+	
+	SET @telefono_viejo = (SELECT telefono FROM deleted)
 
 	IF(@telefono_nuevo = @telefono_viejo)
 	BEGIN
-		print 'estoy aca en el if'		
 		UPDATE LOS_CHATADROIDES.Chofer
 			SET	nombre = @nombre_nuevo,
 				apellido = @apellido_nuevo,
@@ -1070,43 +986,42 @@ BEGIN
 	ELSE
 	BEGIN
 		BEGIN TRY
-		SET TRANSACTION ISOLATION LEVEL SERIALIZABLE 
-		BEGIN TRANSACTION
-			DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
+			BEGIN TRANSACTION
+				DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
 
-			SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo)
+				SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo)
 
-			SET @usernameDummie = '$dummie'--le pongo $ porque desde la bd no te deja hacer usuarios con el char '$'
+				SET @usernameDummie = '$dummie'--le ponemos '$' porque desde la bd no te deja hacer usuarios con el char '$'
 	
-			INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
+				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
 
-			INSERT INTO LOS_CHATADROIDES.Chofer 
-				(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado)
-					VALUES
-				(@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo)
+				INSERT INTO LOS_CHATADROIDES.Chofer 
+					(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado)
+						VALUES
+					(@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo)
 	
-			UPDATE LOS_CHATADROIDES.Viaje
-				SET telefono_chofer = @telefono_nuevo
-			WHERE telefono_chofer = @telefono_viejo
+				UPDATE LOS_CHATADROIDES.Viaje
+					SET telefono_chofer = @telefono_nuevo
+				WHERE telefono_chofer = @telefono_viejo
 
-			UPDATE LOS_CHATADROIDES.Automovil
-				SET telefono_chofer = @telefono_nuevo
-			WHERE telefono_chofer = @telefono_viejo
-
-			UPDATE LOS_CHATADROIDES.Rendicion
-				SET telefono_chofer = @telefono_nuevo
-			WHERE telefono_chofer = @telefono_viejo
-
-			DELETE FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo
+				UPDATE LOS_CHATADROIDES.Automovil
+					SET telefono_chofer = @telefono_nuevo
+				WHERE telefono_chofer = @telefono_viejo;
 			
-			UPDATE LOS_CHATADROIDES.Chofer
-				SET username = @username
-			WHERE telefono = @telefono_nuevo
-			
-			DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
+				UPDATE LOS_CHATADROIDES.Rendicion
+					SET telefono_chofer = @telefono_nuevo
+				WHERE telefono_chofer = @telefono_viejo
 
-			DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
-		COMMIT
+				DELETE FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo
+			
+				UPDATE LOS_CHATADROIDES.Chofer
+					SET username = @username
+				WHERE telefono = @telefono_nuevo
+			
+				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
+
+				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
+			COMMIT
 		END TRY
 		BEGIN CATCH
 			ROLLBACK;
@@ -1116,3 +1031,91 @@ BEGIN
 END
 GO
 
+CREATE TRIGGER LOS_CHATADROIDES.Actualizar_telefono_cliente
+ON LOS_CHATADROIDES.Cliente
+INSTEAD OF UPDATE
+AS
+BEGIN
+
+	DECLARE @telefono_viejo NUMERIC(18,0),
+			@telefono_nuevo NUMERIC(18,0),
+			@nombre_nuevo VARCHAR(255),
+			@apellido_nuevo VARCHAR(255),
+			@fecha_nac_nueva DATETIME,
+			@dni_nuevo NUMERIC(18,0),
+			@mail_nuevo VARCHAR(50),
+			@dir_nueva VARCHAR(255),
+			@depto_nuevo VARCHAR(3),
+			@nro_piso_nuevo VARCHAR(3),
+			@localidad_nueva VARCHAR(20),
+			@usuario_nuevo VARCHAR(50),
+			@codigo_postal_nuevo VARCHAR(5),
+			@habilitado_nuevo BIT
+
+	SELECT @telefono_nuevo = telefono, @nombre_nuevo = nombre, @apellido_nuevo = apellido, @fecha_nac_nueva = fecha_de_nacimiento, 
+		@dni_nuevo = dni, @mail_nuevo = mail, @dir_nueva = direccion, @depto_nuevo = depto, @nro_piso_nuevo = nro_piso, 
+		@localidad_nueva = localidad, @usuario_nuevo = username, @habilitado_nuevo = habilitado, @codigo_postal_nuevo = codigo_postal
+	FROM inserted
+
+	SET @telefono_viejo = (SELECT telefono FROM deleted)
+
+	IF(@telefono_nuevo = @telefono_viejo)
+	BEGIN
+		UPDATE LOS_CHATADROIDES.Cliente
+			SET	nombre = @nombre_nuevo,
+				apellido = @apellido_nuevo,
+				fecha_de_nacimiento = @fecha_nac_nueva,
+				dni = @dni_nuevo,
+				mail = @mail_nuevo,
+				direccion = @dir_nueva,
+				depto = @depto_nuevo,
+				nro_piso = @nro_piso_nuevo,
+				localidad = @localidad_nueva,
+				habilitado = @habilitado_nuevo,
+				username = @usuario_nuevo,
+				codigo_postal = @codigo_postal_nuevo
+		WHERE telefono = @telefono_viejo
+	END
+	ELSE
+	BEGIN
+		BEGIN TRY
+			BEGIN TRANSACTION
+				DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
+
+				SET @username = (SELECT username FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo)
+
+				SET @usernameDummie = '$dummie'
+
+				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
+
+				INSERT INTO LOS_CHATADROIDES.Cliente 
+				  (telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado, codigo_postal)
+					VALUES
+				  (@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo, @codigo_postal_nuevo)
+
+				UPDATE LOS_CHATADROIDES.Viaje
+				  SET telefono_cliente = @telefono_nuevo
+				WHERE telefono_cliente = @telefono_viejo
+        
+				UPDATE LOS_CHATADROIDES.Factura
+				  SET telefono_cliente = @telefono_nuevo
+				WHERE telefono_cliente = @telefono_viejo
+
+				DELETE FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo
+
+				UPDATE LOS_CHATADROIDES.Cliente
+				  SET username = @username
+				WHERE telefono = @telefono_nuevo
+
+				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
+
+				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
+			COMMIT
+		END TRY
+		BEGIN CATCH
+			ROLLBACK;
+			THROW;
+		END CATCH
+	END
+END
+GO
