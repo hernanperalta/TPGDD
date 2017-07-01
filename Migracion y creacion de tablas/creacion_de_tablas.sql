@@ -605,7 +605,7 @@ END
 GO
 
 
-CREATE FUNCTION LOS_CHATADROIDES.calcular_importe_total 
+CREATE FUNCTION LOS_CHATADROIDES.Calcular_importe_total 
 (@mes_factura INTEGER,
 @telefono_cliente NUMERIC(18,0))
 RETURNS FLOAT
@@ -894,13 +894,11 @@ BEGIN
 	INSERT INTO LOS_CHATADROIDES.Usuario (username, password)
 		VALUES (@username, LOS_CHATADROIDES.Hashear_Password(@password))
 
-
 	IF(@rol IS NOT NULL)
 	BEGIN
 		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol)
 			VALUES (@username, @rol)
 	END
-
 END
 GO
 
