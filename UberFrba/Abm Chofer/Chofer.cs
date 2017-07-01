@@ -14,7 +14,6 @@ namespace UberFrba.Abm_Chofer
         public string username;
         public bool habilitado;
 
-        //public Chofer(string nombre, string apellido, int dni, Domicilio domicilio, int telefono, string mail, DateTime fechaNac, string username, bool habilitado) 
         public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado) 
         {
             this.datos = datos;

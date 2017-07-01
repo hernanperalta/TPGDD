@@ -13,15 +13,19 @@ using UberFrba.Conexion;
 namespace UberFrba.Abm_Cliente
 {
     public partial class Alta : Form
-    {
+    {/*
         private string username;
-        private string rol;
+        private string rol;*/
         private string errores = "";
-        public Alta(string username, string rol)
+        private Form parent;
+
+        //public Alta(string username, string rol)
+        public Alta(Form parent)
         {
             InitializeComponent();
-            this.username = username;
-            this.rol = rol;
+            /*this.username = username;
+            this.rol = rol;*/
+            this.parent = parent;
         }
 
         private void crearCliente_Click(object sender, EventArgs e)
@@ -67,10 +71,11 @@ namespace UberFrba.Abm_Cliente
         }
 
         private void volver_Click(object sender, EventArgs e)
-        {
+        {/*
             Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
+            menu.Show();*/
             this.Close();
+            this.parent.Show();
         }
 
         private void limpiarCampos_Click(object sender, EventArgs e)
@@ -79,11 +84,6 @@ namespace UberFrba.Abm_Cliente
                 if (ctrl is TextBox)
                     ((TextBox)ctrl).Clear();
         }
-
-
-
-
-
 
         private string entreParentesis(string texto)
         {
@@ -114,7 +114,6 @@ namespace UberFrba.Abm_Cliente
 
         private void validarFecha()
         {
-            
             if (this.fechaNacCli.Value > DateTime.Today)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }

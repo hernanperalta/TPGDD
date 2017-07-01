@@ -29,21 +29,35 @@ namespace UberFrba.Menu
                 new Funcionalidad(9, "Facturacion a Cliente", new Facturacion.Facturacion_Cliente(this.username, this.rol))
             };
         }
-
+        
         private Menu_ABM crearABMRol() {
-            return new Menu_ABM("Rol", this.username, this.rol, new FuncionalidadABM(new Abm_Rol.Alta(this.username, this.rol), new Abm_Rol.Baja_Rol(this.username, this.rol) , new Abm_Rol.Modificacion(this.username, this.rol)));
+            //return new Menu_ABM("Rol", this.username, this.rol, new FuncionalidadABM(new Abm_Rol.Alta(this.username, this.rol), new Abm_Rol.Baja_Rol(this.username, this.rol) , new Abm_Rol.Modificacion(this.username, this.rol)));
+            return new Menu_ABM("Rol", this.username, this.rol, new FuncionalidadABM(
+                                                                                    (parent) => { return new Abm_Rol.Alta(parent); },
+                                                                                    (parent) => { return new Abm_Rol.Baja(parent); },
+                                                                                    (parent) => { return new Abm_Rol.Modificacion(parent); }
+                                                                                    ));
         }
 
         private Menu_ABM crearABMCliente() {
-            return new Menu_ABM("Cliente", this.username, this.rol, new FuncionalidadABM(new Abm_Cliente.Alta(this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(false, this.username, this.rol)));
+            //return new Menu_ABM("Cliente", this.username, this.rol, new FuncionalidadABM(new Abm_Cliente.Alta(this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(false, this.username, this.rol)));
+            return new Menu_ABM("Cliente", this.username, this.rol, new FuncionalidadABM(
+                                                                                        (parent) => { return new Abm_Cliente.Alta(parent); },
+                                                                                        (parent) => { return new Abm_Cliente.Baja_o_Modificacion(parent, true); },
+                                                                                        (parent) => { return new Abm_Cliente.Baja_o_Modificacion(parent, false); }
+                                                                                        ));
         }
 
         private Menu_ABM crearABMAuto() {
-            return new Menu_ABM("Automovil", this.username, this.rol, new FuncionalidadABM(new Abm_Automovil.Alta(this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(false, this.username, this.rol)));
+            return null;// new Menu_ABM("Automovil", this.username, this.rol, new FuncionalidadABM(new Abm_Automovil.Alta(this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(false, this.username, this.rol)));
         }
-
+        
         private Menu_ABM crearABMChofer() {
-            return new Menu_ABM("Chofer", this.username, this.rol, new FuncionalidadABM(new Abm_Chofer.Alta(this.username, this.rol), new Abm_Chofer.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Chofer.Baja_o_Modificacion(false, this.username, this.rol)));
+            return new Menu_ABM("Chofer", this.username, this.rol, new FuncionalidadABM(
+                                                                                        (parent) => { return new Abm_Chofer.Alta(parent); },
+                                                                                        (parent) => { return new Abm_Chofer.Baja_o_Modificacion(parent, true); },
+                                                                                        (parent) => { return new Abm_Chofer.Baja_o_Modificacion(parent, false); }
+                                                                                        ));
         }
 
         public Funcionalidad obtenerFuncionalidad(short codigo)

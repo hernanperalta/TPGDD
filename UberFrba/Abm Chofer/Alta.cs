@@ -10,20 +10,23 @@ using System.Windows.Forms;
 using System.Data.SqlClient;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
+using UberFrba.Menu;
 
 namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcional o no
 {
     public partial class Alta : Form
     {
-        private string usernameActual;
-        private string rol;
+        /*private string usernameActual;
+        private string rol;*/
+        private Form parent;
         private string errores = "";
 
-        public Alta(string usernameActual, string rol)
+        public Alta(Form parent)
         {
             InitializeComponent();
-            this.usernameActual = usernameActual;
-            this.rol = rol;
+            /*this.usernameActual = usernameActual;
+            this.rol = rol;*/
+            this.parent = parent;
         }
 
         private void Alta_o_Modificacion_Load(object sender, EventArgs e)
@@ -91,7 +94,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void validarFecha()
         {
-            if (this.fechaNacChofer.Value > DateTime.Today)
+            if (this.fechaNacChofer.Value > DateTime.Now)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }
 
@@ -158,7 +161,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
                     if (ex.Message.Contains(this.entreParentesis(this.usernameChofer.Text)) )
                         MessageBox.Show("Ya existe un chofer con el usuario " + this.usernameChofer.Text);
-                    MessageBox.Show(ex.Message);
+                
                 if( ex.Number == 547 )
                     MessageBox.Show("No existe un usuario de nombre " + this.usernameChofer.Text);
             }
@@ -172,9 +175,8 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void volver_Click(object sender, EventArgs e)
         {
-            Form menu = new Menu.Menu(this.usernameActual, this.rol);
-            menu.Show();
             this.Close();
+            this.parent.Show();            
         }
 
         private void label3_Click(object sender, EventArgs e)

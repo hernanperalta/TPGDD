@@ -10,24 +10,29 @@ using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
+using UberFrba.Menu;
 
 namespace UberFrba.Abm_Chofer
 {
     public partial class Modificacion : Form
-    {
+    {/*
         private string usernameActual;
-        private string rolActual;
+        private string rolActual;*/
+        private Form parent;
         private Chofer choferAModificar;
         private UpdateBuilder updateBuilder;
         private string errores = "";
 
-        public Modificacion(Chofer choferAModificar, string usernameActual, string rolActual)
+        //public Modificacion(Chofer choferAModificar, string usernameActual, string rolActual)
+        public Modificacion(Form parent, Chofer choferAModificar)
         {
             InitializeComponent();
 
-            this.choferAModificar = choferAModificar;
+            this.parent = parent;
+
+            this.choferAModificar = choferAModificar;/*
             this.usernameActual = usernameActual;
-            this.rolActual = rolActual;
+            this.rolActual = rolActual;*/
 
             this.updateBuilder = new UpdateBuilder("LOS_CHATADROIDES.Chofer", "WHERE telefono = " + choferAModificar.telefono);
 
@@ -51,9 +56,11 @@ namespace UberFrba.Abm_Chofer
 
         private void volver_Click(object sender, EventArgs e)
         {
-            Form menu = new Menu.Menu(this.usernameActual, this.rolActual);
+            /*Form menu = new Menu.Menu(this.usernameActual, this.rolActual);
             menu.Show();
+            this.Close();*/
             this.Close();
+            //this.parent.Show();
         }
 
         private void limpiar_Click(object sender, EventArgs e)
@@ -225,6 +232,12 @@ namespace UberFrba.Abm_Chofer
         private void usernameChofer_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void volver_Click_1(object sender, EventArgs e)
+        {
+            this.Close();
+            this.parent.Show();
         }
 
     }

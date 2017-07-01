@@ -1,6 +1,6 @@
 ﻿namespace UberFrba.Abm_Rol
 {
-    partial class Baja_Rol
+    partial class Baja
     {
         /// <summary>
         /// Required designer variable.
@@ -82,6 +82,7 @@
             this.Controls.Add(this.comboBox1);
             this.Name = "Baja_Rol";
             this.Text = "Baja de Rol";
+            this.Load += new System.EventHandler(this.Baja_Rol_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

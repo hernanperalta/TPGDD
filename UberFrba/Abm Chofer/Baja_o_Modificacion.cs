@@ -10,24 +10,28 @@ using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
+using UberFrba.Menu;
 
 namespace UberFrba.Abm_Chofer
 {
     public partial class Baja_o_Modificacion : Form
     {
-        private string usernameActual;
-        private string rol;
+        /*private string usernameActual;
+        private string rol;*/
+        private Form parent;
         private bool puedeDarDeBaja;
         private string errores = "";
         private DataTable choferes = new DataTable();
         private string query = "SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad,fecha_de_nacimiento AS 'Fecha de nacimiento'  "
                              + " FROM LOS_CHATADROIDES.Chofer";
 
-        public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
+        //public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
+        public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
-            this.usernameActual = username;
-            this.rol = rol;
+           /* this.usernameActual = username;
+            this.rol = rol;*/
+            this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.noChoferesLabel.Text = "";
 
@@ -51,9 +55,8 @@ namespace UberFrba.Abm_Chofer
 
         private void volver_Click(object sender, EventArgs e)
         {
-            Form menu = new Menu.Menu(this.usernameActual, this.rol);
-            menu.Show();
             this.Close();
+            this.parent.Show();
         }
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
@@ -79,14 +82,17 @@ namespace UberFrba.Abm_Chofer
             if (this.puedeDarDeBaja)
             {
                 this.deshabilitarChoferes();
-                this.buscarChoferes();
+                this.buscarChoferesSegun(this.query);
                 return;
             }
             
             Chofer choferSeleccionado = this.setChofer();
 
-            Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
+            //Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
+            Form modificar = new Modificacion(this, choferSeleccionado);
             modificar.Show();
+            /*this.Hide();
+            modificar.Show();*/
         }
 
         private Chofer setChofer()
@@ -119,9 +125,9 @@ namespace UberFrba.Abm_Chofer
 
             foreach(DataGridViewRow fila in this.choferesGrid.SelectedRows)
             {
-                if ((bool)fila.Cells[11].Value)
+                if ((bool)fila.Cells[5].Value)
                 {
-                    this.deshabilitarChofer(fila.Cells[7].Value.ToString());
+                    this.deshabilitarChofer(fila.Cells[3].Value.ToString());
                     chofsDeshabilitados += fila.Cells[0].Value.ToString() + " " + fila.Cells[1].Value.ToString() + "\n";
                 }
             }
@@ -140,38 +146,6 @@ namespace UberFrba.Abm_Chofer
             DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Chofer "
                                         +"SET habilitado = 0 "
                                      +"WHERE telefono = " + telefono);
-        }
-
-        private void buscarChoferes()
-        {
-            
-            /*
-            this.choferes.Clear();
-            this.noChoferesLabel.Text = "";
-            this.validarTodosLosCamposNoVacios();
-
-            if (!this.errores.Equals(""))
-            {
-                MessageBox.Show(this.errores);
-                this.errores = "";
-                return;
-            }
-            
-            string query = this.agregarFiltros("SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
-                + "mail, fecha_de_nacimiento, username, habilitado "
-                + "FROM LOS_CHATADROIDES.Chofer");
-
-            try
-            {
-                SqlDataReader reader = DBConexion.ResolverQuery(query);
-                this.choferes.Load(reader);
-                this.choferesGrid.DataSource = choferes;
-            }
-            catch (SinRegistrosException)
-            {
-                this.noChoferesLabel.Text = "No se encontraron choferes";
-                this.choferes.Clear();
-            }*/
         }
 
         private void buscarChoferesSegun(string select)

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.label1 = new System.Windows.Forms.Label();
             this.nombreCliente = new System.Windows.Forms.TextBox();
             this.apellidoCliente = new System.Windows.Forms.TextBox();
@@ -43,9 +42,7 @@
             this.volver = new System.Windows.Forms.Button();
             this.rhabilitar = new System.Windows.Forms.Button();
             this.noClientesLabel = new System.Windows.Forms.Label();
-            this.clienteBindingSource = new System.Windows.Forms.BindingSource(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).BeginInit();
             this.SuspendLayout();
             // 
             // label1
@@ -183,10 +180,6 @@
             this.noClientesLabel.Text = "No se encontraron clientes";
             this.noClientesLabel.Click += new System.EventHandler(this.noClientesLabel_Click);
             // 
-            // clienteBindingSource
-            // 
-            this.clienteBindingSource.DataSource = typeof(UberFrba.Abm_Cliente.Cliente);
-            // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -209,7 +202,6 @@
             this.Name = "Baja_o_Modificacion";
             this.Load += new System.EventHandler(this.Baja_o_Modificacion_Load);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.clienteBindingSource)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -229,7 +221,6 @@
         private System.Windows.Forms.Button limpiarCampos;
         private System.Windows.Forms.DataGridView clientesGrid;
         private System.Windows.Forms.Button volver;
-        private System.Windows.Forms.BindingSource clienteBindingSource;
         private System.Windows.Forms.Button rhabilitar;
         private System.Windows.Forms.Label noClientesLabel;
     }

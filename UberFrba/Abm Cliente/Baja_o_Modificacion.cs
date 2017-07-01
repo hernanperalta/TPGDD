@@ -14,17 +14,20 @@ namespace UberFrba.Abm_Cliente
     public partial class Baja_o_Modificacion : Form
     {
         string errores = "";
-        private string username;
-        private string rol;
+        /*private string username;
+        private string rol;*/
+        private Form parent;
         private bool puedeDarDeBaja;
         Cliente cliente = new Cliente();
         DataTable clientes = new DataTable();
 
-        public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
+
+        public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
-            InitializeComponent();
+            InitializeComponent();/*
             this.username = username;
-            this.rol = rol;
+            this.rol = rol;*/
+            this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.setNombrePanel();
             this.noClientesLabel.Text = "";
@@ -59,7 +62,9 @@ namespace UberFrba.Abm_Cliente
                     return;
                 }
                 
-                Form modificar = new Modificacion(this.username, this.rol, cliente);
+                /*Form modificar = new Modificacion(this.username, this.rol, cliente);
+                modificar.Show();*/
+                Form modificar = new Modificacion(this, cliente);
                 modificar.Show();
             }
             catch (ArgumentOutOfRangeException) 
@@ -88,10 +93,11 @@ namespace UberFrba.Abm_Cliente
         }
 
         private void volver_Click(object sender, EventArgs e)
-        {
+        {/*
             Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
+            menu.Show();*/
             this.Close();
+            this.parent.Show();
         }
 
         private void rehabilitar_Click(object sender, EventArgs e)

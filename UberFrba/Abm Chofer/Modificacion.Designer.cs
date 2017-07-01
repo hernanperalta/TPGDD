@@ -171,6 +171,7 @@
             this.volver.TabIndex = 79;
             this.volver.Text = "Volver";
             this.volver.UseVisualStyleBackColor = true;
+            this.volver.Click += new System.EventHandler(this.volver_Click_1);
             // 
             // guardar
             // 

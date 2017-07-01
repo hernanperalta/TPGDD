@@ -9,8 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using UberFrba.Conexion;
-using UberFrba.Facturacion;
-using UberFrba.Abm_Chofer;
+using UberFrba.Login_Usuario;
 
 namespace UberFrba
 {
@@ -27,12 +26,10 @@ namespace UberFrba
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
 
-            new Abm_Cliente.Alta("admin", "Administrador").Show();
-            
+            new Login().Show();
+
             Application.Run();
 
-            
-            
         }
     }
 }

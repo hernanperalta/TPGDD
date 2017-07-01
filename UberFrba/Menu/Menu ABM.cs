@@ -58,17 +58,17 @@ namespace UberFrba.Menu
               MessageBox.Show("Debe seleccionar alguna opcion");
             } else {
                 switch (selectorABM.SelectedItem.ToString()) {
-                    case "Alta": 
-                        this.funcionalidadABM.abrirVentanaAlta();
-                        this.Close();
+                    case "Alta":
+                        this.Hide();
+                        this.funcionalidadABM.abrirVentanaAlta(this);
                         break;
                     case "Baja":
-                        this.funcionalidadABM.abrirVentanaBaja();
-                        this.Close();
+                        this.Hide();
+                        this.funcionalidadABM.abrirVentanaBaja(this);
                         break;
                     case "Modificar":
-                        this.funcionalidadABM.abrirVentanaModificar();
-                        this.Close();
+                        this.Hide();
+                        this.funcionalidadABM.abrirVentanaModificar(this);                        
                         break;
                 }
             }

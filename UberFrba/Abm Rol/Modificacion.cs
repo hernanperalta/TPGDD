@@ -14,12 +14,15 @@ namespace UberFrba.Abm_Rol
     {
         private String username;
         private String rol;
+        private Form parent;
 
-        public Modificacion(String username, String rol)
+        //public Modificacion(String username, String rol)
+        public Modificacion(Form parent)
         {
             InitializeComponent();
-            this.username = username;
-            this.rol = rol;
+            /*this.username = username;
+            this.rol = rol;*/
+            this.parent = parent;
         }
 
         private void label2_Click(object sender, EventArgs e)
@@ -33,10 +36,11 @@ namespace UberFrba.Abm_Rol
         }
 
         private void volver_Click(object sender, EventArgs e)
-        {
+        {/*
             Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
+            menu.Show();*/
             this.Close();
+            this.parent.Show();
         }
     }
 }
