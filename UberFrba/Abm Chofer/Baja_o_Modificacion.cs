@@ -65,7 +65,7 @@ namespace UberFrba.Abm_Chofer
             }
             if (this.choferesGrid.SelectedRows.Count <= 0)
             {
-                MessageBox.Show("Primero debe seleccionar un chofer, tocando el la flecha a la izquierda de la fila");
+                MessageBox.Show("Primero debe seleccionar un chofer, tocando la flecha a la izquierda de la fila");
                 return;
             }
 
@@ -174,7 +174,7 @@ namespace UberFrba.Abm_Chofer
                 this.validarPalabra(255, this.apellidoChofer.Text, "apellido");
 
             if (!this.campoVacio(this.dniChofer))
-            this.validarNumeric(18, this.dniChofer.Text, "dni");
+                this.validarNumeric(18, this.dniChofer.Text, "dni");
         }
 
         private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
@@ -239,17 +239,14 @@ namespace UberFrba.Abm_Chofer
 
         private void nombreChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferes();
         }
 
         private void apellidoChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferes();
         }
 
         private void dniChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferes();
         }
 
         private void choferesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)

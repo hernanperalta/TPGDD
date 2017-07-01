@@ -81,6 +81,7 @@
     </Compile>
     <Compile Include="Abm Chofer\Chofer.cs" />
     <Compile Include="Abm Chofer\Domicilio.cs" />
+    <Compile Include="Abm Chofer\ElUpdateNoTieneSetsException.cs" />
     <Compile Include="Abm Chofer\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -88,6 +89,7 @@
       <DependentUpon>Modificacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Chofer\Persona.cs" />
+    <Compile Include="Abm Chofer\UpdateBuilder.cs" />
     <Compile Include="Abm Cliente\Alta.cs">
       <SubType>Form</SubType>
     </Compile>

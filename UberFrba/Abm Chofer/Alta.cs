@@ -49,13 +49,13 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void validarPalabra(int tamanio, string texto, string nombreDeCampo)
         {
-            this.validarCampoSegunTipo(tamanio, "^[a-zA-Z]+$", texto, nombreDeCampo, "sólo debe tener letras");
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú]+$", texto, nombreDeCampo, "sólo debe tener letras");
         }
 
         private void validarMail()
         {
             this.validarCampoSegunTipo(50,
-                                       "^[a-zA-Z]+[a-zA-Z0-9-._]*@[a-zA-Z]+(.[a-zA-Z]+)+$",
+                                       "^[a-zA-Zá-úÁ-Ú]+[a-zA-Zá-úÁ-Ú0-9-._]*@[a-zA-Zá-úÁ-Ú]+(.[a-zA-Zá-úÁ-Ú]+)+$",
                                        this.mailChofer.Text, 
                                        "mail", 
                                        "debe comenzar con letras, puede tener números, debe terminar con " +
@@ -64,21 +64,21 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void validarUsername()
         {
-            this.validarCampoSegunTipo(50, "^[a-zA-Z-_.0-9]+$", this.usernameChofer.Text, "username", "debe tener letras, números, o los caracteres _ - .");
+            this.validarCampoSegunTipo(50, "^[a-zA-Zá-úÁ-Ú-_.0-9]+$", this.usernameChofer.Text, "username", "debe tener letras, números, o los caracteres _ - .");
         }
 
         private void validarAlfanumerico(int tamanio, string texto, string nombreDeCampo)
         {
-            this.validarCampoSegunTipo(tamanio, "^[a-zA-Z0-9 ]+$", texto, nombreDeCampo, "debe tener letras o números");
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú0-9 ]+$", texto, nombreDeCampo, "debe tener letras o números");
         }
 
-        private void validarTodosLosCamposNoVacios() 
+        private void validarTodosLosCampos() 
         {
             this.validarPalabra(255, this.nombreChofer.Text, "nombre");
             this.validarPalabra(255, this.apellidoChofer.Text, "apellido");
             this.validarNumeric(18, this.telefonoChofer.Text, "teléfono");
             this.validarNumeric(18, this.dniChofer.Text, "dni");
-            this.validarNumeric(5, this.nroPisoChofer.Text, "número de piso");
+            this.validarNumeric(3, this.nroPisoChofer.Text, "número de piso");
             this.validarAlfanumerico(255, this.direccionChofer.Text, "dirección y calle");
             this.validarAlfanumerico(3, this.deptoChofer.Text, "departamento");
             this.validarAlfanumerico(20, this.localidadChofer.Text, "localidad");
@@ -87,7 +87,6 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
             if( !this.campoVacio(this.mailChofer) )
                 this.validarMail();
-
         }
 
         private void validarFecha()
@@ -125,7 +124,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                 return;
             }
 
-            this.validarTodosLosCamposNoVacios();
+            this.validarTodosLosCampos();
 
             if (!this.errores.Equals(""))
             {

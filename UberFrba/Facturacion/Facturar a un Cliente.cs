@@ -29,7 +29,6 @@ namespace UberFrba.Facturacion
             this.username = username;
             this.fechaInicio.Value = new DateTime(fechaFacturacion.Year, fechaFacturacion.Month, 1);
             this.fechaFin.Value = new DateTime(fechaFacturacion.Year, fechaFacturacion.Month, DateTime.DaysInMonth(fechaFacturacion.Year, fechaFacturacion.Month));
-
         }
 
         private void label3_Click(object sender, EventArgs e)
