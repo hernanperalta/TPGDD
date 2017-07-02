@@ -54,9 +54,9 @@
             // 
             // modelo
             // 
-            this.modelo.Location = new System.Drawing.Point(44, 105);
+            this.modelo.Location = new System.Drawing.Point(31, 105);
             this.modelo.Name = "modelo";
-            this.modelo.Size = new System.Drawing.Size(122, 20);
+            this.modelo.Size = new System.Drawing.Size(126, 20);
             this.modelo.TabIndex = 3;
             this.modelo.TextChanged += new System.EventHandler(this.modelo_TextChanged);
             // 
@@ -89,15 +89,16 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(209, 79);
+            this.label4.Location = new System.Drawing.Point(195, 80);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(38, 13);
             this.label4.TabIndex = 6;
             this.label4.Text = "Turno:";
+            this.label4.Click += new System.EventHandler(this.label4_Click);
             // 
             // numeroChofer
             // 
-            this.numeroChofer.Location = new System.Drawing.Point(221, 46);
+            this.numeroChofer.Location = new System.Drawing.Point(198, 46);
             this.numeroChofer.Name = "numeroChofer";
             this.numeroChofer.Size = new System.Drawing.Size(149, 20);
             this.numeroChofer.TabIndex = 11;
@@ -106,7 +107,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(218, 21);
+            this.label6.Location = new System.Drawing.Point(195, 21);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 13);
             this.label6.TabIndex = 10;
@@ -114,7 +115,7 @@
             // 
             // crear
             // 
-            this.crear.Location = new System.Drawing.Point(134, 239);
+            this.crear.Location = new System.Drawing.Point(124, 228);
             this.crear.Name = "crear";
             this.crear.Size = new System.Drawing.Size(109, 32);
             this.crear.TabIndex = 12;
@@ -124,7 +125,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(221, 288);
+            this.button2.Location = new System.Drawing.Point(211, 277);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(109, 32);
             this.button2.TabIndex = 13;
@@ -134,7 +135,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(57, 288);
+            this.button3.Location = new System.Drawing.Point(47, 277);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(109, 32);
             this.button3.TabIndex = 16;
@@ -144,25 +145,26 @@
             // 
             // marca
             // 
-            this.marca.Location = new System.Drawing.Point(44, 179);
+            this.marca.Location = new System.Drawing.Point(31, 179);
             this.marca.Name = "marca";
-            this.marca.Size = new System.Drawing.Size(120, 20);
+            this.marca.Size = new System.Drawing.Size(126, 20);
             this.marca.TabIndex = 14;
             this.marca.TextChanged += new System.EventHandler(this.marca_TextChanged);
             // 
             // listaDeTurnos
             // 
             this.listaDeTurnos.FormattingEnabled = true;
-            this.listaDeTurnos.Location = new System.Drawing.Point(221, 105);
+            this.listaDeTurnos.Location = new System.Drawing.Point(198, 105);
             this.listaDeTurnos.Name = "listaDeTurnos";
-            this.listaDeTurnos.Size = new System.Drawing.Size(120, 94);
+            this.listaDeTurnos.Size = new System.Drawing.Size(158, 94);
             this.listaDeTurnos.TabIndex = 19;
+            this.listaDeTurnos.SelectedIndexChanged += new System.EventHandler(this.listaDeTurnos_SelectedIndexChanged);
             // 
             // Alta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(391, 342);
+            this.ClientSize = new System.Drawing.Size(378, 329);
             this.Controls.Add(this.listaDeTurnos);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.marca);

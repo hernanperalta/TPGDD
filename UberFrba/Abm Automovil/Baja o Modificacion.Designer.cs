@@ -35,14 +35,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.modeloBM = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.marcaBM = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.limpiar = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
+            this.buscarTodos = new System.Windows.Forms.Button();
             this.tablaAutomovil = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
             this.bajaOModificacion = new System.Windows.Forms.Button();
             this.noAutosLabel = new System.Windows.Forms.Label();
+            this.selectorDeMarcas = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.tablaAutomovil)).BeginInit();
             this.SuspendLayout();
             // 
@@ -106,14 +106,6 @@
             this.label2.TabIndex = 27;
             this.label2.Text = "Modelo :";
             // 
-            // marcaBM
-            // 
-            this.marcaBM.Location = new System.Drawing.Point(124, 79);
-            this.marcaBM.Name = "marcaBM";
-            this.marcaBM.Size = new System.Drawing.Size(100, 20);
-            this.marcaBM.TabIndex = 26;
-            this.marcaBM.TextChanged += new System.EventHandler(this.marcaBM_TextChanged);
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -133,15 +125,15 @@
             this.limpiar.UseVisualStyleBackColor = true;
             this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
-            // button4
+            // buscarTodos
             // 
-            this.button4.Location = new System.Drawing.Point(578, 133);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(101, 25);
-            this.button4.TabIndex = 35;
-            this.button4.Text = "Buscar todos";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
+            this.buscarTodos.Location = new System.Drawing.Point(578, 133);
+            this.buscarTodos.Name = "buscarTodos";
+            this.buscarTodos.Size = new System.Drawing.Size(101, 25);
+            this.buscarTodos.TabIndex = 35;
+            this.buscarTodos.Text = "Buscar todos";
+            this.buscarTodos.UseVisualStyleBackColor = true;
+            this.buscarTodos.Click += new System.EventHandler(this.buscarTodos_Click);
             // 
             // tablaAutomovil
             // 
@@ -187,16 +179,27 @@
             this.noAutosLabel.TabIndex = 44;
             this.noAutosLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
             // 
+            // selectorDeMarcas
+            // 
+            this.selectorDeMarcas.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.selectorDeMarcas.FormattingEnabled = true;
+            this.selectorDeMarcas.Location = new System.Drawing.Point(108, 78);
+            this.selectorDeMarcas.Name = "selectorDeMarcas";
+            this.selectorDeMarcas.Size = new System.Drawing.Size(121, 21);
+            this.selectorDeMarcas.TabIndex = 45;
+            this.selectorDeMarcas.SelectedIndexChanged += new System.EventHandler(this.selectorDeMarcas_SelectedIndexChanged);
+            // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(828, 405);
+            this.Controls.Add(this.selectorDeMarcas);
             this.Controls.Add(this.noAutosLabel);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.tablaAutomovil);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.buscarTodos);
             this.Controls.Add(this.limpiar);
             this.Controls.Add(this.numeroChoferBM);
             this.Controls.Add(this.label6);
@@ -204,7 +207,6 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.modeloBM);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.marcaBM);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label4);
             this.Name = "Baja_o_Modificacion";
@@ -226,13 +228,13 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox modeloBM;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox marcaBM;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button limpiar;
-        private System.Windows.Forms.Button button4;
+        private System.Windows.Forms.Button buscarTodos;
         private System.Windows.Forms.DataGridView tablaAutomovil;
         private System.Windows.Forms.Button volver;
         private System.Windows.Forms.Button bajaOModificacion;
         private System.Windows.Forms.Label noAutosLabel;
+        private System.Windows.Forms.ComboBox selectorDeMarcas;
     }
 }

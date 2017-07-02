@@ -10,12 +10,14 @@ namespace UberFrba.Abm_Chofer
     {
         private string condicion;
         private string query;
+        private string queryConSets;
         private bool tieneSets = false;
 
         public UpdateBuilder(string tabla, string condicion)
         {
             this.condicion = condicion;
             this.query = "UPDATE " + tabla + " SET ";
+            this.queryConSets = query;
         }
 
         public string obtenerUpdate()
@@ -23,7 +25,7 @@ namespace UberFrba.Abm_Chofer
             if (!this.tieneSets)
                 throw new ElUpdateNoTieneSetsException("La query que pidio no tiene sets");
 
-            return this.query + " " + this.condicion;
+            return this.queryConSets + " " + this.condicion;
         }
 
         public bool tieneSetsAgregados()
@@ -37,10 +39,16 @@ namespace UberFrba.Abm_Chofer
 
             if (this.tieneSets)
                 prefijo = ",";
-                
-            query += prefijo + nombreDeCampo + " = " + wrap + valorNuevo + wrap;
+
+            queryConSets += prefijo + nombreDeCampo + " = " + wrap + valorNuevo + wrap;
 
             this.tieneSets = true;
+        }
+
+        public void resetearUpdate()
+        {
+            this.queryConSets = this.query;
+            this.tieneSets = false;
         }
 
     }

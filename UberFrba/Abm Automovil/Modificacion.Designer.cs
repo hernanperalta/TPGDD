@@ -33,16 +33,15 @@
             this.guardar = new System.Windows.Forms.Button();
             this.numeroChofer = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.modelo = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.habilitado = new System.Windows.Forms.CheckBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.patente = new System.Windows.Forms.Label();
-            this.selectorTurno = new System.Windows.Forms.ComboBox();
-            this.turnoActualLabel = new System.Windows.Forms.Label();
             this.volver = new System.Windows.Forms.Button();
+            this.listaDeTurnos = new System.Windows.Forms.CheckedListBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.patente = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // marca
@@ -55,7 +54,7 @@
             // 
             // restaurar
             // 
-            this.restaurar.Location = new System.Drawing.Point(185, 240);
+            this.restaurar.Location = new System.Drawing.Point(224, 309);
             this.restaurar.Name = "restaurar";
             this.restaurar.Size = new System.Drawing.Size(109, 32);
             this.restaurar.TabIndex = 28;
@@ -65,7 +64,7 @@
             // 
             // guardar
             // 
-            this.guardar.Location = new System.Drawing.Point(335, 240);
+            this.guardar.Location = new System.Drawing.Point(129, 247);
             this.guardar.Name = "guardar";
             this.guardar.Size = new System.Drawing.Size(109, 32);
             this.guardar.TabIndex = 27;
@@ -75,7 +74,7 @@
             // 
             // numeroChofer
             // 
-            this.numeroChofer.Location = new System.Drawing.Point(344, 104);
+            this.numeroChofer.Location = new System.Drawing.Point(233, 104);
             this.numeroChofer.Name = "numeroChofer";
             this.numeroChofer.Size = new System.Drawing.Size(100, 20);
             this.numeroChofer.TabIndex = 26;
@@ -84,20 +83,11 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(322, 79);
+            this.label6.Location = new System.Drawing.Point(211, 79);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 13);
             this.label6.TabIndex = 25;
             this.label6.Text = "Número de chofer :";
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(216, 148);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(102, 13);
-            this.label4.TabIndex = 24;
-            this.label4.Text = "Seleccion de turno :";
             // 
             // modelo
             // 
@@ -128,7 +118,7 @@
             // habilitado
             // 
             this.habilitado.AutoSize = true;
-            this.habilitado.Location = new System.Drawing.Point(208, 104);
+            this.habilitado.Location = new System.Drawing.Point(221, 39);
             this.habilitado.Name = "habilitado";
             this.habilitado.Size = new System.Drawing.Size(73, 17);
             this.habilitado.TabIndex = 34;
@@ -138,44 +128,15 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(194, 19);
+            this.label3.Location = new System.Drawing.Point(45, 18);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(117, 13);
             this.label3.TabIndex = 35;
             this.label3.Text = "Patente de Automovil : ";
             // 
-            // patente
-            // 
-            this.patente.AutoSize = true;
-            this.patente.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.patente.Location = new System.Drawing.Point(216, 42);
-            this.patente.Name = "patente";
-            this.patente.Size = new System.Drawing.Size(53, 16);
-            this.patente.TabIndex = 36;
-            this.patente.Text = "patente";
-            // 
-            // selectorTurno
-            // 
-            this.selectorTurno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.selectorTurno.FormattingEnabled = true;
-            this.selectorTurno.Location = new System.Drawing.Point(219, 173);
-            this.selectorTurno.Name = "selectorTurno";
-            this.selectorTurno.Size = new System.Drawing.Size(225, 21);
-            this.selectorTurno.TabIndex = 37;
-            this.selectorTurno.SelectedIndexChanged += new System.EventHandler(this.selectorTurno_SelectedIndexChanged);
-            // 
-            // turnoActualLabel
-            // 
-            this.turnoActualLabel.AutoSize = true;
-            this.turnoActualLabel.Location = new System.Drawing.Point(257, 212);
-            this.turnoActualLabel.Name = "turnoActualLabel";
-            this.turnoActualLabel.Size = new System.Drawing.Size(68, 13);
-            this.turnoActualLabel.TabIndex = 38;
-            this.turnoActualLabel.Text = "Turno Actual";
-            // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(35, 240);
+            this.volver.Location = new System.Drawing.Point(35, 309);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(109, 32);
             this.volver.TabIndex = 39;
@@ -183,15 +144,41 @@
             this.volver.UseVisualStyleBackColor = true;
             this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
+            // listaDeTurnos
+            // 
+            this.listaDeTurnos.FormattingEnabled = true;
+            this.listaDeTurnos.Location = new System.Drawing.Point(233, 140);
+            this.listaDeTurnos.Name = "listaDeTurnos";
+            this.listaDeTurnos.Size = new System.Drawing.Size(158, 79);
+            this.listaDeTurnos.TabIndex = 41;
+            this.listaDeTurnos.SelectedIndexChanged += new System.EventHandler(this.listaDeTurnos_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(189, 173);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.TabIndex = 40;
+            this.label5.Text = "Turno:";
+            // 
+            // patente
+            // 
+            this.patente.Location = new System.Drawing.Point(48, 41);
+            this.patente.Name = "patente";
+            this.patente.Size = new System.Drawing.Size(100, 20);
+            this.patente.TabIndex = 42;
+            this.patente.TextChanged += new System.EventHandler(this.patente_TextChanged);
+            // 
             // Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(490, 298);
-            this.Controls.Add(this.volver);
-            this.Controls.Add(this.turnoActualLabel);
-            this.Controls.Add(this.selectorTurno);
+            this.ClientSize = new System.Drawing.Size(426, 353);
             this.Controls.Add(this.patente);
+            this.Controls.Add(this.listaDeTurnos);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.volver);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.habilitado);
             this.Controls.Add(this.marca);
@@ -199,7 +186,6 @@
             this.Controls.Add(this.guardar);
             this.Controls.Add(this.numeroChofer);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.label4);
             this.Controls.Add(this.modelo);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -218,15 +204,14 @@
         private System.Windows.Forms.Button guardar;
         private System.Windows.Forms.TextBox numeroChofer;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox modelo;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox habilitado;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Label patente;
-        private System.Windows.Forms.ComboBox selectorTurno;
-        private System.Windows.Forms.Label turnoActualLabel;
         private System.Windows.Forms.Button volver;
+        private System.Windows.Forms.CheckedListBox listaDeTurnos;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox patente;
     }
 }

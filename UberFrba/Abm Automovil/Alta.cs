@@ -78,7 +78,7 @@ namespace UberFrba.Abm_Automovil
             if (campo.Text.Length > rango)
             {
                 MessageBox.Show("El campo "+ nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
-                campo.Text = campo.Text.Remove(campo.Text.Length - 1);
+                
             }
         }
 
@@ -89,7 +89,7 @@ namespace UberFrba.Abm_Automovil
             if (this.numeroChofer.Text.Any(char.IsLetter))
             {
                 MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
-                this.numeroChofer.Text = this.numeroChofer.Text.Remove(this.numeroChofer.Text.Length - 1);
+   
             }
 
             
@@ -109,7 +109,7 @@ namespace UberFrba.Abm_Automovil
             if (this.marca.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("La marca no puede contener numeros.");
-                this.marca.Text = this.marca.Text.Remove(this.marca.Text.Length - 1);
+                
             }
 
             
@@ -237,6 +237,16 @@ namespace UberFrba.Abm_Automovil
         private void selectorTurno_SelectedIndexChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void listaDeTurnos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label4_Click(object sender, EventArgs e)
+        {
+
         }
 
         

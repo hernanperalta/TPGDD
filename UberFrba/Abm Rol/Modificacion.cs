@@ -87,6 +87,12 @@ namespace UberFrba.Abm_Rol
                 MessageBox.Show("El rol seleccionado ya se encuentra dado de alta");
                 return;
             }
+            if (this.roles.SelectedItem == null)
+            {
+                MessageBox.Show("Debe seleccionar un rol antes de actualizar");
+                return;
+            }
+
             DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Rol "
                                        + "SET habilitado = 1 "
                                        + "WHERE nombre_del_rol = '" + this.roles.SelectedItem.ToString() + "'");
@@ -98,7 +104,6 @@ namespace UberFrba.Abm_Rol
         {
             try
             {
-
                 if (this.funcsAAgregar.CheckedItems != null)
                 {
                     this.agregarFuncs();
@@ -112,6 +117,16 @@ namespace UberFrba.Abm_Rol
                     this.actualizarRol(this.roles.SelectedItem.ToString());
                 }
 
+                if (this.roles.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un rol antes de actualizar");
+                    return;
+                }
+                if (this.funcsAAgregar.CheckedItems.Count == 0 && this.funcsAQuitar.CheckedItems.Count == 0 && this.nuevoNombreRol.Text.Equals(""))
+                {
+                    MessageBox.Show("El rol original no ha sufrido ningun cambio, asegurese de llenar los campos que desee actualizar");
+                    return;
+                }
                 MessageBox.Show("El rol ha sido actualizado correctamente");
                 this.limpiarCampos();
             }

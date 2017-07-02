@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace UberFrba.Abm_Automovil
 {
@@ -20,6 +21,7 @@ namespace UberFrba.Abm_Automovil
         public Form parent;
         private List<Automovil> autosSeleccionados = new List<Automovil>();
         DataTable automoviles = new DataTable();
+        private string errores = "";
        
 
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
@@ -38,71 +40,84 @@ namespace UberFrba.Abm_Automovil
                 this.bajaOModificacion.Text = "Modificar";
             }
 
+            this.cargarMarcasExistentes();
+
         
         }
         /* VALIDACIONES  -------------- */
 
-        private void superaElRango(TextBox campo, string nombreCampo, int rango)
+
+
+        private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
         {
-            if (campo.Text.Length > rango)
+            this.validarCampoSegunTipo(tamanio, "^[0-9]+$", texto, nombreDeCampo, "sólo debe tener números");
+        }
+
+        private void validarPalabra(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Z]+$", texto, nombreDeCampo, "sólo debe tener letras");
+        }
+
+        private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
+        {
+            if (!Regex.IsMatch(texto, regex))
             {
-                MessageBox.Show("El campo " + nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
-                campo.Text = campo.Text.Remove(campo.Text.Length - 1);
+                errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
             }
+            if (texto.Length > tamanio)
+            {
+                errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
+            }
+        }
+
+        private bool campoVacio(Control campo)
+        {
+            return campo == null || this.estaVacio(campo.Text);
+        }
+
+
+        private bool estaVacio(string texto)
+        {
+            return texto.Equals("") || texto.Replace(" ", "").Equals("");
         }
 
         private void validarNumeroChofer()
         {
-
-            this.superaElRango(this.numeroChoferBM, "numero chofer", 18);
-
-            if (this.numeroChoferBM.Text.Any(char.IsLetter))
-            {
-                MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
-                this.numeroChoferBM.Text = this.numeroChoferBM.Text.Remove(this.numeroChoferBM.Text.Length - 1);
-            }
-
-
-
+            if (!this.campoVacio(this.numeroChoferBM))
+                this.validarNumeric(18, this.numeroChoferBM.Text, "numero chofer");
+            this.siHayErroresMostrarlos();
         }
+
         private void validarModelo()
         {
-
-            this.superaElRango(this.modeloBM, "modelo", 255);
+            if (!this.campoVacio(this.modeloBM))
+                this.validarPalabra(255, this.modeloBM.Text, "modelo");
+            this.siHayErroresMostrarlos();
         }
 
-        private void validarMarca()
-        {
-
-            this.superaElRango(this.marcaBM, "marca", 255);
-
-            if (this.marcaBM.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("La marca no puede contener numeros.");
-                this.marcaBM.Text = this.marcaBM.Text.Remove(this.marcaBM.Text.Length - 1);
-            }
-
-        }
-
+       
 
         private void validarPatente()
         {
-            this.superaElRango(this.patenteBM, "patente", 10);
+            if (!this.campoVacio(this.patenteBM))
+                this.validarPalabra(255, this.patenteBM.Text, "patente");
+            this.siHayErroresMostrarlos();
         }
 
         /* -----------   VALIDACIONES */
 
+        private void siHayErroresMostrarlos(){
 
-        /* CUANDO CAMBIAN LOS CAMPOS DE FILTRO ----------------------*/
-
-        private void marcaBM_TextChanged(object sender, EventArgs e)
-        {
-            // FIXME : ESTO TIENE QUE SER UN COMBO !!!! En el enunciado dice seleccion acotada 
-            this.validarMarca();
-            this.llenarTablaSiSePuede();
+            if (!errores.Equals("")) {
+                MessageBox.Show(errores);
+                this.errores = "";
+            } 
             
         }
 
+        /* CUANDO CAMBIAN LOS CAMPOS DE FILTRO ----------------------*/
+
+      
         private void modeloBM_TextChanged(object sender, EventArgs e)
         {
             this.validarModelo();
@@ -122,7 +137,23 @@ namespace UberFrba.Abm_Automovil
             this.llenarTablaSiSePuede();
         }
 
+        public void cargarMarcasExistentes() {
 
+            try
+            {
+                SqlDataReader reader = DBConexion.ResolverQuery("SELECT marca FROM LOS_CHATADROIDES.Automovil GROUP BY marca");
+                while (reader.Read())
+                {
+                    this.selectorDeMarcas.Items.Add(reader.GetString(0));
+                }
+                reader.Close();
+            }
+            catch (SinRegistrosException sre) {
+                MessageBox.Show("No hay marcas en la base de datos, no podra utilizar este filtro.");
+                this.selectorDeMarcas.Enabled = false;
+            }
+               
+        }
 
         /* ---------------------- CUANDO CAMBIAN LOS CAMPOS DE FILTRO */
 
@@ -143,6 +174,9 @@ namespace UberFrba.Abm_Automovil
                     text.Clear();
                 }
             }
+
+            this.selectorDeMarcas.SelectedIndex = -1;
+
         }
 
 
@@ -197,27 +231,37 @@ namespace UberFrba.Abm_Automovil
                 
                 foreach (Automovil auto in this.autosSeleccionados)
                 {
-                    try
+                    if (!auto.habilitado)
                     {
-
-                        DBConexion.ResolverNonQuery("DELETE FROM LOS_CHATADROIDES.Automovil WHERE patente = '" + auto.patente + "'");
-
-                        dadosDeBaja += auto.patente + "\n";
-
-                        this.llenarTablaSiSePuede();
-
+                        errores += "El auto de patente : " + auto.patente + " ya se encuentra deshabilitado.\n";
                     }
-                    catch (SqlException sqle)
+                    else
                     {
-                        errores += "El automovil de patente " + auto.patente + " no pudo darse de baja.\n";
+                        try
+                        {
+
+                            DBConexion.ResolverNonQuery("DELETE FROM LOS_CHATADROIDES.Automovil WHERE patente = '" + auto.patente + "'");
+
+                            dadosDeBaja += auto.patente + "\n";
+
+                            this.llenarTablaSiSePuede();
+
+                        }
+                        catch (SqlException sqle)
+                        {
+                            errores += "El automovil de patente " + auto.patente + " no pudo darse de baja.\n";
+                        }
                     }
                 }
+
                 if (!errores.Equals(""))
                 {
                     MessageBox.Show(errores);
                     errores = "";
                 }
-                else MessageBox.Show(dadosDeBaja);
+
+                if (!dadosDeBaja.Equals("Los autos dados de baja corresponden a las patentes : \n"))
+                    MessageBox.Show(dadosDeBaja);
 
             }
             else
@@ -245,7 +289,7 @@ namespace UberFrba.Abm_Automovil
             }
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void buscarTodos_Click(object sender, EventArgs e)
         {
                 this.llenarTablaSiSePuede();
                 this.limpiarLosCampos();
@@ -267,7 +311,7 @@ namespace UberFrba.Abm_Automovil
 
                 automoviles.Load(DBConexion.ResolverQuery("SELECT patente as Patente,telefono_chofer as 'Numero Chofer', marca as Marca, modelo as Modelo,  licencia as Licencia, rodado as Rodado, habilitado as Habilitado "
                                             + " FROM LOS_CHATADROIDES.Automovil "
-                                            + " WHERE marca LIKE '" + this.marcaBM.Text + "%' AND "
+                                            + " WHERE " + this.filtrarPorLaMarcaSiSelecciono()      
                                             + " modelo LIKE '" + this.modeloBM.Text + "%' AND "
                                             + " patente LIKE '" + this.patenteBM.Text + "%' AND "
                                             + " CONVERT(VARCHAR(18),telefono_chofer) LIKE '" + this.numeroChoferBM.Text + "%' "
@@ -285,6 +329,18 @@ namespace UberFrba.Abm_Automovil
                 return;
             }
             
+        }
+
+        private string filtrarPorLaMarcaSiSelecciono() {
+            if (this.selectorDeMarcas.SelectedIndex > -1) {
+                return "marca LIKE '" + this.selectorDeMarcas.SelectedItem.ToString() + "%' AND ";
+            } 
+            return "";
+        }
+
+        private void selectorDeMarcas_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            this.llenarTablaSiSePuede();
         }
 
 

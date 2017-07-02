@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
+using UberFrba.Abm_Chofer;
 
 namespace UberFrba.Abm_Automovil
 {
@@ -19,21 +20,45 @@ namespace UberFrba.Abm_Automovil
         private Turno turno;
         private Baja_o_Modificacion parent;
         private string errores = "";
-        private string estadoOriginalDelTurno;
+        private UpdateBuilder updateBuilder;
         
         public Modificacion(Baja_o_Modificacion parent, Automovil automovilSeleccionado)
         {
             InitializeComponent();
             this.parent = parent;
             this.automovilSeleccionado = automovilSeleccionado;
+            this.cargarLosHorariosDeLosTurnos();
+
+            this.updateBuilder = new UpdateBuilder("LOS_CHATADROIDES.Automovil", "WHERE patente = '" + automovilSeleccionado.patente + "'");
         }
 
         private void Modificacion_Load(object sender, EventArgs e)
         {
             this.cargarDatosDelAuto();
-            this.cargarTurnoDelAutomovilSeleccionado();
-            this.cargarTodosLosTurnosDisponibles();
             
+            this.cargarTurnoDelAutomovilSeleccionado();
+            
+        }
+
+        private string estaHabilitado(bool habilitado) {
+
+            if (habilitado) return "1";
+            return "0";
+        }
+
+        private void setearUpdates()
+        {
+            this.setearUpdateSiCambioCampo("patente", this.patente.Text, this.automovilSeleccionado.patente, "'");
+            this.setearUpdateSiCambioCampo("marca", this.marca.Text, this.automovilSeleccionado.marca, "'");
+            this.setearUpdateSiCambioCampo("modelo", this.modelo.Text, this.automovilSeleccionado.modelo, "'");
+            this.setearUpdateSiCambioCampo("telefono_chofer", this.numeroChofer.Text, this.automovilSeleccionado.telefono_chofer, "");
+            this.setearUpdateSiCambioCampo("habilitado", this.estaHabilitado(this.habilitado.Checked), this.estaHabilitado(this.automovilSeleccionado.habilitado), "");
+        }
+
+        private void setearUpdateSiCambioCampo(string nombreDeCampo, string valorSegunUsuario, string valorOriginal, string wrap)
+        {
+            if (!valorSegunUsuario.Equals(valorOriginal) && !this.estaVacio(valorSegunUsuario))
+                this.updateBuilder.agregarFiltro(nombreDeCampo, valorSegunUsuario, wrap);
         }
 
         private void cargarDatosDelAuto() {
@@ -60,38 +85,29 @@ namespace UberFrba.Abm_Automovil
             {
 
                 SqlDataReader readerTurnos = DBConexion.ResolverQuery(queryTurno);
-                readerTurnos.Read();
-                this.turno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
+                while (readerTurnos.Read())
+                {
+                    this.turno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
+                    this.tildarEnLaLista(turno);
+                }
                 readerTurnos.Close();
             }
             catch (SinRegistrosException e)
             {
-                this.turno = new Turno("", "", "");
+                this.listaDeTurnos.ClearSelected();
             }
 
-            this.turnoActualLabel.Text = "Turno Actual :" + turno.ToString();
-            this.estadoOriginalDelTurno = this.selectorTurno.Text;
+          
         }
 
-        private void cargarTodosLosTurnosDisponibles() {
-            try
-            {
-                SqlDataReader readerTurnos = DBConexion.ResolverQuery("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno");
-
-                while (readerTurnos.Read())
-                {
-                    Turno nuevoTurno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
-                    this.selectorTurno.Items.Add(nuevoTurno);
+        private void tildarEnLaLista(Turno nuevoTurno) {
+            foreach (Turno turno in this.listaDeTurnos.Items) {
+                if (nuevoTurno.horaInicio == turno.horaInicio && nuevoTurno.horaFin == turno.horaFin) {
+                    int indice = this.listaDeTurnos.Items.IndexOf(turno);
+                    this.listaDeTurnos.SetItemChecked(indice, true);
+                    break;
                 }
-                selectorTurno.Items.Add("No asignar turno");
-                readerTurnos.Close();
-
             }
-            catch (Exception e)
-            {
-                this.selectorTurno.Text = "No hay turnos en la base de datos";
-            }
-            
         }
 
         /* VALIDACIONES  -------------- */
@@ -101,12 +117,18 @@ namespace UberFrba.Abm_Automovil
                 this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
         }
 
+
+        private bool estaVacio(string texto)
+        {
+            return texto.Equals("") || texto.Replace(" ", "").Equals("");
+        }
+
         private void superaElRango(TextBox campo, string nombreCampo, int rango)
         {
             if (campo.Text.Length > rango)
             {
                 MessageBox.Show("El campo " + nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
-                campo.Text = campo.Text.Remove(campo.Text.Length - 1);
+             
             }
         }
 
@@ -118,7 +140,7 @@ namespace UberFrba.Abm_Automovil
             if (this.numeroChofer.Text.Any(char.IsLetter))
             {
                 MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
-                this.numeroChofer.Text = this.numeroChofer.Text.Remove(this.numeroChofer.Text.Length - 1);
+                
             }
 
         }
@@ -135,8 +157,12 @@ namespace UberFrba.Abm_Automovil
             if (this.marca.Text.Any(char.IsDigit))
             {
                 MessageBox.Show("La marca no puede contener numeros.");
-                this.marca.Text = this.marca.Text.Remove(this.marca.Text.Length - 1);
+               
             }
+        }
+
+        private void validarPatente() {
+            this.superaElRango(this.patente, "patente", 10);
         }
 
 
@@ -145,13 +171,10 @@ namespace UberFrba.Abm_Automovil
             this.estaVacio(this.numeroChofer.Text, "numero chofer");
             this.estaVacio(this.modelo.Text, "modelo");
             this.estaVacio(this.marca.Text, "marca");
+            this.estaVacio(this.patente.Text, "patente");
         }
 
-        private bool seleccionoTurno()
-        {
-            return this.selectorTurno.SelectedIndex != -1 && !selectorTurno.SelectedItem.Equals("No asignar turno") && !selectorTurno.Text.Equals("No asignar turno") ;
-
-        }
+     
       
         /* -----------   VALIDACIONES */
 
@@ -173,12 +196,19 @@ namespace UberFrba.Abm_Automovil
             this.validarModelo();
         }
 
+        private void patente_TextChanged(object sender, EventArgs e)
+        {
+            this.validarPatente();
+        }
+
+
+
         /* ---------------------- CUANDO CAMBIAN LOS CAMPOS A MODIFICAR */
 
         private void restaurar_Click(object sender, EventArgs e)
         {
             this.cargarDatosDelAuto();
-            this.selectorTurno.SelectedIndex = -1;
+            this.cargarTurnoDelAutomovilSeleccionado();
         }
 
         private void guardar_Click(object sender, EventArgs e)
@@ -191,35 +221,66 @@ namespace UberFrba.Abm_Automovil
                 return;
             }
 
-            string modificarAutomovil = "EXEC LOS_CHATADROIDES.Modificar_automovil  '"
-                                       + this.patente.Text + "', "
-                                       + this.numeroChofer.Text + ", '"
-                                       + this.marca.Text + "', '"
-                                       + this.modelo.Text + "', "
-                                       + ((this.habilitado.Checked) ? " 1, " : " 0, ")
-                                       + (this.turno.horaInicio.Equals("")? " NULL, " : this.turno.horaInicio + ", ")
-                                       + (this.turno.horaFin.Equals("")? " NULL " : this.turno.horaFin )
-                                     
-                                       ;
+            this.setearUpdates();
+
+            this.modificarAutoPorTurno();
+
+            if (!this.updateBuilder.tieneSetsAgregados())
+            {
+                MessageBox.Show("No cambio el valor de ninguno de los campos originales. Por ende, el automovil quedara sin actualizar");
+                return;
+            }
 
             try 
-            { 
-                DBConexion.ResolverNonQuery(modificarAutomovil);
-                MessageBox.Show("Los datos del automovil se modificaron correctamente. A continuacion se muestra el estado actual del mismo.");
-                this.automovilSeleccionado = new Automovil(this.patente.Text, this.numeroChofer.Text, this.marca.Text, this.modelo.Text, this.automovilSeleccionado.licencia, this.automovilSeleccionado.rodado, this.habilitado.Checked);
-                this.cargarDatosDelAuto();
-                this.cargarTurnoDelAutomovilSeleccionado();
+            {
+                MessageBox.Show(this.updateBuilder.obtenerUpdate());
+                DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
+                
+                MessageBox.Show("Los datos del automovil se modificaron correctamente.");
+                this.Close();
+                new Abm_Automovil.Baja_o_Modificacion(this.parent.parent, false).Show();
             } catch(SqlException sqle)
             {
+                this.updateBuilder.resetearUpdate();
                 MessageBox.Show(sqle.Message);
             } 
+
+
         }
 
-        private void selectorTurno_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (this.seleccionoTurno()) {
-                this.turno = (Turno)this.selectorTurno.SelectedItem;
+        public void selectorTurno_SelectedIndexChanged(object sender, EventArgs e) { }
+
+
+        private void modificarAutoPorTurno() {
+            string errores = "";
+            string turnosActualizados = "Los turnos asignados son: \n";
+            foreach(Turno turno in this.listaDeTurnos.Items){
+                try {
+                        
+                        DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Modificar_auto_x_turno_si_el_valor_cambia " + turno.horaInicio + ", " + turno.horaFin + ", '" + this.automovilSeleccionado.patente + "', " + (this.esTurnoCheckeado(turno) ? " 1 " : " 0 ") );
+                        if(this.esTurnoCheckeado(turno))
+                            turnosActualizados += turno.ToString() + "\n";
+                } catch(SqlException sqle)
+                {
+                    errores += "El automovil no pudo actualizarse con el turno : " + turno.descripcion + " \n";
+                }
             }
+
+            if (!errores.Equals("")) {
+                MessageBox.Show(errores);
+                return;
+            }
+            if (turnosActualizados.Equals("Los turnos asignados son: \n"))
+            {
+                MessageBox.Show("El automovil no tiene turnos asignados. \n");
+                return;
+            }
+
+            MessageBox.Show(turnosActualizados);
+        }
+
+        private bool esTurnoCheckeado(Turno turno) {
+            return this.listaDeTurnos.CheckedIndices.Contains(this.listaDeTurnos.Items.IndexOf(turno));
         }
 
         private void volver_Click(object sender, EventArgs e)
@@ -228,8 +289,42 @@ namespace UberFrba.Abm_Automovil
             bajaOModificacion.Show();
             this.Close();
         }
-        
 
-        
+
+
+        private void cargarLosHorariosDeLosTurnos()
+        {
+
+            try
+            {
+                SqlDataReader readerTurnos = DBConexion.ResolverQuery("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno");
+
+                while (readerTurnos.Read())
+                {
+                    Turno nuevoTurno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
+                    this.listaDeTurnos.Items.Add(nuevoTurno);
+                }
+                readerTurnos.Close();
+            }
+            catch (Exception e)
+            {
+                this.listaDeTurnos.Text = "No hay turnos en la base de datos";
+            }
+
+        }
+
+        private void listaDeTurnos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void patente_Click(object sender, EventArgs e)
+        {
+
+        }
+
+     
+
+
     }
 }
