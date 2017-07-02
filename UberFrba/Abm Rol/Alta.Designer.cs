@@ -52,6 +52,7 @@
             this.nombreRol.Name = "nombreRol";
             this.nombreRol.Size = new System.Drawing.Size(174, 20);
             this.nombreRol.TabIndex = 1;
+            this.nombreRol.TextChanged += new System.EventHandler(this.nombreRol_TextChanged);
             // 
             // label2
             // 
@@ -76,6 +77,7 @@
             this.rolesCheckBox.Name = "rolesCheckBox";
             this.rolesCheckBox.Size = new System.Drawing.Size(120, 64);
             this.rolesCheckBox.TabIndex = 3;
+            this.rolesCheckBox.SelectedIndexChanged += new System.EventHandler(this.rolesCheckBox_SelectedIndexChanged);
             // 
             // crearRol
             // 

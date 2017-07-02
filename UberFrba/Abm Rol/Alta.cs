@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Menu;
+using UberFrba.Conexion;
+using System.Data.SqlClient;
 
 namespace UberFrba.Abm_Rol
 {
@@ -19,6 +21,7 @@ namespace UberFrba.Abm_Rol
         {
             InitializeComponent();
             this.parent = parent;
+            this.cargarFuncionalidades();
         }
 
         private void Alta_Load(object sender, EventArgs e)
@@ -36,6 +39,29 @@ namespace UberFrba.Abm_Rol
             foreach (Control ctrl in this.Controls)
                 if (ctrl is TextBox)
                     ((TextBox)ctrl).Clear();
+        }
+
+        private void nombreRol_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void rolesCheckBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+         
+        }
+
+        private void cargarFuncionalidades()
+        {
+            SqlDataReader funcionalidadesReader = this.leerFuncionalidades();
+
+            while (funcionalidadesReader.Read())
+            {
+                Funcionalidad funcAAgregar = this.rolesCheckBox.obtenerFuncionalidad(funcionalidadesReader.GetByte(0));
+                this.rolesCheckBox.Items.Add(funcAAgregar);
+            }
+
+            funcionalidadesReader.Close();
         }
     }
 }
