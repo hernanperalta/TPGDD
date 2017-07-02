@@ -14,8 +14,6 @@ namespace UberFrba.Abm_Cliente
     public partial class Baja_o_Modificacion : Form
     {
         string errores = "";
-        /*private string username;
-        private string rol;*/
         private Form parent;
         private bool puedeDarDeBaja;
         Cliente cliente = new Cliente();
@@ -24,9 +22,7 @@ namespace UberFrba.Abm_Cliente
 
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
-            InitializeComponent();/*
-            this.username = username;
-            this.rol = rol;*/
+            InitializeComponent();
             this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.setNombrePanel();
@@ -283,6 +279,21 @@ namespace UberFrba.Abm_Cliente
         }
 
         private void noClientesLabel_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void label1_Click(object sender, EventArgs e)
         {
 
         }

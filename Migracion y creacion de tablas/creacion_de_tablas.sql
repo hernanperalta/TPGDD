@@ -715,6 +715,7 @@ INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Vi
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Rendicion de cuenta del Chofer');
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Listado Estadistico');
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Facturacion a Cliente');
+INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Turno');
 
 EXEC LOS_CHATADROIDES.Cargar_Funcionalidades_X_Rol;
 EXEC LOS_CHATADROIDES.Migrar_Clientes;
@@ -736,53 +737,145 @@ EXEC LOS_CHATADROIDES.Migrar_Viajes;
 EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
 GO
 
-CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_chofer
-@localidad VARCHAR(20), @direccion VARCHAR(255),
-@nro_piso SMALLINT, @depto VARCHAR(3),
-@telefono NUMERIC(18,0), @nombre VARCHAR(255), 
-@apellido VARCHAR(255), @dni NUMERIC(18,0), 
-@fecha_de_nac DATETIME, @mail VARCHAR(50), 
-@username VARCHAR(50)
-AS
-BEGIN
+
+CREATE TRIGGER LOS_CHATADROIDES.Dar_de_baja_automovil
+ON LOS_CHATADROIDES.Automovil
+INSTEAD OF DELETE
+AS 
+BEGIN  
+	DECLARE @patente VARCHAR(10)
+	SET @patente = (SELECT patente FROM deleted)
 	BEGIN TRY
 		BEGIN TRANSACTION
-			IF( NOT EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Domicilio WHERE localidad = @localidad AND direccion = @direccion) )
-			BEGIN
-				INSERT INTO LOS_CHATADROIDES.Domicilio (localidad, direccion, nro_piso, depto) 
-					VALUES (@localidad, @direccion, @nro_piso, @depto)
-			END
+			DELETE FROM LOS_CHATADROIDES.Auto_X_Turno 
+			WHERE patente = @patente
 
-			INSERT INTO LOS_CHATADROIDES.Chofer (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username)
-				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username)
-		COMMIT TRANSACTION
+			UPDATE LOS_CHATADROIDES.Automovil
+			SET habilitado = 0
+			WHERE patente = @patente
+
+		 COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
-		ROLLBACK;
+		ROLLBACK TRANSACTION;
 		THROW;
 	END CATCH
 END
 GO
 
-CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_cliente
-@localidad VARCHAR(20), @direccion VARCHAR(255),
-@nro_piso SMALLINT, @depto VARCHAR(3),
-@telefono NUMERIC(18,0), @nombre VARCHAR(255), 
-@apellido VARCHAR(255), @dni NUMERIC(18,0), 
-@fecha_de_nac DATETIME, @codigo_postal SMALLINT,
-@mail VARCHAR(50), @username VARCHAR(50)
+
+
+CREATE PROCEDURE LOS_CHATADROIDES.Modificar_auto_x_turno_si_el_valor_cambia
+@hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0), @patente VARCHAR(10)
 AS
 BEGIN
-	BEGIN TRY
-		BEGIN TRANSACTION
-			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal)
-				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username, @codigo_postal)
-		COMMIT TRANSACTION
-	END TRY
-	BEGIN CATCH
-		ROLLBACK;
-		THROW;
-	END CATCH
+	IF NOT EXISTS (
+					SELECT * FROM LOS_CHATADROIDES.Auto_X_Turno 
+					WHERE hora_inicio_turno = @hora_inicio_turno 
+						AND hora_fin_turno = @hora_fin_turno 
+						AND patente = @patente
+				  )
+	
+	INSERT INTO LOS_CHATADROIDES.Auto_X_Turno (hora_inicio_turno, hora_fin_turno, patente)
+	VALUES (@hora_inicio_turno, @hora_fin_turno, @patente)
+
+END
+GO
+
+
+
+CREATE PROCEDURE LOS_CHATADROIDES.Modificar_automovil
+@patente VARCHAR(10), @telefono_chofer NUMERIC(18,0),
+@marca VARCHAR(255), @modelo VARCHAR(255), @habilitado BIT, 
+@hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0)
+AS 
+BEGIN
+	UPDATE LOS_CHATADROIDES.Automovil
+	SET telefono_chofer = @telefono_chofer,
+		marca = @marca,
+		modelo = @modelo,
+		habilitado = @habilitado
+	WHERE patente = @patente 
+
+	IF(@hora_inicio_turno IS NOT NULL AND @hora_fin_turno IS NOT NULL)
+	BEGIN
+			EXEC LOS_CHATADROIDES.Modificar_auto_x_turno_si_el_valor_cambia @hora_inicio_turno, @hora_fin_turno, @patente
+	END
+END
+GO
+
+CREATE FUNCTION LOS_CHATADROIDES.Validar_Chofer 
+(@telefono_chofer NUMERIC(18,0), @patente VARCHAR(10) )
+RETURNS VARCHAR(50)
+AS
+BEGIN
+	DECLARE @error VARCHAR(50)
+	IF NOT EXISTS (SELECT telefono FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer) 
+			SET @error = 'El telefono ingresado no corresponde a un chofer existente.'
+
+	IF((SELECT habilitado FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer) = 0)
+		SET @error = 'No se puede asignar automoviles al chofer porque no esta habilitado.'
+	
+	IF EXISTS (SELECT patente FROM LOS_CHATADROIDES.Automovil where patente <> @patente and telefono_chofer = @telefono_chofer)
+		SET @error = 'El chofer ya tiene asignado un automovil.'  
+
+	RETURN @error
+END 
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Alta_automovil_solo_si_el_chofer_esta_habilitado
+ON LOS_CHATADROIDES.Automovil
+INSTEAD OF INSERT
+AS
+BEGIN
+	DECLARE @habilitado BIT
+	DECLARE @patente VARCHAR(10)
+	DECLARE @telefono_chofer NUMERIC(18,0)
+	DECLARE @marca VARCHAR(255)
+	DECLARE @modelo VARCHAR(255)
+	DECLARE @error VARCHAR(50)
+
+
+	SELECT @patente = patente, @telefono_chofer = telefono_chofer, @marca = marca, @modelo = modelo FROM inserted
+
+	SET @error = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
+
+	IF(@error IS NULL)
+		INSERT INTO LOS_CHATADROIDES.Automovil (patente, telefono_chofer, marca, modelo)
+		VALUES (@patente, @telefono_chofer, @marca, @modelo)
+		
+	ELSE THROW 51000, @error, 1;	
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Modificar_automovil_solo_si_el_chofer_esta_habilitado
+ON LOS_CHATADROIDES.Automovil
+INSTEAD OF UPDATE
+AS
+BEGIN
+	DECLARE @habilitado BIT
+	DECLARE @patente VARCHAR(10)
+	DECLARE @telefono_chofer NUMERIC(18,0)
+	DECLARE @marca VARCHAR(255)
+	DECLARE @modelo VARCHAR(255)
+	DECLARE @error VARCHAR(50)
+
+	SELECT @patente = patente, @telefono_chofer = telefono_chofer, @marca = marca, @modelo = modelo , @habilitado = habilitado FROM inserted
+	
+	SET @error = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
+
+	UPDATE LOS_CHATADROIDES.Automovil
+	SET marca = @marca,
+		modelo = @modelo,
+		habilitado = @habilitado
+	WHERE patente = @patente 
+			
+	IF(@error IS NULL)
+		UPDATE LOS_CHATADROIDES.Automovil
+		SET telefono_chofer = @telefono_chofer
+		WHERE patente = @patente
+	ELSE THROW 51000, @error, 1;	
+
 END
 GO
 
@@ -819,57 +912,6 @@ BEGIN
 		INSERT INTO LOS_CHATADROIDES.Rol_X_Usuario (username, nombre_del_rol, habilitado)
 			VALUES (@username, 'Chofer', 1)
 	END
-END
-GO
-
-CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_automovil
-@patente varchar(10), @numero_chofer numeric(18,0), 
-@marca varchar(255), @modelo varchar(255),
-@hora_inicio_turno numeric(18,0), @hora_fin_turno numeric(18,0)
-AS 
-BEGIN
-	BEGIN TRY
-		BEGIN TRANSACTION
-
-			INSERT INTO LOS_CHATADROIDES.Automovil
-				(patente, telefono_chofer, marca, modelo)
-			VALUES (@patente, @numero_chofer, @marca, @modelo)
-
-			INSERT INTO LOS_CHATADROIDES.Auto_X_Turno
-				(patente, hora_inicio_turno, hora_fin_turno)
-			VALUES(@patente, @hora_inicio_turno, @hora_fin_turno)
-
-		COMMIT TRANSACTION
-	END TRY
-	BEGIN CATCH
-		ROLLBACK;
-		THROW;
-	END CATCH
-END
-GO
-
-CREATE TRIGGER LOS_CHATADROIDES.Dar_de_baja_automovil 
-ON LOS_CHATADROIDES.Automovil
-INSTEAD OF DELETE
-AS 
-BEGIN  
-	DECLARE @patente VARCHAR(10)
-	SET @patente = (SELECT patente FROM deleted)
-	BEGIN TRY
-		BEGIN TRANSACTION
-			DELETE FROM LOS_CHATADROIDES.Auto_X_Turno 
-			WHERE patente = @patente
-
-			UPDATE LOS_CHATADROIDES.Automovil
-			SET habilitado = 0
-			WHERE patente = @patente
-
-		 COMMIT TRANSACTION
-	END TRY
-	BEGIN CATCH
-		ROLLBACK TRANSACTION;
-		THROW;
-	END CATCH
 END
 GO
 
@@ -1118,3 +1160,149 @@ BEGIN
 	END
 END
 GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Borrar_auto_x_turno_si_se_deshabilito
+ON LOS_CHATADROIDES.Turno
+AFTER UPDATE
+AS
+BEGIN
+	DECLARE @hora_inicio NUMERIC(18,0), @hora_fin NUMERIC(18,0), @habilitado BIT
+
+	SELECT @hora_inicio = hora_inicio_turno, @hora_fin = hora_fin_turno, @habilitado = habilitado
+	FROM inserted
+
+	IF(@habilitado = 0)
+	BEGIN
+		DELETE FROM LOS_CHATADROIDES.Auto_X_Turno WHERE hora_inicio_turno = @hora_inicio AND hora_fin_turno = @hora_fin
+	END
+END
+GO
+
+CREATE FUNCTION LOS_CHATADROIDES.Esta_entre
+(@valor NUMERIC(18,0), @cota_inferior NUMERIC(18,0), @cota_superior NUMERIC(18,0))
+RETURNS BIT
+AS
+BEGIN
+	IF(@valor > @cota_inferior AND @valor < @cota_superior)
+	BEGIN
+		RETURN 1
+	END
+
+	RETURN 0
+END
+GO
+
+CREATE PROCEDURE LOS_CHATADROIDES.Validar_turno_no_solapado
+@hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0)
+ AS
+BEGIN
+  	DECLARE @descripcion_que_fallo VARCHAR(50)
+ 
+	SELECT @descripcion_que_fallo = descripcion 
+	FROM LOS_CHATADROIDES.Turno 
+	WHERE (LOS_CHATADROIDES.Esta_entre(@hora_inicio_turno, hora_inicio_turno, hora_fin_turno) = 1
+	   OR LOS_CHATADROIDES.Esta_entre(@hora_fin_turno, hora_inicio_turno, hora_fin_turno) = 1) AND habilitado = 1
+  
+	IF (@descripcion_que_fallo != '')
+	BEGIN
+		DECLARE @error VARCHAR(255)
+ 
+		SET @error = 'El turno ingresado se solapa con el turno ' + @descripcion_que_fallo;
+ 
+		THROW 52000, @error, 1;
+	END
+ 
+END
+GO 
+ 
+CREATE TRIGGER LOS_CHATADROIDES.Validar_creacion_turnos_sobrepasados
+ON LOS_CHATADROIDES.Turno
+INSTEAD OF INSERT
+AS 
+BEGIN
+  DECLARE @hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0), @descripcion VARCHAR(255), 
+		  @valor_del_kilometro NUMERIC(18,2), @precio_base NUMERIC(18,2), @habilitado BIT
+ 
+  SELECT @hora_inicio_turno = hora_inicio_turno , @hora_fin_turno = hora_fin_turno, @precio_base = precio_base,
+	@descripcion = descripcion, @valor_del_kilometro = valor_del_kilometro, @habilitado = habilitado
+  FROM INSERTED
+  
+  IF(@habilitado = 1)
+ 	EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+ 
+  INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado)
+	VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, @habilitado)
+END	
+GO
+ 
+CREATE TRIGGER LOS_CHATADROIDES.Validar_actualizacion_turnos_sobrepasados
+ON LOS_CHATADROIDES.Turno
+INSTEAD OF UPDATE
+AS 
+BEGIN
+SET NOCOUNT ON
+  DECLARE 	@hora_inicio_turno NUMERIC(18,0), 
+        	@hora_fin_turno NUMERIC(18,0), 
+			@descripcion VARCHAR(255), 
+			@valor_del_kilometro NUMERIC(18,2), 
+			@precio_base NUMERIC(18,2), 
+			@descripcion_que_fallo VARCHAR(255),
+			@habilitado BIT, 
+			@hora_inicio_turno_vieja NUMERIC(18,0), 
+			@hora_fin_turno_vieja NUMERIC(18,0)
+  
+	select * from inserted--
+  SELECT @hora_inicio_turno = hora_inicio_turno, @hora_fin_turno = hora_fin_turno, @precio_base = precio_base,
+	@descripcion = descripcion, @valor_del_kilometro = valor_del_kilometro, @habilitado = habilitado
+  FROM inserted
+ select * from deleted--
+  SELECT @hora_inicio_turno_vieja = hora_inicio_turno, @hora_fin_turno_vieja = hora_fin_turno 
+  FROM deleted
+ print @hora_inicio_turno--
+ print @hora_fin_turno--
+	IF(@habilitado = 1 AND (@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja))
+	BEGIN
+		print 'holi'
+		EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+	
+		INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) 
+			VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, 1)
+
+		select * from LOS_CHATADROIDES.Turno
+
+		UPDATE LOS_CHATADROIDES.Auto_X_Turno
+			SET hora_inicio_turno = @hora_inicio_turno,
+				hora_fin_turno = @hora_fin_turno
+		WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
+			AND hora_fin_turno = @hora_fin_turno_vieja 
+
+		select * from LOS_CHATADROIDES.Auto_X_Turno
+
+		UPDATE LOS_CHATADROIDES.Turno
+			SET habilitado = 0
+		WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
+			AND  hora_fin_turno = @hora_fin_turno_vieja 
+
+		select * from LOS_CHATADROIDES.Turno
+   END
+   ELSE 
+   BEGIN
+		print 'chauchi'
+	  UPDATE LOS_CHATADROIDES.Turno 
+		  SET descripcion = @descripcion,
+			  precio_base = @precio_base,
+			  valor_del_kilometro = @valor_del_kilometro,
+			  habilitado = @habilitado
+	   WHERE hora_inicio_turno = @hora_inicio_turno AND
+		  hora_fin_turno = @hora_fin_turno
+     END
+END	
+GO
+
+UPDATE LOS_CHATADROIDES.Turno
+	SET hora_inicio_turno = 16,
+		hora_fin_turno = 19
+WHERE hora_fin_turno = 16 AND hora_fin_turno = 24
+
+SELECT * FROM LOS_CHATADROIDES.Turno
+

@@ -14,15 +14,11 @@ namespace UberFrba.Abm_Cliente
     public partial class Modificacion : Form
     {
         string errores = "";
-        /*string username;
-        string rol;*/
         private Form parent;
         Cliente cliente;
         public Modificacion(Form parent, Cliente cliente)
         {
-            InitializeComponent();/*
-            this.username = username;
-            this.rol = rol;*/
+            InitializeComponent();
             this.parent = parent;
             this.cliente = cliente;
             this.setCampos();

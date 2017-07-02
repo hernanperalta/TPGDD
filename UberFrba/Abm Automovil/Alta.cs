@@ -14,110 +14,132 @@ namespace UberFrba.Abm_Automovil
 {
     public partial class Alta : Form
     {
+        private Form parent;
+        
+        //private List<ErrorTextBox> listaDeErrores = new List<ErrorTextBox>();
+        private string errores = "";
 
-        private string username;
-        private string rol;
-        private List<ErrorTextBox> listaDeErrores = new List<ErrorTextBox>();
-
-        public Alta(string username, string rol)
+        //public Alta(string username, string rol)
+        public Alta(Form parent)
         {
             InitializeComponent();
-            this.username = username;
-            this.rol = rol;
+            this.parent = parent;
             this.cargarLosHorariosDeLosTurnos();
         }
 
         private void limpiarLosCampos() {
-            this.marca.ResetText();
-            this.modelo.ResetText();
-            this.patente.ResetText();
-            this.numeroChofer.ResetText();
-            this.selectorTurno.ResetText();
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox text = ctrl as TextBox;
+                    text.Clear();
+                }
+            }
         }
 
         private void limpiar_Click(object sender, EventArgs e)
         {
             this.limpiarLosCampos();
         }
-
+        /* ----------------------- CUANDO CAMBIAN LOS CAMPOS */
         private void turno_TextChanged(object sender, EventArgs e){
         
         }
 
         private void marca_TextChanged(object sender, EventArgs e)
         {
+            this.validarMarca();
         }
 
         private void numeroChofer_TextChanged(object sender, EventArgs e)
         {
-            
-        }
-        /* VALIDACIONES : */
-        private bool estaVacio(string campo) {
-            return campo == null || campo.Equals("") || campo.Any(char.IsWhiteSpace);
+            this.validarNumeroChofer();   
         }
 
-        private void validarNumeroChofer() {
-            if (this.estaVacio(this.numeroChofer.Text))
-                this.listaDeErrores.Add(new ErrorTextBox(this.numeroChofer, "El telefono esta vacio.\n"));
+        private void patente_TextChanged(object sender, EventArgs e)
+        {
+            this.validarPatente();
+        }
+        private void modelo_TextChanged(object sender, EventArgs e)
+        {
+            this.validarModelo();
+        }
+
+        /*  CUANDO CAMBIAN LOS CAMPOS  ----------------------- */
+
+        /* VALIDACIONES : */
+        private void estaVacio(string campo, string nombreCampo) {
+            if(campo == null || campo.Equals(""))
+                this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
+        }
+
+        private void superaElRango(TextBox campo, string nombreCampo, int rango) {
+            if (campo.Text.Length > rango)
+            {
+                MessageBox.Show("El campo "+ nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
+                campo.Text = campo.Text.Remove(campo.Text.Length - 1);
+            }
+        }
+
+        private void validarNumeroChofer()
+        {
+            this.superaElRango(this.numeroChofer, "numero chofer", 18);
 
             if (this.numeroChofer.Text.Any(char.IsLetter))
-                this.listaDeErrores.Add(new ErrorTextBox(this.numeroChofer, "El telefono del chofer solo puede tener numeros.\n"));
+            {
+                MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
+                this.numeroChofer.Text = this.numeroChofer.Text.Remove(this.numeroChofer.Text.Length - 1);
+            }
 
-            if (this.numeroChofer.Text.Length > 18)
-                this.listaDeErrores.Add(new ErrorTextBox(this.numeroChofer, "El telefono excede los 18 digitos.\n"));
-           
             
-        }
 
-        /* ASUMIMOS QUE LA MARCA NO PUEDE TENER NUMEROS PERO EL MODELO SI */
+        }
         private void validarModelo()
         {
-            if (this.estaVacio(this.modelo.Text))
-                this.listaDeErrores.Add(new ErrorTextBox(this.modelo, "Debe insertar un modelo para el automovil.\n" ));
-
-            if (this.modelo.Text.Length > 255)
-                this.listaDeErrores.Add(new ErrorTextBox(this.modelo, "El modelo excede el numero de caracteres permitidos (255).\n"));
+            
+            this.superaElRango(this.modelo, "modelo", 255);
         }
 
-        private void validarMarca() {
-            if (this.estaVacio(this.marca.Text))
-                this.listaDeErrores.Add(new ErrorTextBox(this.marca, "Debe insertar una marca para el automovil.\n"));
+        private void validarMarca()
+        {
+            
+            this.superaElRango(this.marca, "marca", 255);
 
             if (this.marca.Text.Any(char.IsDigit))
-                this.listaDeErrores.Add(new ErrorTextBox(this.marca, "La marca no puede contener numeros.\n"));
+            {
+                MessageBox.Show("La marca no puede contener numeros.");
+                this.marca.Text = this.marca.Text.Remove(this.marca.Text.Length - 1);
+            }
 
-            if (this.marca.Text.Length > 255)
-                this.listaDeErrores.Add(new ErrorTextBox(this.marca, "La marca excede el numero de caracteres permitidos (255)"));
             
         }
 
-        private void validarPatente() {
-            if (this.estaVacio(this.patente.Text))
-                this.listaDeErrores.Add(new ErrorTextBox(this.patente, "La patente esta vacia.\n"));
 
-            if (this.patente.Text.Length > 10)
-                this.listaDeErrores.Add(new ErrorTextBox(this.patente, "La patente excede los 10 caracteres.\n"));
+        private void validarPatente() {
+
+           
+            this.superaElRango(this.patente, "patente", 10);
+
         }
 
-        private void validarLosCampos() {
-            this.validarMarca();
-            this.validarModelo();
-            this.validarPatente();
-            this.validarNumeroChofer();
+        private void validarQueLosCamposNoEstenVacios()
+        {
+            this.estaVacio(this.numeroChofer.Text, "numero chofer");
+            this.estaVacio(this.modelo.Text, "modelo");
+            this.estaVacio(this.marca.Text, "marca");
+            this.estaVacio(this.patente.Text, "patente");
         }
 
         private bool seleccionoTurno() {
-            return selectorTurno.SelectedItem.Equals("No asignar turno") || selectorTurno.Text.Equals("No asignar turno");
+
+            return this.listaDeTurnos.CheckedItems.Count != 0; 
             
         }
 
         /**  - VALIDACIONES **/
 
-        private Turno turnoSeleccionado() {
-            return (Turno) this.selectorTurno.SelectedItem;
-        }
-
+    
         private void cargarLosHorariosDeLosTurnos(){
             
             try
@@ -127,59 +149,61 @@ namespace UberFrba.Abm_Automovil
                 while (readerTurnos.Read())
                 {
                     Turno nuevoTurno = new Turno(readerTurnos.GetDecimal(0).ToString(), readerTurnos.GetDecimal(1).ToString(), readerTurnos.GetString(2));
-                    this.selectorTurno.Items.Add(nuevoTurno);
+                    this.listaDeTurnos.Items.Add(nuevoTurno);
                 }
-                selectorTurno.Items.Add("No asignar turno");
                 readerTurnos.Close();
-
             }
             catch (Exception e) {
-                this.selectorTurno.Text = "No hay turnos en la base de datos";
+                this.listaDeTurnos.Text = "No hay turnos en la base de datos";
             }
 
         }
 
         private void crear_Click(object sender, EventArgs e)
         {
-            this.validarLosCampos();
+
+            string insertarAutomovil = "INSERT INTO LOS_CHATADROIDES.Automovil (patente, telefono_chofer, marca, modelo) "
+			                         + "VALUES ( '"
+                                     + this.patente.Text + "', " 
+                                     + this.numeroChofer.Text + ", '" 
+              						 + this.marca.Text + "', '" 
+                                     + this.modelo.Text + "')" ;
           
-            if (listaDeErrores.Any()) {
-                string errores = "";
-                listaDeErrores.ForEach(error => { errores += error.descripcionError; error.limpiarContenedor(); });
-                MessageBox.Show(errores);
-                listaDeErrores = new List<ErrorTextBox>();
+
+
+            this.validarQueLosCamposNoEstenVacios();
+            if (!this.errores.Equals("")) {
+                MessageBox.Show(this.errores);
+                this.errores = "";
+                return;
             }
-            else
+            try
             {
-                try
-                 {
 
-                     DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Dar_de_alta_automovil '" 
-                                                + this.patente.Text +"', " 
-                                                + this.numeroChofer.Text + ", '"
-                                                + this.marca.Text + "', '"
-                                                + this.modelo.Text + "', " 
-                                                + (this.seleccionoTurno() ? "NULL, " :  this.turnoSeleccionado().horaInicio + ",")
-                                                + (this.seleccionoTurno() ? "NULL" :  this.turnoSeleccionado().horaFin) 
-                                               );
+                DBConexion.ResolverNonQuery(insertarAutomovil);
 
-
-                     MessageBox.Show("Se pudo crear el automovil de patente nro: " + this.patente.Text);
-                 }
-                 catch (SqlException sqle)
-                 {
-                     
-                     if(sqle.Number == 2627)
-                            MessageBox.Show("No se pudo crear el automovil porque existe otro registro de automovil con patente nro: " + this.patente.Text );
-                            
-                     if(sqle.Number == 547) {
-                        if(sqle.Message.Contains("'telefono'"))
-                            MessageBox.Show("No se pudo crear el automovil porque no existe un chofer con el numero: " + this.numeroChofer.Text);
-                     }
-                          
-                     }
-                 }
+				this.insertarTurnos();
+              
+                MessageBox.Show("Se pudo crear el automovil de patente : " + this.patente.Text);
+            }
+            catch (SqlException sqle)
+            {
+                MessageBox.Show(sqle.Message);
+               
+            }
+                 
             
+        }
+
+        private void insertarTurnos()
+        {
+          string insertarAutoXTurno = "INSERT INTO LOS_CHATADROIDES.Auto_X_Turno (hora_inicio_turno, hora_fin_turno, patente) VALUES ";
+  
+          foreach(Turno turno in this.listaDeTurnos.CheckedItems)
+          {
+  		    DBConexion.ResolverNonQuery(insertarAutoXTurno + "(" + turno.horaInicio + ", " + turno.horaFin + ", '" + this.patente.Text + "')" );	
+          }
+  
         }
         
 
@@ -190,15 +214,15 @@ namespace UberFrba.Abm_Automovil
 
         private void button3_Click(object sender, EventArgs e)
         {
+            /*
             Form menu = new Menu.Menu(this.username, this.rol);
             menu.Show();
+            this.Close();*/
             this.Close();
+            this.parent.Show();
         }
 
-        private void patente_TextChanged(object sender, EventArgs e)
-        {
-
-        }
+      
 
         private void label5_Click(object sender, EventArgs e)
         {
@@ -215,6 +239,7 @@ namespace UberFrba.Abm_Automovil
             
         }
 
+        
       
     }
 }

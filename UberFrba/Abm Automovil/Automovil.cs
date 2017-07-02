@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace UberFrba.Abm_Automovil
 {
-    class Automovil
+    public class Automovil
     {
 
         public string patente;

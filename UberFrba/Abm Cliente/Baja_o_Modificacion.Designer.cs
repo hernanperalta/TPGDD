@@ -53,6 +53,7 @@
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Nombre :";
+            this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
             // nombreCliente
             // 
@@ -78,6 +79,7 @@
             this.label2.Size = new System.Drawing.Size(50, 13);
             this.label2.TabIndex = 8;
             this.label2.Text = "Apellido :";
+            this.label2.Click += new System.EventHandler(this.label2_Click);
             // 
             // dniCliente
             // 
@@ -95,6 +97,7 @@
             this.label3.Size = new System.Drawing.Size(32, 13);
             this.label3.TabIndex = 10;
             this.label3.Text = "DNI :";
+            this.label3.Click += new System.EventHandler(this.label3_Click);
             // 
             // label4
             // 

@@ -58,8 +58,6 @@
     <Compile Include="Abm Automovil\Baja o Modificacion.Designer.cs">
       <DependentUpon>Baja o Modificacion.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Automovil\Error.cs" />
-    <Compile Include="Abm Automovil\Filtro.cs" />
     <Compile Include="Abm Automovil\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,11 +131,11 @@
     <Compile Include="Abm Turno\Alta.Designer.cs">
       <DependentUpon>Alta.cs</DependentUpon>
     </Compile>
-    <Compile Include="Abm Turno\Baja.cs">
+    <Compile Include="Abm Turno\Baja_o_Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Abm Turno\Baja.Designer.cs">
-      <DependentUpon>Baja.cs</DependentUpon>
+    <Compile Include="Abm Turno\Baja_o_Modificacion.Designer.cs">
+      <DependentUpon>Baja_o_Modificacion.cs</DependentUpon>
     </Compile>
     <Compile Include="Abm Turno\Modificacion.cs">
       <SubType>Form</SubType>
@@ -145,6 +143,7 @@
     <Compile Include="Abm Turno\Modificacion.Designer.cs">
       <DependentUpon>Modificacion.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Turno\Turno.cs" />
     <Compile Include="Alta de Usuario\Alta de Usuario.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -180,9 +179,6 @@
       <DependentUpon>Seleccionar Rol.cs</DependentUpon>
     </Compile>
     <Compile Include="Login Usuario\UsuarioDeshabilitadoException.cs" />
-    <Compile Include="Menu\ABM.cs">
-      <SubType>Form</SubType>
-    </Compile>
     <Compile Include="Menu\Funcionalidad.cs" />
     <Compile Include="Menu\FuncionalidadABM.cs" />
     <Compile Include="Menu\Funcionalidades.cs" />
@@ -263,8 +259,11 @@
     <EmbeddedResource Include="Abm Turno\Alta.resx">
       <DependentUpon>Alta.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Abm Turno\Baja.resx">
-      <DependentUpon>Baja.cs</DependentUpon>
+    <EmbeddedResource Include="Abm Turno\Baja_o_Modificacion.resx">
+      <DependentUpon>Baja_o_Modificacion.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Abm Turno\Modificacion.resx">
+      <DependentUpon>Modificacion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Alta de Usuario\Alta de Usuario.resx">
       <DependentUpon>Alta de Usuario.cs</DependentUpon>
@@ -280,9 +279,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Login Usuario\Seleccionar Rol.resx">
       <DependentUpon>Seleccionar Rol.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Menu\ABM.resx">
-      <DependentUpon>ABM.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Menu\Menu ABM.resx">
       <DependentUpon>Menu ABM.cs</DependentUpon>

@@ -42,13 +42,14 @@
             this.tablaAutomovil = new System.Windows.Forms.DataGridView();
             this.volver = new System.Windows.Forms.Button();
             this.bajaOModificacion = new System.Windows.Forms.Button();
+            this.noAutosLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.tablaAutomovil)).BeginInit();
             this.SuspendLayout();
             // 
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(36, 21);
+            this.label4.Location = new System.Drawing.Point(108, 22);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(216, 13);
             this.label4.TabIndex = 22;
@@ -56,7 +57,7 @@
             // 
             // numeroChoferBM
             // 
-            this.numeroChoferBM.Location = new System.Drawing.Point(506, 78);
+            this.numeroChoferBM.Location = new System.Drawing.Point(578, 79);
             this.numeroChoferBM.Name = "numeroChoferBM";
             this.numeroChoferBM.Size = new System.Drawing.Size(100, 20);
             this.numeroChoferBM.TabIndex = 32;
@@ -65,7 +66,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(490, 53);
+            this.label6.Location = new System.Drawing.Point(562, 54);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(98, 13);
             this.label6.TabIndex = 31;
@@ -73,7 +74,7 @@
             // 
             // patenteBM
             // 
-            this.patenteBM.Location = new System.Drawing.Point(200, 78);
+            this.patenteBM.Location = new System.Drawing.Point(425, 79);
             this.patenteBM.Name = "patenteBM";
             this.patenteBM.Size = new System.Drawing.Size(100, 20);
             this.patenteBM.TabIndex = 30;
@@ -82,7 +83,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(184, 53);
+            this.label1.Location = new System.Drawing.Point(409, 54);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(50, 13);
             this.label1.TabIndex = 29;
@@ -90,7 +91,7 @@
             // 
             // modeloBM
             // 
-            this.modeloBM.Location = new System.Drawing.Point(359, 78);
+            this.modeloBM.Location = new System.Drawing.Point(272, 79);
             this.modeloBM.Name = "modeloBM";
             this.modeloBM.Size = new System.Drawing.Size(100, 20);
             this.modeloBM.TabIndex = 28;
@@ -99,7 +100,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(343, 53);
+            this.label2.Location = new System.Drawing.Point(256, 54);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(48, 13);
             this.label2.TabIndex = 27;
@@ -107,7 +108,7 @@
             // 
             // marcaBM
             // 
-            this.marcaBM.Location = new System.Drawing.Point(52, 78);
+            this.marcaBM.Location = new System.Drawing.Point(124, 79);
             this.marcaBM.Name = "marcaBM";
             this.marcaBM.Size = new System.Drawing.Size(100, 20);
             this.marcaBM.TabIndex = 26;
@@ -116,7 +117,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(36, 53);
+            this.label3.Location = new System.Drawing.Point(108, 54);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(43, 13);
             this.label3.TabIndex = 25;
@@ -124,7 +125,7 @@
             // 
             // limpiar
             // 
-            this.limpiar.Location = new System.Drawing.Point(57, 132);
+            this.limpiar.Location = new System.Drawing.Point(129, 133);
             this.limpiar.Name = "limpiar";
             this.limpiar.Size = new System.Drawing.Size(101, 25);
             this.limpiar.TabIndex = 34;
@@ -134,7 +135,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(506, 132);
+            this.button4.Location = new System.Drawing.Point(578, 133);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(101, 25);
             this.button4.TabIndex = 35;
@@ -146,18 +147,19 @@
             // 
             this.tablaAutomovil.AllowUserToAddRows = false;
             this.tablaAutomovil.AllowUserToDeleteRows = false;
+            this.tablaAutomovil.AllowUserToResizeRows = false;
             this.tablaAutomovil.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.tablaAutomovil.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tablaAutomovil.Location = new System.Drawing.Point(22, 187);
+            this.tablaAutomovil.Location = new System.Drawing.Point(30, 187);
             this.tablaAutomovil.Name = "tablaAutomovil";
             this.tablaAutomovil.ReadOnly = true;
-            this.tablaAutomovil.Size = new System.Drawing.Size(643, 149);
+            this.tablaAutomovil.Size = new System.Drawing.Size(757, 149);
             this.tablaAutomovil.TabIndex = 37;
             this.tablaAutomovil.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(225, 362);
+            this.volver.Location = new System.Drawing.Point(181, 360);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 42;
@@ -167,7 +169,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(380, 362);
+            this.bajaOModificacion.Location = new System.Drawing.Point(511, 360);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(105, 23);
             this.bajaOModificacion.TabIndex = 43;
@@ -175,11 +177,22 @@
             this.bajaOModificacion.UseVisualStyleBackColor = true;
             this.bajaOModificacion.Click += new System.EventHandler(this.bajaOModificacion_Click);
             // 
+            // noAutosLabel
+            // 
+            this.noAutosLabel.AutoSize = true;
+            this.noAutosLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.noAutosLabel.Location = new System.Drawing.Point(268, 138);
+            this.noAutosLabel.Name = "noAutosLabel";
+            this.noAutosLabel.Size = new System.Drawing.Size(0, 20);
+            this.noAutosLabel.TabIndex = 44;
+            this.noAutosLabel.TextAlign = System.Drawing.ContentAlignment.TopCenter;
+            // 
             // Baja_o_Modificacion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(717, 405);
+            this.ClientSize = new System.Drawing.Size(828, 405);
+            this.Controls.Add(this.noAutosLabel);
             this.Controls.Add(this.bajaOModificacion);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.tablaAutomovil);
@@ -220,5 +233,6 @@
         private System.Windows.Forms.DataGridView tablaAutomovil;
         private System.Windows.Forms.Button volver;
         private System.Windows.Forms.Button bajaOModificacion;
+        private System.Windows.Forms.Label noAutosLabel;
     }
 }

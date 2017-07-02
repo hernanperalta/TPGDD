@@ -17,17 +17,15 @@ namespace UberFrba.Abm_Automovil
         private string username;
         private string rol;
         private bool puedeDarDeBaja;
-        private List<ErrorTextBox> listaDeErrores = new List<ErrorTextBox>();
+        public Form parent;
         private List<Automovil> autosSeleccionados = new List<Automovil>();
         DataTable automoviles = new DataTable();
-        private List<Filtro> filtrosTabla;
-        
+       
 
-        public Baja_o_Modificacion(bool puedeDarDeBaja, string p1, string p2)
+        public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
-            this.username = p1;
-            this.rol = p2;
+            this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             if (puedeDarDeBaja)
             {
@@ -40,54 +38,56 @@ namespace UberFrba.Abm_Automovil
                 this.bajaOModificacion.Text = "Modificar";
             }
 
-            this.nuevaListaDeFiltros();
+        
         }
         /* VALIDACIONES  -------------- */
-        private bool estaVacio(string campo)
+
+        private void superaElRango(TextBox campo, string nombreCampo, int rango)
         {
-            return campo == null || campo.Equals("") || campo.Any(char.IsWhiteSpace);
+            if (campo.Text.Length > rango)
+            {
+                MessageBox.Show("El campo " + nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
+                campo.Text = campo.Text.Remove(campo.Text.Length - 1);
+            }
         }
 
         private void validarNumeroChofer()
         {
 
-            if (this.numeroChoferBM.Text.Any(char.IsLetter))
-                this.listaDeErrores.Add(new ErrorTextBox(this.numeroChoferBM, "El telefono del chofer solo puede tener numeros.\n"));
+            this.superaElRango(this.numeroChoferBM, "numero chofer", 18);
 
-            if (this.numeroChoferBM.Text.Length > 18)
-                this.listaDeErrores.Add(new ErrorTextBox(this.numeroChoferBM, "El telefono excede los 18 digitos.\n"));
+            if (this.numeroChoferBM.Text.Any(char.IsLetter))
+            {
+                MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
+                this.numeroChoferBM.Text = this.numeroChoferBM.Text.Remove(this.numeroChoferBM.Text.Length - 1);
+            }
+
 
 
         }
         private void validarModelo()
         {
 
-            if (this.modeloBM.Text.Length > 255)
-                this.listaDeErrores.Add(new ErrorTextBox(this.modeloBM, "El modeloBM excede el numero de caracteres permitidos (255).\n"));
+            this.superaElRango(this.modeloBM, "modelo", 255);
         }
 
         private void validarMarca()
         {
-            if (this.marcaBM.Text.Any(char.IsDigit))
-                this.listaDeErrores.Add(new ErrorTextBox(this.marcaBM, "La marca no puede contener numeros.\n"));
 
-            if (this.marcaBM.Text.Length > 255)
-                this.listaDeErrores.Add(new ErrorTextBox(this.marcaBM, "La marca excede el numero de caracteres permitidos (255)"));
+            this.superaElRango(this.marcaBM, "marca", 255);
+
+            if (this.marcaBM.Text.Any(char.IsDigit))
+            {
+                MessageBox.Show("La marca no puede contener numeros.");
+                this.marcaBM.Text = this.marcaBM.Text.Remove(this.marcaBM.Text.Length - 1);
+            }
 
         }
+
 
         private void validarPatente()
         {
-            if (this.patenteBM.Text.Length > 10)
-                this.listaDeErrores.Add(new ErrorTextBox(this.patenteBM, "La patente excede los 10 caracteres.\n"));
-        }
-
-        private void validarLosCampos()
-        {
-            this.validarMarca();
-            this.validarModelo();
-            this.validarPatente();
-            this.validarNumeroChofer();
+            this.superaElRango(this.patenteBM, "patente", 10);
         }
 
         /* -----------   VALIDACIONES */
@@ -97,7 +97,7 @@ namespace UberFrba.Abm_Automovil
 
         private void marcaBM_TextChanged(object sender, EventArgs e)
         {
-            this.filtrosTabla[0].agregarFiltro(this.marcaBM.Text);
+            // FIXME : ESTO TIENE QUE SER UN COMBO !!!! En el enunciado dice seleccion acotada 
             this.validarMarca();
             this.llenarTablaSiSePuede();
             
@@ -105,7 +105,6 @@ namespace UberFrba.Abm_Automovil
 
         private void modeloBM_TextChanged(object sender, EventArgs e)
         {
-            this.filtrosTabla[1].agregarFiltro(this.modeloBM.Text);
             this.validarModelo();
             this.llenarTablaSiSePuede();
         }
@@ -113,14 +112,12 @@ namespace UberFrba.Abm_Automovil
 
         private void patenteBM_TextChanged(object sender, EventArgs e)
         {
-            this.filtrosTabla[2].agregarFiltro(this.patenteBM.Text); 
             this.validarPatente();
             this.llenarTablaSiSePuede();
         }
 
         private void numeroChoferBM_TextChanged(object sender, EventArgs e)
         {
-            this.filtrosTabla[3].agregarFiltro(this.numeroChoferBM.Text);
             this.validarNumeroChofer();
             this.llenarTablaSiSePuede();
         }
@@ -138,26 +135,20 @@ namespace UberFrba.Abm_Automovil
 
         private void limpiarLosCampos()
         {
-            this.marcaBM.ResetText();
-            this.modeloBM.ResetText();
-            this.patenteBM.ResetText();
-            this.numeroChoferBM.ResetText();
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                {
+                    TextBox text = ctrl as TextBox;
+                    text.Clear();
+                }
+            }
         }
 
 
         private void limpiar_Click(object sender, EventArgs e)
         {
             this.limpiarLosCampos();
-            this.nuevaListaDeFiltros();
-        }
-
-        private void nuevaListaDeFiltros() {
-            this.filtrosTabla = new List<Filtro> { 
-                                                    new Filtro("Marca"),
-                                                    new Filtro("Modelo"),
-                                                    new Filtro("Patente"),
-                                                    new Filtro("Numero Chofer")
-                                                 };
         }
 
         private void baja_Click(object sender, EventArgs e)
@@ -167,9 +158,8 @@ namespace UberFrba.Abm_Automovil
 
         private void volver_Click(object sender, EventArgs e)
         {
-            Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
             this.Close();
+            this.parent.Show();
         }
 
         private void Baja_Load(object sender, EventArgs e)
@@ -183,8 +173,8 @@ namespace UberFrba.Abm_Automovil
         {
 
             foreach (DataGridViewRow fila in this.tablaAutomovil.SelectedRows)
-            {
-                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(), fila.Cells[4].Value.ToString(), fila.Cells[5].Value.ToString(), (fila.Cells[6].Value.ToString().Equals("1") ? true : false));
+            {                                                                                                                                                                                                                                             
+                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(), fila.Cells[4].Value.ToString(), fila.Cells[5].Value.ToString(), Convert.ToBoolean(fila.Cells[6].Value.ToString()));
                 autosSeleccionados.Add(filaAutomovil);
             }
 
@@ -193,21 +183,28 @@ namespace UberFrba.Abm_Automovil
         private void bajaOModificacion_Click(object sender, EventArgs e)
         {
             this.cargarLosAutomovilesSeleccionados();
-            // FIJARSE SI TENGO QUE CONTROLAR QUE NO HAYA SELECCIONADO NADA... 
+          
+            if (this.tablaAutomovil.RowCount == 0)
+            {
+                MessageBox.Show("Para llenar la lista de automoviles disponibles haga click en el boton 'Buscar todos' o añada algun filtro");
+                return;
+            }
+
             string errores = "";
             string dadosDeBaja = "Los autos dados de baja corresponden a las patentes : \n";
             if (puedeDarDeBaja)
             {
-
+                
                 foreach (Automovil auto in this.autosSeleccionados)
                 {
-
                     try
                     {
 
                         DBConexion.ResolverNonQuery("DELETE FROM LOS_CHATADROIDES.Automovil WHERE patente = '" + auto.patente + "'");
 
                         dadosDeBaja += auto.patente + "\n";
+
+                        this.llenarTablaSiSePuede();
 
                     }
                     catch (SqlException sqle)
@@ -216,54 +213,44 @@ namespace UberFrba.Abm_Automovil
                     }
                 }
                 if (!errores.Equals(""))
+                {
                     MessageBox.Show(errores);
+                    errores = "";
+                }
                 else MessageBox.Show(dadosDeBaja);
 
-
-                /*baja*/
             }
             else
             {
-                /*
-                Form modificar = new Modificacion(automovilSeleccionado, this.username, this.rol);
-                modificar.Show();*/
+                
+
+                if (this.autosSeleccionados.Count > 1)
+                {
+                    MessageBox.Show("Debe seleccionar de a un automovil para modificar");
+                    this.autosSeleccionados.Clear();
+                    return;
+                }
+                try
+                {
+                    Form modificar = new Modificacion(this, (Automovil)this.autosSeleccionados.First());
+                    this.autosSeleccionados.Clear();
+                    modificar.Show();
+                    this.Close();
+                }
+                catch (InvalidOperationException) {
+                    MessageBox.Show("Para elegir un automovil debe oprimir la flecha que se encuentra a la izquierda de la fila");
+                    return;
+                }
+               
             }
         }
 
         private void button4_Click(object sender, EventArgs e)
         {
-            this.validarLosCampos();
-
-            if (listaDeErrores.Any())
-            {
-                this.mostrarErrores();
-            }
-            else
-            {
-                this.llenarTabla();
-
-            }
+                this.llenarTablaSiSePuede();
+                this.limpiarLosCampos();
         }
 
-        private void llenarTabla()
-        {
-            DataTable autos = new DataTable();
-            try
-            {
-               
-                autos.Load(DBConexion.ResolverQuery("SELECT patente as Patente, modelo as Modelo, marca as Marca, rodado as Rodado, telefono_chofer as 'Numero Chofer', licencia as Licencia, habilitado as Habilitado "
-                                                       + "FROM LOS_CHATADROIDES.Automovil "
-                                                       + "ORDER BY patente"));
-                
-
-                this.tablaAutomovil.DataSource = autos;
-                
-            }
-            catch (SinRegistrosException e)
-            {
-                MessageBox.Show("No hay registros de automoviles");
-            }
-        }
 
         private void dataGridView1_CellContentClick_1(object sender, DataGridViewCellEventArgs e)
         {
@@ -271,64 +258,33 @@ namespace UberFrba.Abm_Automovil
         }
 
        
-        private void mostrarErrores() {
-            string errores = "";
-            listaDeErrores.ForEach(error => { errores += error.descripcionError; error.limpiarContenedor(); });
-            MessageBox.Show(errores);
-            listaDeErrores = new List<ErrorTextBox>();
-        }
-
         private void llenarTablaSiSePuede()
         {
-            if (listaDeErrores.Any())
+    
+            automoviles.Clear();
+            try
             {
-                this.mostrarErrores();
+
+                automoviles.Load(DBConexion.ResolverQuery("SELECT patente as Patente,telefono_chofer as 'Numero Chofer', marca as Marca, modelo as Modelo,  licencia as Licencia, rodado as Rodado, habilitado as Habilitado "
+                                            + " FROM LOS_CHATADROIDES.Automovil "
+                                            + " WHERE marca LIKE '" + this.marcaBM.Text + "%' AND "
+                                            + " modelo LIKE '" + this.modeloBM.Text + "%' AND "
+                                            + " patente LIKE '" + this.patenteBM.Text + "%' AND "
+                                            + " CONVERT(VARCHAR(18),telefono_chofer) LIKE '" + this.numeroChoferBM.Text + "%' "
+                                            + " ORDER BY patente"
+                                            )
+
+                                            );
+
+                this.tablaAutomovil.DataSource = automoviles;
+                this.noAutosLabel.Text = "";
             }
-            else
+            catch (SinRegistrosException)
             {
-                this.llenarTabla();
-                /*foreach (Filtro filtro in this.filtrosTabla) {
-                    
-                    (this.tablaAutomovil.DataSource as DataTable).DefaultView.RowFilter += filtro.filtroActual;
-                }
-               */
-                string rowFilter = "";
-
-                string valorAnterior = "";
-
-                for (int i = 0; i < this.filtrosTabla.Count; i++) {
-                /*    if (this.filtrosTabla[i].filtroActual.Equals("")) {
-                        break;
-                    }
-                    rowFilter += this.filtrosTabla[i].filtroActual;
-
-                    int siguiente = i+1;
-                    if (siguiente < this.filtrosTabla.Count && !this.filtrosTabla[siguiente].filtroActual.Equals("") && !this.filtrosTabla[i].filtroActual.Equals(""))
-                    {
-                        rowFilter += " AND ";
-                    }
-                 * */
-
-                    if (i != 0)
-                    {
-                        if (!valorAnterior.Equals("") && !this.filtrosTabla[i].filtroActual.Equals(""))
-                        {
-                            // NO ESTA ENTRANDO ACA Y POR LO TANTO NO LE CONCATENA EL AND !!! 
-                            rowFilter += " AND ";
-                        }
-                    }
-                   
-                    rowFilter += this.filtrosTabla[i].filtroActual;
-                    valorAnterior = this.filtrosTabla[i].filtroActual;
-                   
-                    
-
-                }
-               
-                (this.tablaAutomovil.DataSource as DataTable).DefaultView.RowFilter = rowFilter;
-                       
+                this.noAutosLabel.Text = "No se encontraron automoviles";
+                return;
             }
-
+            
         }
 
 

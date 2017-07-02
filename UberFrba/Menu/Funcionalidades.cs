@@ -26,12 +26,21 @@ namespace UberFrba.Menu
                 new Funcionalidad(6, "Registro de Viajes", new Registro_Viajes.Registro_Viajes(this.username, this.rol)),
                 new Funcionalidad(7, "Rendicion de cuenta del Chofer", new Rendicion_Al_Chofer.Rendicion_Al_Chofer(this.username, this.rol)),
                 new Funcionalidad(8, "Listado Estadistico", new Listado_Estadistico.Listado_Estadistico(this.username, this.rol)),
-                new Funcionalidad(9, "Facturacion a Cliente", new Facturacion.Facturacion_Cliente(this.username, this.rol))
+                new Funcionalidad(9, "Facturacion a Cliente", new Facturacion.Facturacion_Cliente(this.username, this.rol)),
+                new Funcionalidad(10, "ABM de Turno", this.crearABMTurno())
             };
         }
-        
+
+        private Menu_ABM crearABMTurno()
+        {
+            return new Menu_ABM("Turno", this.username, this.rol, new FuncionalidadABM(
+                                                                                    (parent) => { return new Abm_Turno.Alta(parent); },
+                                                                                    (parent) => { return new Abm_Turno.Baja_o_Modificacion(parent, true); },
+                                                                                    (parent) => { return new Abm_Turno.Baja_o_Modificacion(parent, false); }
+                                                                                    ));
+        }
+
         private Menu_ABM crearABMRol() {
-            //return new Menu_ABM("Rol", this.username, this.rol, new FuncionalidadABM(new Abm_Rol.Alta(this.username, this.rol), new Abm_Rol.Baja_Rol(this.username, this.rol) , new Abm_Rol.Modificacion(this.username, this.rol)));
             return new Menu_ABM("Rol", this.username, this.rol, new FuncionalidadABM(
                                                                                     (parent) => { return new Abm_Rol.Alta(parent); },
                                                                                     (parent) => { return new Abm_Rol.Baja(parent); },
@@ -40,7 +49,6 @@ namespace UberFrba.Menu
         }
 
         private Menu_ABM crearABMCliente() {
-            //return new Menu_ABM("Cliente", this.username, this.rol, new FuncionalidadABM(new Abm_Cliente.Alta(this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Cliente.Baja_o_Modificacion(false, this.username, this.rol)));
             return new Menu_ABM("Cliente", this.username, this.rol, new FuncionalidadABM(
                                                                                         (parent) => { return new Abm_Cliente.Alta(parent); },
                                                                                         (parent) => { return new Abm_Cliente.Baja_o_Modificacion(parent, true); },
@@ -49,7 +57,11 @@ namespace UberFrba.Menu
         }
 
         private Menu_ABM crearABMAuto() {
-            return null;// new Menu_ABM("Automovil", this.username, this.rol, new FuncionalidadABM(new Abm_Automovil.Alta(this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(true, this.username, this.rol), new Abm_Automovil.Baja_o_Modificacion(false, this.username, this.rol)));
+            return new Menu_ABM("Automovil", this.username, this.rol, new FuncionalidadABM(
+                                                                                        (parent) => { return new Abm_Automovil.Alta(parent); },
+                                                                                        (parent) => { return new Abm_Automovil.Baja_o_Modificacion(parent, true); },
+                                                                                        (parent) => { return new Abm_Automovil.Baja_o_Modificacion(parent, false); }
+                                                                                        ));
         }
         
         private Menu_ABM crearABMChofer() {

@@ -27,7 +27,9 @@ namespace UberFrba.Abm_Automovil
         }
 
         public override string ToString() {
-            return "De: " + this.horaInicio + " A: " + this.horaFin + " (" + this.descripcion + ")";
+            if(!this.horaInicio.Equals("") && !this.horaFin.Equals(""))
+                return "De: " + this.horaInicio + " A: " + this.horaFin + " (" + this.descripcion + ")";
+            return "No posee un turno asignado.";
         }
     }
 }
