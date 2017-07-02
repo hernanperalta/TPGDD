@@ -27,8 +27,8 @@ namespace UberFrba
             DBConexion.Conectar();
 
             //new Login().Show();
-            new Abm_Rol.Modificacion(null).Show();
-
+            //new Registro_Viajes.Registro_Viajes("admin", "Administrador").Show();
+            
             Application.Run();
 
         }

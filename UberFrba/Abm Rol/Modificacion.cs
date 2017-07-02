@@ -27,16 +27,6 @@ namespace UberFrba.Abm_Rol
             this.rolDeshabilitadoLabel.Text = "";
         }
 
-        private void label2_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Modificacion_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void volver_Click(object sender, EventArgs e)
         {
             this.Close();
@@ -56,8 +46,12 @@ namespace UberFrba.Abm_Rol
             this.funcionalidadesAQuitar = new List<Funcionalidad>();
             try
             {
-                this.cargarFuncionalidades(this.funcionalidadesAAgregar, this.funcsAAgregar, false);
                 this.cargarFuncionalidades(this.funcionalidadesAQuitar, this.funcsAQuitar, true);
+            }
+            catch (SinRegistrosException) { }
+            try
+            {
+                this.cargarFuncionalidades(this.funcionalidadesAAgregar, this.funcsAAgregar, false);
             }
             catch (SinRegistrosException) { }
         }
@@ -263,6 +257,15 @@ namespace UberFrba.Abm_Rol
 
         private void rolDeshabilitadoLabel_Click(object sender, EventArgs e)
         {
+        }
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Modificacion_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

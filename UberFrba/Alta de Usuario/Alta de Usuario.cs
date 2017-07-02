@@ -142,6 +142,11 @@ namespace UberFrba.Alta_de_Usuario
         {
             return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol ");
         }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+
+        }
        
 
     }

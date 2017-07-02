@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace UberFrba.Registro_Viajes
 {
-    public partial class Seleccionar_Chofer : Form
+    public partial class Seleccionar_Choferes : Form
     {
-        public Seleccionar_Chofer()
+        public Seleccionar_Choferes()
         {
             InitializeComponent();
         }
