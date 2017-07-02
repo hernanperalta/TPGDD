@@ -737,7 +737,59 @@ EXEC LOS_CHATADROIDES.Migrar_Viajes;
 EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
 GO
 
+CREATE TRIGGER LOS_CHATADROIDES.Dar_de_alta_cliente
+ON LOS_CHATADROIDES.Cliente
+INSTEAD OF INSERT
+ AS
+ BEGIN
+	 DECLARE @localidad VARCHAR(20), @direccion VARCHAR(255),
+			 @nro_piso SMALLINT, @depto VARCHAR(3),
+			 @telefono NUMERIC(18,0), @nombre VARCHAR(255), 
+			 @apellido VARCHAR(255), @dni NUMERIC(18,0), 
+			 @fecha_de_nac DATETIME, @codigo_postal SMALLINT,
+			 @mail VARCHAR(50), @username VARCHAR(50)
+			 
+	SELECT @localidad = localidad, @direccion = direccion, @nro_piso = nro_piso, @depto = depto, @telefono = telefono,
+		@nombre = nombre, @apellido = apellido, @dni = dni, @fecha_de_nac = fecha_de_nacimiento, @codigo_postal = codigo_postal,
+		@mail = mail, @username = username
+	FROM inserted
 
+ 	BEGIN TRY
+ 		BEGIN TRANSACTION
+ 			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal)
+ 				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username, @codigo_postal)
+ 		COMMIT TRANSACTION
+ 	END TRY
+ 	BEGIN CATCH
+ 		ROLLBACK;
+		DECLARE @errorNum INT
+
+		DECLARE @errorMessage VARCHAR(50)
+
+		SET @errorNum = ERROR_NUMBER();
+		
+		IF @errorNum = 2627
+		BEGIN
+			IF (ERROR_MESSAGE() LIKE '%(' + convert(varchar, @telefono) + ')%')
+			BEGIN
+				SET @errorMessage = 'Ya existe un cliente de telefono ' + convert(varchar, @telefono);
+			END
+			ELSE
+			BEGIN
+				SET @errorMessage = 'Ya existe un cliente con el usuario ' + @username;
+			END;
+
+			THROW 50001, @errorMessage, 1;
+		END
+		ELSE IF @errorNum = 547
+		BEGIN
+			SET @errorMessage = 'No existe un usuario de nombre ' + @username;
+ 			THROW 50002, @errorMessage, 1;
+		END
+ 	END CATCH
+ END
+ GO  
+ 
 CREATE TRIGGER LOS_CHATADROIDES.Dar_de_baja_automovil
 ON LOS_CHATADROIDES.Automovil
 INSTEAD OF DELETE
@@ -1215,14 +1267,13 @@ BEGIN
 				AND 
 			   LOS_CHATADROIDES.No_se_solapan(@hora_fin_turno, hora_inicio_turno, hora_fin_turno, 1) = 1) 
 	AND habilitado = 1
-	AND @hora_inicio_turno != hora_inicio_turno
-	AND @hora_fin_turno != hora_fin_turno
-	    
+	AND convert(varchar, @hora_inicio_turno) + convert(varchar,@hora_fin_turno) != convert(varchar, hora_inicio_turno) + convert(varchar,hora_fin_turno)
+	
 	IF (@descripcion_que_fallo != '')
 	BEGIN
 		DECLARE @error VARCHAR(255)
  
-		SET @error = 'El turno ingresado se solapa con el turno ' + @descripcion_que_fallo;
+		SET @error = 'El turno ingresado se solapa con el turno cuya descripcion es: ' + @descripcion_que_fallo;
 	
 		THROW 52000, @error, 1;
 	END
@@ -1325,3 +1376,68 @@ SET NOCOUNT ON
      END
 END	
 GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Dar_de_baja_rol
+ON LOS_CHATADROIDES.Rol
+INSTEAD OF DELETE
+AS
+BEGIN
+	DECLARE @rol VARCHAR(25)
+	SELECT @rol = nombre_del_rol
+	FROM deleted
+ 
+	DELETE LOS_CHATADROIDES.Funcionalidad_X_Rol
+	WHERE nombre_del_rol = @rol
+
+	DELETE LOS_CHATADROIDES.Rol_X_Usuario
+	WHERE nombre_del_rol = @rol
+ 
+	UPDATE LOS_CHATADROIDES.Rol
+		SET habilitado = 0
+	WHERE nombre_del_rol = @rol
+END
+GO
+
+CREATE TRIGGER LOS_CHATADROIDES.Cambiar_nombre_rol
+ON LOS_CHATADROIDES.Rol
+INSTEAD OF UPDATE
+AS
+BEGIN
+	DECLARE @nombre_viejo VARCHAR(25), @nombre_nuevo VARCHAR(25),
+			@habilitado BIT
+ 
+	SELECT @nombre_viejo = nombre_del_rol FROM deleted
+	SELECT @nombre_nuevo = nombre_del_rol, @habilitado = habilitado FROM inserted
+ 
+	IF(@nombre_viejo != @nombre_nuevo)
+	BEGIN;
+		BEGIN TRY
+		DISABLE TRIGGER LOS_CHATADROIDES.Dar_de_baja_rol ON LOS_CHATADROIDES.Rol
+ 
+		INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol, habilitado)
+		VALUES (@nombre_nuevo, @habilitado)
+ 
+		UPDATE LOS_CHATADROIDES.Rol_X_Usuario
+			SET nombre_del_rol = @nombre_nuevo
+		WHERE nombre_del_rol = @nombre_viejo
+ 
+		UPDATE LOS_CHATADROIDES.Funcionalidad_X_Rol
+			SET nombre_del_rol = @nombre_nuevo
+		WHERE nombre_del_rol = @nombre_viejo
+ 
+		DELETE FROM LOS_CHATADROIDES.Rol WHERE nombre_del_rol = @nombre_viejo;
+		
+		ENABLE TRIGGER LOS_CHATADROIDES.Dar_de_baja_rol ON LOS_CHATADROIDES.Rol
+		END TRY
+		BEGIN CATCH
+		END CATCH
+	END
+	ELSE
+	BEGIN
+		UPDATE LOS_CHATADROIDES.Rol
+			SET habilitado = @habilitado
+		WHERE nombre_del_rol = @nombre_viejo
+	END
+END
+GO
+

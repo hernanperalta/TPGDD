@@ -40,7 +40,7 @@ namespace UberFrba.Abm_Cliente
             
             try
             {
-                DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Dar_de_alta_cliente '" 
+                DBConexion.ResolverNonQuery("INSERT INTO LOS_CHATADROIDES.Cliente (localidad, direccion, nro_piso, depto, telefono, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal) VALUES ('"
                                            + this.localidadCliente.Text + "', '"
                                            + this.direccionCliente.Text + "', "
                                            + this.nroPiso.Text + ", '"
@@ -50,22 +50,15 @@ namespace UberFrba.Abm_Cliente
                                            + this.apellidoCliente.Text + "', "
                                            + this.dniCliente.Text + ", '"
                                            + this.fechaNacCli.Value + "', "
-                                           + this.codPostal.Text + ", "
                                            + (this.estaVacio(this.mailCliente.Text) ? "NULL" : "'" + this.mailCliente.Text + "'") + ", '"
-                                           + this.usernameCliente.Text + "'");
+                                           + this.usernameCliente.Text + "', '"
+                                           + this.codPostal + "')");
                 
                 MessageBox.Show("El cliente se creó con éxito!");
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627)
-                    if (ex.Message.Contains(this.entreParentesis(this.telefonoCliente.Text)))
-                        MessageBox.Show("Ya existe un cliente con el teléfono " + this.telefonoCliente.Text);
-                    if (ex.Message.Contains(this.entreParentesis(this.usernameCliente.Text)) )
-                        MessageBox.Show("Ya existe un cliente con el usuario " + this.usernameCliente.Text);
-                
-                if( ex.Number == 547 )
-                    MessageBox.Show("No existe un usuario de nombre " + this.usernameCliente.Text);
+                MessageBox.Show(ex.Message);
             }
 
         }

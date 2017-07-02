@@ -26,7 +26,8 @@ namespace UberFrba
             Application.SetCompatibleTextRenderingDefault(false);
             DBConexion.Conectar();
 
-            new Login().Show();
+            //new Login().Show();
+            new Abm_Rol.Modificacion(null).Show();
 
             Application.Run();
 

@@ -119,6 +119,7 @@
     <Compile Include="Abm Rol\Baja.Designer.cs">
       <DependentUpon>Baja.cs</DependentUpon>
     </Compile>
+    <Compile Include="Abm Rol\Funcionalidad.cs" />
     <Compile Include="Abm Rol\Modificacion.cs">
       <SubType>Form</SubType>
     </Compile>

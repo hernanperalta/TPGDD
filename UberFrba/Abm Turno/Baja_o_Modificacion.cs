@@ -159,6 +159,7 @@ namespace UberFrba.Abm_Turno
             {
                 if (ex.Number == 2627)
                     MessageBox.Show("Ya existe un turno habilitado en esa franja horaria");
+
                 if (ex.Number == 52000)
                     MessageBox.Show(ex.Message);
             }

@@ -70,7 +70,7 @@
             this.guardarCliente.Name = "guardarCliente";
             this.guardarCliente.Size = new System.Drawing.Size(100, 32);
             this.guardarCliente.TabIndex = 121;
-            this.guardarCliente.Text = "Guardar Cliente";
+            this.guardarCliente.Text = "Guardar turno";
             this.guardarCliente.UseVisualStyleBackColor = true;
             this.guardarCliente.Click += new System.EventHandler(this.guardarCliente_Click);
             // 
