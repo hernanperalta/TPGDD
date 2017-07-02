@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.turno = new System.Windows.Forms.ComboBox();
+            this.turnos = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.telefonoCliente = new System.Windows.Forms.TextBox();
@@ -47,16 +47,19 @@
             this.volver = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
+            this.horaInicioTurno = new System.Windows.Forms.TextBox();
+            this.horaFinTurno = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
-            // turno
+            // turnos
             // 
-            this.turno.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.turno.FormattingEnabled = true;
-            this.turno.Location = new System.Drawing.Point(193, 156);
-            this.turno.Name = "turno";
-            this.turno.Size = new System.Drawing.Size(187, 21);
-            this.turno.TabIndex = 5;
+            this.turnos.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.turnos.FormattingEnabled = true;
+            this.turnos.Location = new System.Drawing.Point(58, 156);
+            this.turnos.Name = "turnos";
+            this.turnos.Size = new System.Drawing.Size(110, 21);
+            this.turnos.TabIndex = 5;
+            this.turnos.SelectedIndexChanged += new System.EventHandler(this.turnos_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -218,11 +221,31 @@
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.buscarChofer_Click);
             // 
+            // horaInicioTurno
+            // 
+            this.horaInicioTurno.Location = new System.Drawing.Point(193, 157);
+            this.horaInicioTurno.Name = "horaInicioTurno";
+            this.horaInicioTurno.ReadOnly = true;
+            this.horaInicioTurno.Size = new System.Drawing.Size(100, 20);
+            this.horaInicioTurno.TabIndex = 30;
+            this.horaInicioTurno.TextChanged += new System.EventHandler(this.horaInicioTurno_TextChanged);
+            // 
+            // horaFinTurno
+            // 
+            this.horaFinTurno.Location = new System.Drawing.Point(311, 157);
+            this.horaFinTurno.Name = "horaFinTurno";
+            this.horaFinTurno.ReadOnly = true;
+            this.horaFinTurno.Size = new System.Drawing.Size(100, 20);
+            this.horaFinTurno.TabIndex = 31;
+            this.horaFinTurno.TextChanged += new System.EventHandler(this.horaFinTurno_TextChanged);
+            // 
             // Registro_Viajes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(540, 386);
+            this.Controls.Add(this.horaFinTurno);
+            this.Controls.Add(this.horaInicioTurno);
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.volver);
@@ -238,7 +261,7 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.turno);
+            this.Controls.Add(this.turnos);
             this.Controls.Add(this.patente);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.telefonoCliente);
@@ -252,7 +275,7 @@
 
         #endregion
 
-        private System.Windows.Forms.ComboBox turno;
+        private System.Windows.Forms.ComboBox turnos;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox telefonoCliente;
@@ -271,6 +294,8 @@
         private System.Windows.Forms.Button volver;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox horaInicioTurno;
+        private System.Windows.Forms.TextBox horaFinTurno;
 
     }
 }

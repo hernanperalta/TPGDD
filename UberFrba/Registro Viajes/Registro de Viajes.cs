@@ -25,6 +25,7 @@ namespace UberFrba.Registro_Viajes
             InitializeComponent();
             this.username = username;
             this.rol = rol;
+            this.cargarTurnos();
         }
 
         private void volver_Click(object sender, EventArgs e)
@@ -36,6 +37,7 @@ namespace UberFrba.Registro_Viajes
 
         private void registrarCliente_Click(object sender, EventArgs e)
         {
+            this.errores = "";
             this.validarCampos();
             if (errores != "")
             {
@@ -68,6 +70,8 @@ namespace UberFrba.Registro_Viajes
             this.validarCampo("Patente del chofer", this.patente.Text, 10, "^[a-zA-Z]+$");
             this.validarCampo("Numero del cliente", this.telefonoCliente.Text, 18, "^[0-9]+$");
             this.validarCampo("Cantidad de kilometros del viaje", this.cantKm.Text, 18, "^[0-9]+$");
+            if (this.turnos.SelectedItem == null)
+                errores += "Debe seleccionar un Turno\n";
             //this.validarHoraInicioYFin();
         }
 
@@ -80,7 +84,10 @@ namespace UberFrba.Registro_Viajes
         private void validarExpresion(string expresion, string campo, string campoError)
         {
             if (campo == "")
-                return;
+            {
+                errores += "El campo " + campoError + " esta vacio\n";
+                
+            }
             else if (!System.Text.RegularExpressions.Regex.IsMatch(campo, expresion))
             {
                 errores += "El campo " + campoError + " posee caracteres invalidos\n";
@@ -113,18 +120,41 @@ namespace UberFrba.Registro_Viajes
         }
 
         private void registrarViaje()
-        {/*
+        {
             DBConexion.ResolverNonQuery("INSERT INTO LOS_CHATADROIDES.Viaje "
                                        +"(telefono_chofer,patente,telefono_cliente, hora_inicio_turno, hora_fin_turno, "
                                        +" fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES "
-                                       +"("+ this.telefonoChofer + "," + "'" + this.patente + "',"+ this.telefonoCliente + ", "
-                                       +"'" + this.horaInicioTurno)")*/
+                                       +"("+ this.telefonoChofer.Text + "," + "'" + this.patente.Text + "',"+ this.telefonoCliente.Text + ", "
+                                       + this.horaInicioTurno.SelectedText + "," + this.horaFinTurno.SelectedText + "," + this.fechaHoraInicio.Value + "," + this.fechaHoraFin.Value + "," + this.cantKm.Text  + ")");
         }
 
         public void setChofer(string telefono, string patente)
         {
             this.telefonoChofer.Text = telefono;
             this.patente.Text = patente;
+        }
+
+        private void cargarTurnos()
+        {
+            SqlDataReader turno = this.leerTurnos();
+
+            while (turno.Read())
+            {
+                this.turnos.Items.Add(new Turno(turno.GetDecimal(0).ToString(), turno.GetDecimal(1).ToString(), turno.GetString(2)));
+            }
+            turno.Close();
+        }
+
+        private SqlDataReader leerTurnos()
+        {
+            return DBConexion.ResolverQuery("SELECT hora_inicio_turno, hora_fin_turno, descripcion FROM LOS_CHATADROIDES.Turno WHERE habilitado = 1");
+        }
+
+        private void turnos_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Turno turnoElegido = (Turno) this.turnos.SelectedItem;
+            this.horaInicioTurno.Text = turnoElegido.horaInicioTurno;
+            this.horaFinTurno.Text = turnoElegido.horaFinTurno;
         }
 
         private void telefonoChofer_TextChanged(object sender, EventArgs e)
@@ -152,5 +182,14 @@ namespace UberFrba.Registro_Viajes
         {
         }
 
+        private void horaInicioTurno_TextChanged(object sender, EventArgs e)
+        {
+        
+        }
+
+        private void horaFinTurno_TextChanged(object sender, EventArgs e)
+        {
+        
+        }
      }
 }

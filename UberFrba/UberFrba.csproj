@@ -221,6 +221,7 @@
     <Compile Include="Registro Viajes\Seleccionar Cliente.Designer.cs">
       <DependentUpon>Seleccionar Cliente.cs</DependentUpon>
     </Compile>
+    <Compile Include="Registro Viajes\Turno.cs" />
     <Compile Include="Rendicion al chofer\Rendicion al chofer.cs">
       <SubType>Form</SubType>
     </Compile>
