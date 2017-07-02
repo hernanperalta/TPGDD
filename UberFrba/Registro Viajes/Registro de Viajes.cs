@@ -121,7 +121,11 @@ namespace UberFrba.Registro_Viajes
                                        +"'" + this.horaInicioTurno)")*/
         }
 
-
+        public void setChofer(string telefono, string patente)
+        {
+            this.telefonoChofer.Text = telefono;
+            this.patente.Text = patente;
+        }
 
         private void telefonoChofer_TextChanged(object sender, EventArgs e)
         {
