@@ -68,3 +68,5 @@ DROP TRIGGER LOS_CHATADROIDES.Borrar_auto_x_turno_si_se_deshabilito;
 DROP PROCEDURE LOS_CHATADROIDES.Validar_turno_no_solapado;
 DROP TRIGGER LOS_CHATADROIDES.Validar_creacion_turnos_sobrepasados;
 DROP TRIGGER LOS_CHATADROIDES.Validar_actualizacion_turnos_sobrepasados;
+DROP TRIGGER LOS_CHATADROIDES.Dar_de_alta_cliente
+DROP FUNCTION LOS_CHATADROIDES.No_se_solapan
