@@ -66,6 +66,7 @@
             // 
             // selectorABM
             // 
+            this.selectorABM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selectorABM.FormattingEnabled = true;
             this.selectorABM.Items.AddRange(new object[] {
             "Alta ",

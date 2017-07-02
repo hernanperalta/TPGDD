@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
+using System.Data.SqlClient;
 
 namespace UberFrba.Abm_Turno
 {
@@ -153,6 +154,13 @@ namespace UberFrba.Abm_Turno
                 }
                 MessageBox.Show("El turno " + turno.descripcion + "\nYa se encuentra habilitado");
                 return;
+            }
+            catch (SqlException ex)
+            {
+                if (ex.Number == 2627)
+                    MessageBox.Show("Ya existe un turno habilitado en esa franja horaria");
+                if (ex.Number == 52000)
+                    MessageBox.Show(ex.Message);
             }
             catch (ArgumentOutOfRangeException)
             {

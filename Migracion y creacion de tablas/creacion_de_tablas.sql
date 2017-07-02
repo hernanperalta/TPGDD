@@ -1178,12 +1178,22 @@ BEGIN
 END
 GO
 
-CREATE FUNCTION LOS_CHATADROIDES.Esta_entre
-(@valor NUMERIC(18,0), @cota_inferior NUMERIC(18,0), @cota_superior NUMERIC(18,0))
+CREATE FUNCTION LOS_CHATADROIDES.No_se_solapan
+(@valor NUMERIC(18,0), @cota_inferior NUMERIC(18,0), @cota_superior NUMERIC(18,0), @comparaConInferior BIT)
 RETURNS BIT
 AS
 BEGIN
-	IF(@valor > @cota_inferior AND @valor < @cota_superior)
+	IF @comparaConInferior = 1
+	BEGIN
+		IF((@valor < @cota_inferior OR @valor > @cota_superior) OR @valor = @cota_inferior)
+		BEGIN
+			RETURN 1
+		END
+		
+		RETURN 0
+	END
+	ELSE
+	IF((@valor < @cota_inferior OR @valor > @cota_superior) OR @valor = @cota_superior)
 	BEGIN
 		RETURN 1
 	END
@@ -1197,21 +1207,25 @@ CREATE PROCEDURE LOS_CHATADROIDES.Validar_turno_no_solapado
  AS
 BEGIN
   	DECLARE @descripcion_que_fallo VARCHAR(50)
+	SET @descripcion_que_fallo = ''
  
 	SELECT @descripcion_que_fallo = descripcion 
-	FROM LOS_CHATADROIDES.Turno 
-	WHERE (LOS_CHATADROIDES.Esta_entre(@hora_inicio_turno, hora_inicio_turno, hora_fin_turno) = 1
-	   OR LOS_CHATADROIDES.Esta_entre(@hora_fin_turno, hora_inicio_turno, hora_fin_turno) = 1) AND habilitado = 1
-  
+	FROM LOS_CHATADROIDES.Turno
+	WHERE NOT (LOS_CHATADROIDES.No_se_solapan(@hora_inicio_turno, hora_inicio_turno, hora_fin_turno, 0) = 1
+				AND 
+			   LOS_CHATADROIDES.No_se_solapan(@hora_fin_turno, hora_inicio_turno, hora_fin_turno, 1) = 1) 
+	AND habilitado = 1
+	AND @hora_inicio_turno != hora_inicio_turno
+	AND @hora_fin_turno != hora_fin_turno
+	    
 	IF (@descripcion_que_fallo != '')
 	BEGIN
 		DECLARE @error VARCHAR(255)
  
 		SET @error = 'El turno ingresado se solapa con el turno ' + @descripcion_que_fallo;
- 
+	
 		THROW 52000, @error, 1;
 	END
- 
 END
 GO 
  
@@ -1251,43 +1265,56 @@ SET NOCOUNT ON
 			@hora_inicio_turno_vieja NUMERIC(18,0), 
 			@hora_fin_turno_vieja NUMERIC(18,0)
   
-	select * from inserted--
   SELECT @hora_inicio_turno = hora_inicio_turno, @hora_fin_turno = hora_fin_turno, @precio_base = precio_base,
 	@descripcion = descripcion, @valor_del_kilometro = valor_del_kilometro, @habilitado = habilitado
   FROM inserted
- select * from deleted--
+
   SELECT @hora_inicio_turno_vieja = hora_inicio_turno, @hora_fin_turno_vieja = hora_fin_turno 
   FROM deleted
- print @hora_inicio_turno--
- print @hora_fin_turno--
-	IF(@habilitado = 1 AND (@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja))
-	BEGIN
-		print 'holi'
-		EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
 	
-		INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) 
-			VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, 1)
+	IF(@habilitado = 1)
+	BEGIN
+		BEGIN TRY
+			BEGIN TRANSACTION
+				IF(@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja)
+				BEGIN
+					INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) 
+						VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, 0)
 
-		select * from LOS_CHATADROIDES.Turno
+					UPDATE LOS_CHATADROIDES.Auto_X_Turno
+						SET hora_inicio_turno = @hora_inicio_turno,
+							hora_fin_turno = @hora_fin_turno
+					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
+						AND hora_fin_turno = @hora_fin_turno_vieja 
 
-		UPDATE LOS_CHATADROIDES.Auto_X_Turno
-			SET hora_inicio_turno = @hora_inicio_turno,
-				hora_fin_turno = @hora_fin_turno
-		WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
-			AND hora_fin_turno = @hora_fin_turno_vieja 
+					UPDATE LOS_CHATADROIDES.Turno
+						SET habilitado = 0
+					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
+						AND hora_fin_turno = @hora_fin_turno_vieja 
 
-		select * from LOS_CHATADROIDES.Auto_X_Turno
-
-		UPDATE LOS_CHATADROIDES.Turno
-			SET habilitado = 0
-		WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
-			AND  hora_fin_turno = @hora_fin_turno_vieja 
-
-		select * from LOS_CHATADROIDES.Turno
+					UPDATE LOS_CHATADROIDES.Turno
+						SET habilitado = 1
+					WHERE hora_inicio_turno = @hora_inicio_turno
+						AND hora_fin_turno = @hora_fin_turno 
+				END
+				ELSE
+				BEGIN
+					UPDATE LOS_CHATADROIDES.Turno
+						SET habilitado = 1
+					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
+					  AND hora_fin_turno = @hora_fin_turno_vieja 
+				END
+		
+				EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+			COMMIT
+		END TRY
+		BEGIN CATCH
+			ROLLBACK;
+			THROW
+		END CATCH
    END
    ELSE 
    BEGIN
-		print 'chauchi'
 	  UPDATE LOS_CHATADROIDES.Turno 
 		  SET descripcion = @descripcion,
 			  precio_base = @precio_base,
@@ -1298,11 +1325,3 @@ SET NOCOUNT ON
      END
 END	
 GO
-
-UPDATE LOS_CHATADROIDES.Turno
-	SET hora_inicio_turno = 16,
-		hora_fin_turno = 19
-WHERE hora_fin_turno = 16 AND hora_fin_turno = 24
-
-SELECT * FROM LOS_CHATADROIDES.Turno
-
