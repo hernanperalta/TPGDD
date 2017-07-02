@@ -67,7 +67,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void validarUsername()
         {
-            this.validarCampoSegunTipo(50, "^[a-zA-Zá-úÁ-Ú-_.0-9]+$", this.usernameChofer.Text, "username", "debe tener letras, números, o los caracteres _ - .");
+            this.validarCampoSegunTipo(50, "^[a-zA-Z-_.0-9]+$", this.usernameChofer.Text, "username", "debe tener letras, números, o los caracteres _ - .");
         }
 
         private void validarAlfanumerico(int tamanio, string texto, string nombreDeCampo)

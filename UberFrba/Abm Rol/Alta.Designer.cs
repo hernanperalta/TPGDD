@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.nombreRol = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.rolesCheckBox = new System.Windows.Forms.CheckedListBox();
+            this.crearRol = new System.Windows.Forms.Button();
+            this.limpiarCampos = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -46,12 +46,12 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Ingresar nombre de Rol :";
             // 
-            // textBox1
+            // nombreRol
             // 
-            this.textBox1.Location = new System.Drawing.Point(88, 64);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(174, 20);
-            this.textBox1.TabIndex = 1;
+            this.nombreRol.Location = new System.Drawing.Point(88, 64);
+            this.nombreRol.Name = "nombreRol";
+            this.nombreRol.Size = new System.Drawing.Size(174, 20);
+            this.nombreRol.TabIndex = 1;
             // 
             // label2
             // 
@@ -62,38 +62,39 @@
             this.label2.TabIndex = 2;
             this.label2.Text = "Seleccione las funcionalidades para el Rol :";
             // 
-            // checkedListBox1
+            // rolesCheckBox
             // 
-            this.checkedListBox1.FormattingEnabled = true;
-            this.checkedListBox1.Items.AddRange(new object[] {
+            this.rolesCheckBox.FormattingEnabled = true;
+            this.rolesCheckBox.Items.AddRange(new object[] {
             "Funcionalidad 1 ",
             "Funcionalidad 2 ",
             "...",
             "...",
             "...",
             "Funcionalidad n "});
-            this.checkedListBox1.Location = new System.Drawing.Point(114, 140);
-            this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(120, 64);
-            this.checkedListBox1.TabIndex = 3;
+            this.rolesCheckBox.Location = new System.Drawing.Point(114, 140);
+            this.rolesCheckBox.Name = "rolesCheckBox";
+            this.rolesCheckBox.Size = new System.Drawing.Size(120, 64);
+            this.rolesCheckBox.TabIndex = 3;
             // 
-            // button1
+            // crearRol
             // 
-            this.button1.Location = new System.Drawing.Point(250, 224);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 32);
-            this.button1.TabIndex = 4;
-            this.button1.Text = "Crear Rol";
-            this.button1.UseVisualStyleBackColor = true;
+            this.crearRol.Location = new System.Drawing.Point(250, 224);
+            this.crearRol.Name = "crearRol";
+            this.crearRol.Size = new System.Drawing.Size(95, 32);
+            this.crearRol.TabIndex = 4;
+            this.crearRol.Text = "Crear Rol";
+            this.crearRol.UseVisualStyleBackColor = true;
             // 
-            // button2
+            // limpiarCampos
             // 
-            this.button2.Location = new System.Drawing.Point(123, 224);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 32);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "Limpiar";
-            this.button2.UseVisualStyleBackColor = true;
+            this.limpiarCampos.Location = new System.Drawing.Point(123, 224);
+            this.limpiarCampos.Name = "limpiarCampos";
+            this.limpiarCampos.Size = new System.Drawing.Size(109, 32);
+            this.limpiarCampos.TabIndex = 14;
+            this.limpiarCampos.Text = "Limpiar";
+            this.limpiarCampos.UseVisualStyleBackColor = true;
+            this.limpiarCampos.Click += new System.EventHandler(this.limpiarCampos_Click);
             // 
             // volver
             // 
@@ -111,11 +112,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(361, 268);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
-            this.Controls.Add(this.checkedListBox1);
+            this.Controls.Add(this.limpiarCampos);
+            this.Controls.Add(this.crearRol);
+            this.Controls.Add(this.rolesCheckBox);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.nombreRol);
             this.Controls.Add(this.label1);
             this.Name = "Alta";
             this.Text = "Alta de Rol";
@@ -128,11 +129,11 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox nombreRol;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckedListBox checkedListBox1;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.CheckedListBox rolesCheckBox;
+        private System.Windows.Forms.Button crearRol;
+        private System.Windows.Forms.Button limpiarCampos;
         private System.Windows.Forms.Button volver;
     }
 }

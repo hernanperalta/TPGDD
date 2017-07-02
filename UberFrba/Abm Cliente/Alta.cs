@@ -102,14 +102,14 @@ namespace UberFrba.Abm_Cliente
             this.validarCampo("Localidad", this.localidadCliente.Text, 20, "^[a-zA-Z0-9- ]+$");
             this.validarCampo("Departamento", this.deptoCliente.Text, 3, "^[a-zA-Z0-9]+$");
             this.validarCampo("Direccion y calle", this.direccionCliente.Text, 255, "^[a-zA-Z0-9- ]+$");
-            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z-áéíóúÁÉÍÓÚ ]+$");
-            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z-áéíóúÁÉÍÓÚ ]+$");
+            this.validarCampo("Nombre", this.nombreCliente.Text, 255, "^[a-zA-Z-á-úÁ-Ú ]+$");
+            this.validarCampo("Apellido", this.apellidoCliente.Text, 255, "^[a-zA-Z-á-úÁ-Ú ]+$");
             this.validarCampo("Codigo Postal", this.codPostal.Text, 5, "^[0-9]+$");
             this.validarCampo("Nro de Piso", this.nroPiso.Text, 5, "^[0-9]+$");
             if(!this.estaVacio(this.mailCliente.Text))
                 this.validarCampo("Mail", this.mailCliente.Text, 255, "^[a-zA-Z]+[a-zA-Z0-9-._]*@[a-zA-Z]+(.[a-zA-Z]+)+$");            
             this.validarFecha();
-            this.validarCampo("Nombre de usuario", this.usernameCliente.Text, 50, "^[a-zA-Z-_.0-9áéíóúÁÉÍÓÚ]+$");
+            this.validarCampo("Nombre de usuario", this.usernameCliente.Text, 50, "^[a-zA-Z-_.0-9]+$");
         }
 
         private void validarFecha()

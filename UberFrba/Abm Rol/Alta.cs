@@ -30,5 +30,12 @@ namespace UberFrba.Abm_Rol
             this.Close();
             this.parent.Show();
         }
+
+        private void limpiarCampos_Click(object sender, EventArgs e)
+        {
+            foreach (Control ctrl in this.Controls)
+                if (ctrl is TextBox)
+                    ((TextBox)ctrl).Clear();
+        }
     }
 }

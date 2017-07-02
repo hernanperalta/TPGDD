@@ -35,11 +35,12 @@
             this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // comboBox1
+            // selectorFuncionalidades
             // 
+            this.selectorFuncionalidades.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.selectorFuncionalidades.FormattingEnabled = true;
-            resources.ApplyResources(this.selectorFuncionalidades, "comboBox1");
-            this.selectorFuncionalidades.Name = "comboBox1";
+            resources.ApplyResources(this.selectorFuncionalidades, "selectorFuncionalidades");
+            this.selectorFuncionalidades.Name = "selectorFuncionalidades";
             this.selectorFuncionalidades.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label1
