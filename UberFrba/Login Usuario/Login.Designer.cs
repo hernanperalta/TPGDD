@@ -43,7 +43,7 @@
             this.ingresar.TabIndex = 0;
             this.ingresar.Text = "Ingresar";
             this.ingresar.UseVisualStyleBackColor = true;
-            this.ingresar.Click += new System.EventHandler(this.button1_Click);
+            this.ingresar.Click += new System.EventHandler(this.ingresar_Click);
             // 
             // password
             // 

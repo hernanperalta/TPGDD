@@ -83,9 +83,9 @@ namespace UberFrba.Facturacion
                 {
                     DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Crear_factura " + this.telefonoTB.Text + ", " + this.importeTotal.Text.Replace(",", ".") + ", '" + this.fechaFacturacion + "', '" + this.fechaInicio.Value + "', '" + this.fechaFin.Value + "'");
                     MessageBox.Show("Facturacion realizada");
-                } catch (SqlException)
+                } catch (SqlException sqle)
                 {
-                    MessageBox.Show("No se pudo facturar");
+                    MessageBox.Show(sqle.Message);
                 }
 
                 //MessageBox.Show(this.fechaInicio.Value.ToString());

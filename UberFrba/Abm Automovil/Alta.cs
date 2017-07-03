@@ -16,10 +16,9 @@ namespace UberFrba.Abm_Automovil
     {
         private Form parent;
         
-        //private List<ErrorTextBox> listaDeErrores = new List<ErrorTextBox>();
+        
         private string errores = "";
 
-        //public Alta(string username, string rol)
         public Alta(Form parent)
         {
             InitializeComponent();

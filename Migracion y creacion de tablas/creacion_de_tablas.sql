@@ -1,4 +1,6 @@
-
+GO
+CREATE SCHEMA [LOS_CHATADROIDES] AUTHORIZATION [gd]
+GO
 
 CREATE TABLE LOS_CHATADROIDES.Usuario
 (
@@ -6,6 +8,7 @@ CREATE TABLE LOS_CHATADROIDES.Usuario
 	password VARCHAR(64) NOT NULL,
 	habilitado BIT NOT NULL DEFAULT 1
 );
+
 
 
 CREATE TABLE LOS_CHATADROIDES.Turno
@@ -1074,6 +1077,17 @@ RETURN @ultimaFactura + 1
 END
 GO
 
+/*CREATE PROCEDURE LOS_CHATADROIDES.Crear_factura
+@telefono NUMERIC(18,0), @importeTotal FLOAT, @fecha_facturacion VARCHAR(20),
+@fecha_inicio VARCHAR(20), @fecha_fin VARCHAR(20)
+AS 
+BEGIN
+	INSERT INTO LOS_CHATADROIDES.Factura (id_factura, telefono_cliente, fecha_facturacion, fecha_inicio, fecha_fin, importe_total)
+		VALUES (LOS_CHATADROIDES.Ultima_factura(), @telefono, @fecha_facturacion, @fecha_inicio, @fecha_fin, @importeTotal)
+END
+GO*/
+
+
 CREATE PROCEDURE LOS_CHATADROIDES.Crear_factura
 @telefono NUMERIC(18,0), @importeTotal FLOAT, @fecha_facturacion VARCHAR(20),
 @fecha_inicio VARCHAR(20), @fecha_fin VARCHAR(20)
@@ -1083,6 +1097,7 @@ BEGIN
 		VALUES (LOS_CHATADROIDES.Ultima_factura(), @telefono, @fecha_facturacion, @fecha_inicio, @fecha_fin, @importeTotal)
 END
 GO
+
 
 CREATE TRIGGER LOS_CHATADROIDES.Actualizar_Viajes_Facturados
 ON LOS_CHATADROIDES.Factura

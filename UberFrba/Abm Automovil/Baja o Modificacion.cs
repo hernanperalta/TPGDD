@@ -15,8 +15,7 @@ namespace UberFrba.Abm_Automovil
 {
     public partial class Baja_o_Modificacion : Form
     {
-        private string username;
-        private string rol;
+
         private bool puedeDarDeBaja;
         public Form parent;
         private List<Automovil> autosSeleccionados = new List<Automovil>();
@@ -210,7 +209,7 @@ namespace UberFrba.Abm_Automovil
 
             foreach (DataGridViewRow fila in this.tablaAutomovil.SelectedRows)
             {                                                                                                                                                                                                                                             
-                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(), fila.Cells[4].Value.ToString(), fila.Cells[5].Value.ToString(), Convert.ToBoolean(fila.Cells[6].Value.ToString()));
+                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(),  Convert.ToBoolean(fila.Cells[6].Value.ToString()));
                 autosSeleccionados.Add(filaAutomovil);
             }
 
@@ -311,7 +310,7 @@ namespace UberFrba.Abm_Automovil
             try
             {
 
-                automoviles.Load(DBConexion.ResolverQuery("SELECT patente as Patente,telefono_chofer as 'Numero Chofer', marca as Marca, modelo as Modelo,  licencia as Licencia, rodado as Rodado, habilitado as Habilitado "
+                automoviles.Load(DBConexion.ResolverQuery("SELECT patente as Patente, telefono_chofer as 'Numero Chofer', marca as Marca, modelo as Modelo, habilitado as Habilitado "
                                             + " FROM LOS_CHATADROIDES.Automovil "
                                             + " WHERE " + this.filtrarPorLaMarcaSiSelecciono()      
                                             + " modelo LIKE '%" + this.modeloBM.Text + "%' AND "

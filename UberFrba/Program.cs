@@ -23,19 +23,14 @@ namespace UberFrba
         static void Main()
         {
             
-            //Application.EnableVisualStyles();
-            //Application.SetCompatibleTextRenderingDefault(false);
-            //DBConexion.Conectar();
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            DBConexion.Conectar();
 
             new Login().Show();
-            //new Abm_Rol.Baja(new Form()).Show();
+           
             
             Application.Run();
-
-            
-            //DateTime value = Convert.ToDateTime(ConfigurationManager.AppSettings["DateFormat"]);
-            //var appDate = DateTime.Parse(value);
-
 
           
 

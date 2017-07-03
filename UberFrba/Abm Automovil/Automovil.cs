@@ -13,18 +13,14 @@ namespace UberFrba.Abm_Automovil
         public string telefono_chofer;
         public string marca;
         public string modelo;
-        public string licencia;
-        public string rodado;
         public bool habilitado;
 
-        public Automovil(string patente, string telefono_chofer, string marca, string modelo, string licencia, string rodado, bool habilitado)
+        public Automovil(string patente, string telefono_chofer, string marca, string modelo,  bool habilitado)
         {
             this.patente = patente;
             this.telefono_chofer = telefono_chofer;
             this.marca = marca;
             this.modelo = modelo;
-            this.licencia = licencia;
-            this.rodado = rodado;
             this.habilitado = habilitado;
         }
 
