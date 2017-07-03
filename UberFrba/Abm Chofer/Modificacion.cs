@@ -11,6 +11,8 @@ using UberFrba.Conexion;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using UberFrba.Menu;
+using System.Configuration;
+
 
 namespace UberFrba.Abm_Chofer
 {
@@ -22,6 +24,7 @@ namespace UberFrba.Abm_Chofer
         private Chofer choferAModificar;
         private UpdateBuilder updateBuilder;
         private string errores = "";
+        private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         //public Modificacion(Chofer choferAModificar, string usernameActual, string rolActual)
         public Modificacion(Form parent, Chofer choferAModificar)
@@ -184,7 +187,7 @@ namespace UberFrba.Abm_Chofer
 
         private void validarFecha()
         {
-            if (this.fechaNacChofer.Value > DateTime.Today)
+            if (this.fechaNacChofer.Value > fechaActual)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }
 

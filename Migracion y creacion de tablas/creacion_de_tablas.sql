@@ -141,6 +141,7 @@ CREATE TABLE LOS_CHATADROIDES.Rendicion
 	FOREIGN KEY (hora_inicio_turno, hora_fin_turno) REFERENCES LOS_CHATADROIDES.Turno(hora_inicio_turno, hora_fin_turno)
 );  
 
+
 CREATE TABLE LOS_CHATADROIDES.Viaje
 (
 	numero_viaje INTEGER IDENTITY(1,1) PRIMARY KEY,
@@ -1584,10 +1585,10 @@ BEGIN
 		(
 		SELECT 1 FROM LOS_CHATADROIDES.Viaje 
 		WHERE (LOS_CHATADROIDES.No_se_solapan(
-				CAST(@fecha_hora_inicio AS FLOAT), 
-				CAST(@fecha_hora_fin AS FLOAT), 
-				CAST(fecha_y_hora_inicio_viaje AS FLOAT), 
-				CAST(fecha_y_hora_fin_viaje AS FLOAT)) 
+				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), @fecha_hora_inicio, 108), ':', '')), 
+				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), @fecha_hora_fin, 108), ':', '')), 
+				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_inicio_viaje, 108), ':', '')), 
+				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_fin_viaje, 108), ':', ''))) 
 				= 0
 		AND CONVERT(DATE, fecha_y_hora_inicio_viaje) = CONVERT(DATE, @fecha_hora_inicio)
 		AND telefono_chofer = @telefono_chofer AND telefono_cliente = @telefono_cliente)
@@ -1602,7 +1603,73 @@ BEGIN
 		(@telefono_chofer, @patente, @telefono_cliente, @hora_inicio_turno, 
 		@hora_fin_turno, @fecha_hora_inicio, @fecha_hora_fin, @kmsDelViaje) 
 END
+GO
 
-
-
+CREATE TRIGGER LOS_CHATADROIDES.Dar_de_alta_rendicion
+ON LOS_CHATADROIDES.Rendicion
+INSTEAD OF INSERT
+AS
+BEGIN
+	DECLARE @nro_rendicion NUMERIC(18,0),
+			@fecha DATETIME,
+			@telefono_chofer NUMERIC(18,0),
+			@importe_total NUMERIC(18,2),
+			@hora_inicio_turno NUMERIC(18,0),
+			@hora_fin_turno NUMERIC(18,0),
+			@porcentaje FLOAT
+	
+	SELECT @fecha = fecha, @hora_inicio_turno = hora_inicio_turno, @hora_fin_turno = hora_fin_turno,
+		   @telefono_chofer = telefono_chofer, @importe_total = importe_total, @porcentaje = porcentaje_aplicado 
+	FROM inserted
+ 
+	SET @nro_rendicion = (SELECT MAX(nro_rendicion) FROM LOS_CHATADROIDES.Rendicion) + 1
+ 
+	IF EXISTS (SELECT fecha FROM LOS_CHATADROIDES.Rendicion 
+				WHERE CAST(fecha AS DATE) = CAST(@fecha AS DATE) 
+				AND telefono_chofer = @telefono_chofer)
+	BEGIN
+		DECLARE @error VARCHAR(100)
+		
+		SET @error = 'Ya se realizo la rendicion al chofer ' + CONVERT(VARCHAR, @telefono_chofer) 
+			+ ' correspondiente para la fecha ' + CONVERT(VARCHAR, CAST(@fecha AS DATE));
+		
+		THROW 59000, @error, 1;
+	END
+ 
+	DECLARE rendiciones_cursor CURSOR FOR
+	SELECT hora_inicio_turno, hora_fin_turno       
+	FROM LOS_CHATADROIDES.Viaje V
+	WHERE telefono_chofer = @telefono_chofer
+		AND CAST(fecha_y_hora_inicio_viaje AS DATE) = CAST(@fecha AS DATE)
+		AND nro_rendicion IS NULL
+	GROUP BY hora_inicio_turno, hora_fin_turno
+ 
+	OPEN rendiciones_cursor 
+ 
+	FETCH rendiciones_cursor  INTO @hora_inicio_turno, @hora_fin_turno 
+ 
+	WHILE(@@FETCH_STATUS = 0)
+	BEGIN
+		INSERT INTO LOS_CHATADROIDES.Rendicion 
+			(nro_rendicion, fecha, telefono_chofer, importe_total, hora_inicio_turno, hora_fin_turno, porcentaje_aplicado)
+				VALUES 
+			(@nro_rendicion, @fecha, @telefono_chofer, @importe_total, @hora_inicio_turno, @hora_fin_turno, @porcentaje)
+ 
+		UPDATE LOS_CHATADROIDES.Viaje
+			SET nro_rendicion = @nro_rendicion
+		WHERE hora_inicio_turno = @hora_inicio_turno
+			 AND hora_fin_turno = @hora_fin_turno
+			 AND nro_rendicion IS NULL
+			 AND telefono_chofer = @telefono_chofer
+			 AND CAST(fecha_y_hora_inicio_viaje AS DATE) = CAST(@fecha AS DATE)
+ 
+		SET @nro_rendicion = @nro_rendicion + 1
+ 
+		FETCH rendiciones_cursor INTO @hora_inicio_turno, @hora_fin_turno	
+	END
+ 
+	CLOSE rendiciones_cursor
+	DEALLOCATE rendiciones_cursor
+END
+GO
 

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
+using System.Configuration;
 
 namespace UberFrba.Listado_Estadistico
 {
@@ -17,6 +18,7 @@ namespace UberFrba.Listado_Estadistico
         private String username;
         private String rol;
         private DataTable listado = new DataTable();
+        private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         public Listado_Estadistico(String username, String rol)
         {
@@ -84,10 +86,10 @@ namespace UberFrba.Listado_Estadistico
 
         private void anio_ValueChanged(object sender, EventArgs e)
         {
-            if (anio.Value.Year > DateTime.Today.Year)
+            if (anio.Value.Year > fechaActual.Year)
             {
                 MessageBox.Show("El año no puede ser superior al actual");
-                this.anio.Value = DateTime.Today;
+                this.anio.Value = fechaActual;
                 return;
             }
         }

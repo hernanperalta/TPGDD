@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using UberFrba.Conexion;
 using UberFrba.Registro_Viajes;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace UberFrba.Rendicion_al_chofer
 {
@@ -23,6 +24,7 @@ namespace UberFrba.Rendicion_al_chofer
         private string rol;
         private string errores = "";
         private DataTable viajes = new DataTable();
+        private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         public Rendicion_al_chofer(string username, string rol)
         {
@@ -30,6 +32,8 @@ namespace UberFrba.Rendicion_al_chofer
             this.username = username;
             this.rol = rol;
             this.porcentaje.Text = "100";
+
+            this.fechaRendicion.MaxDate = fechaActual;
         }
 
         private void Rendicion_al_chofer_Load(object sender, EventArgs e)
@@ -124,7 +128,46 @@ namespace UberFrba.Rendicion_al_chofer
 
         private void guardarRendicion_Click(object sender, EventArgs e)
         {
+            if (this.telefonoChofer.Text.Equals(""))
+            {
+                MessageBox.Show("Debe oprimir el boton \"Buscar chofer\".");
+                return;
+            }
 
+            if (this.turnos.SelectedIndex == -1)
+            {
+                MessageBox.Show("Debe seleccionar un turno para cargar los datos.");
+                return;
+            }
+
+            this.validarPorcentaje();
+
+            if (!this.errores.Equals(""))
+            {
+                MessageBox.Show(this.errores);
+                this.errores = "";
+                return;
+            }
+
+            try
+            {
+                string query = "INSERT INTO LOS_CHATADROIDES.Rendicion (fecha, telefono_chofer, importe_total, hora_inicio_turno, hora_fin_turno, porcentaje_aplicado) "
+                                            + "VALUES ('"
+                                            + this.fechaRendicion.Value + "', "
+                                            + this.telefonoChofer.Text + ", "
+                                            + this.importeTotalDia.Text.Replace(",", ".") + ", "
+                                            + this.horaInicioTurno.Text + ", "
+                                            + this.horaFinTurno.Text + ", "
+                                            + (Int32.Parse(this.porcentaje.Text)/100).ToString().Replace(",", ".") + ")";
+
+                DBConexion.ResolverNonQuery(query);
+
+                MessageBox.Show("La rendicion se realizo con exito con un importe de: ");
+            }
+            catch (SqlException ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
 
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
@@ -134,7 +177,6 @@ namespace UberFrba.Rendicion_al_chofer
 
         private void cargarDatos_Click(object sender, EventArgs e)
         {
-            
             if (this.telefonoChofer.Text.Equals(""))
             {
                 MessageBox.Show("Debe oprimir el boton \"Buscar chofer\".");
@@ -142,7 +184,7 @@ namespace UberFrba.Rendicion_al_chofer
             }
             if (this.turnos.SelectedIndex == -1)
             {
-                MessageBox.Show("Debes seleccionar un turno para cargar los datos.");
+                MessageBox.Show("Debe seleccionar un turno para cargar los datos.");
                 return;
             }
 
@@ -180,7 +222,6 @@ namespace UberFrba.Rendicion_al_chofer
             }
 
             this.importeTotalDia.Text = (porc * impTotal).ToString();
- 
         }
 
         private void validarPorcentaje()

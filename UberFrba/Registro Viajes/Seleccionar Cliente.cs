@@ -64,7 +64,6 @@ namespace UberFrba.Registro_Viajes
                     text.Clear();
                 }
             }
-            this.clientesGrid.DataSource = null;
         }
 
 
@@ -216,6 +215,11 @@ namespace UberFrba.Registro_Viajes
         private void volver_Click_1(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void Seleccionar_Cliente_Load(object sender, EventArgs e)
+        {
+
         }
 
     }

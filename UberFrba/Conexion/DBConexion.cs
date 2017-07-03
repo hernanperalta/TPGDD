@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using System.Windows.Forms;
+using System.Configuration;
 
 namespace UberFrba.Conexion
 {
@@ -15,11 +16,12 @@ namespace UberFrba.Conexion
 
         public static void Conectar()
         {
-            String conexionString = "Server=.\\SQLSERVER2012;"
+           /* String conexionString = "Server=.\\SQLSERVER2012;"
                                        + "Database=GD1C2017;"
                                        + "User ID=gd;"
                                        + "Password=gd2017;"
-                                       + "Integrated Security=true";
+                                       + "Integrated Security=true";*/
+            string conexionString = ConfigurationManager.ConnectionStrings["UberFrba.Properties.Settings.ConexionString"].ConnectionString;
 
             conexion = new SqlConnection(conexionString);
 

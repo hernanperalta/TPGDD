@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace UberFrba.Facturacion
 {
@@ -20,7 +21,7 @@ namespace UberFrba.Facturacion
         private String rol;
         private string errores = "";
         private DataTable viajesSinFacturar = new DataTable();
-        private DateTime fechaFacturacion = DateTime.Today;
+        private DateTime fechaFacturacion = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         public Facturacion_Cliente(String username, String rol)
         {

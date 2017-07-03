@@ -182,9 +182,11 @@
             // fechaRendicion
             // 
             this.fechaRendicion.Location = new System.Drawing.Point(321, 190);
+            this.fechaRendicion.MaxDate = new System.DateTime(2017, 7, 3, 0, 0, 0, 0);
             this.fechaRendicion.Name = "fechaRendicion";
             this.fechaRendicion.Size = new System.Drawing.Size(207, 20);
             this.fechaRendicion.TabIndex = 55;
+            this.fechaRendicion.Value = new System.DateTime(2017, 7, 3, 0, 0, 0, 0);
             this.fechaRendicion.ValueChanged += new System.EventHandler(this.dateTimePicker1_ValueChanged);
             // 
             // label5

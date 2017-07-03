@@ -187,6 +187,7 @@
             this.Controls.Add(this.label1);
             this.Name = "Seleccionar_Cliente";
             this.Text = "Seleccionar_Cliente";
+            this.Load += new System.EventHandler(this.Seleccionar_Cliente_Load);
             ((System.ComponentModel.ISupportInitialize)(this.clientesGrid)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();

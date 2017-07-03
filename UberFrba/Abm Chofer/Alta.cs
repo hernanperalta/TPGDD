@@ -12,6 +12,7 @@ using System.Data.SqlClient;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
 using UberFrba.Menu;
+using System.Configuration;
 
 namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcional o no
 {
@@ -21,6 +22,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         private string rol;*/
         private Form parent;
         private string errores = "";
+        private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         public Alta(Form parent)
         {
@@ -96,7 +98,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void validarFecha()
         {
-            if (this.fechaNacChofer.Value > DateTime.Now)
+            if (this.fechaNacChofer.Value > fechaActual)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }
 

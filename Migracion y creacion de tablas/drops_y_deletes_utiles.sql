@@ -70,3 +70,20 @@ DROP TRIGGER LOS_CHATADROIDES.Validar_creacion_turnos_sobrepasados;
 DROP TRIGGER LOS_CHATADROIDES.Validar_actualizacion_turnos_sobrepasados;
 DROP TRIGGER LOS_CHATADROIDES.Dar_de_alta_cliente
 DROP FUNCTION LOS_CHATADROIDES.No_se_solapan
+
+DROP TRIGGER LOS_CHATADROIDES.Dar_de_alta_rendicion
+
+
+DROP TRIGGER LOS_CHATADROIDES.Registrar_Viaje
+
+DROP TRIGGER LOS_CHATADROIDES.Cambiar_nombre_rol
+
+DROP TRIGGER LOS_CHATADROIDES.Dar_de_baja_rol
+
+
+
+DROP FUNCTION LOS_CHATADROIDES.No_esta_en_intervalo_o_es_una_cota
+
+DROP PROCEDURE LOS_CHATADROIDES.Dar_de_alta_cliente
+
+DROP PROCEDURE LOS_CHATADROIDES.Dar_de_alta_chofer

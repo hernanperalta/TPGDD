@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SqlClient;
 using UberFrba.Conexion;
+using System.Configuration;
 
 namespace UberFrba.Abm_Cliente
 {
@@ -18,6 +19,7 @@ namespace UberFrba.Abm_Cliente
         private string rol;*/
         private string errores = "";
         private Form parent;
+        private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
         //public Alta(string username, string rol)
         public Alta(Form parent)
@@ -107,7 +109,7 @@ namespace UberFrba.Abm_Cliente
 
         private void validarFecha()
         {
-            if (this.fechaNacCli.Value > DateTime.Today)
+            if (this.fechaNacCli.Value > fechaActual)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }
 
