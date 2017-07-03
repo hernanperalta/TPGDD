@@ -58,7 +58,7 @@ namespace UberFrba.Abm_Turno
             {
                 if (ex.Number == 2627)
                     if (ex.Message.Contains(this.entreParentesis(this.horaInicio.Text + ", " + this.horaFin.Text)))
-                        MessageBox.Show("Ya existe un turno de " + this.precioBase.Text);
+                        MessageBox.Show("Ya existe un turno de " + this.horaInicio.Text + " a " + this.horaFin.Text);
             }
         }
 
@@ -191,6 +191,11 @@ namespace UberFrba.Abm_Turno
 
         private void usernameCliente_TextChanged(object sender, EventArgs e)
         {
+        }
+
+        private void valorDelKm_TextChanged(object sender, EventArgs e)
+        {
+
         }
 
       

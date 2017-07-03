@@ -74,7 +74,7 @@
             // turnosGrid
             // 
             this.turnosGrid.AllowUserToAddRows = false;
-            this.turnosGrid.AllowUserToOrderColumns = true;
+            this.turnosGrid.AllowUserToDeleteRows = false;
             this.turnosGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.turnosGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.turnosGrid.Location = new System.Drawing.Point(20, 168);

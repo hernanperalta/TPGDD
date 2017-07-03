@@ -1,4 +1,5 @@
-﻿using System;
+﻿//alta chofer
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -33,14 +34,15 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         {
 
         }
-        
+
         private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
         {
-           if (!Regex.IsMatch(texto, regex))
+            if (!Regex.IsMatch(texto, regex))
             {
                 errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
             }
-            if ( texto.Length > tamanio ) {
+            if (texto.Length > tamanio)
+            {
                 errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
             }
         }
@@ -59,8 +61,8 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         {
             this.validarCampoSegunTipo(50,
                                        "^[a-zA-Zá-úÁ-Ú]+[a-zA-Zá-úÁ-Ú0-9-._]*@[a-zA-Zá-úÁ-Ú]+(.[a-zA-Zá-úÁ-Ú]+)+$",
-                                       this.mailChofer.Text, 
-                                       "mail", 
+                                       this.mailChofer.Text,
+                                       "mail",
                                        "debe comenzar con letras, puede tener números, debe terminar con " +
                                        "@'nombre del dominio'.'nombre de la organizacion', y puede tener los caracteres . - _");
         }
@@ -75,7 +77,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
             this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú0-9 ]+$", texto, nombreDeCampo, "debe tener letras o números");
         }
 
-        private void validarTodosLosCampos() 
+        private void validarTodosLosCampos()
         {
             this.validarPalabra(255, this.nombreChofer.Text, "nombre");
             this.validarPalabra(255, this.apellidoChofer.Text, "apellido");
@@ -88,7 +90,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
             this.validarUsername();
             this.validarFecha();
 
-            if( !this.campoVacio(this.mailChofer) )
+            if (!this.campoVacio(this.mailChofer))
                 this.validarMail();
         }
 
@@ -103,7 +105,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
             return campo == null || this.estaVacio(campo.Text);
         }
 
-        private bool hayCamposObligatoriosVacios() 
+        private bool hayCamposObligatoriosVacios()
         {
             foreach (Control control in this.Controls)
                 if (control is TextBox || control is DateTimePicker)
@@ -121,7 +123,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void crear_chofer_Click(object sender, EventArgs e)
         {
-            if ( this.hayCamposObligatoriosVacios() )
+            if (this.hayCamposObligatoriosVacios())
             {
                 MessageBox.Show("Debe llenar todos los campos no opcionales antes de crear un chofer");
                 return;
@@ -135,10 +137,10 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                 this.errores = "";
                 return;
             }
-            
+
             try
             {
-                DBConexion.ResolverNonQuery("INSERT INTO LOS_CHATADROIDES.Chofer (localidad, direccion, nro_piso, depto, telefono, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES ('" 
+                DBConexion.ResolverNonQuery("INSERT INTO LOS_CHATADROIDES.Chofer (localidad, direccion, nro_piso, depto, telefono, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES ('"
                                            + this.localidadChofer.Text + "', '"
                                            + this.direccionChofer.Text + "', "
                                            + this.nroPisoChofer.Text + ", '"
@@ -151,21 +153,21 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                                            + (this.estaVacio(this.mailChofer.Text) ? "NULL" : "'" + this.mailChofer.Text + "'") + ", '"
                                            + this.usernameChofer.Text + "')"
                                            );
-                
+
                 MessageBox.Show("El chofer se creó con éxito!");
             }
-            catch (SqlException ex) 
+            catch (SqlException ex)
             {
                 if (ex.Number == 2627)
-                    if( ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)) )                 
+                    if (ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)))
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
-                    if (ex.Message.Contains(this.entreParentesis(this.usernameChofer.Text)) )
-                        MessageBox.Show("Ya existe un chofer con el usuario " + this.usernameChofer.Text);
-                
-                if( ex.Number == 547 )
+                if (ex.Message.Contains(this.entreParentesis(this.usernameChofer.Text)))
+                    MessageBox.Show("Ya existe un chofer con el usuario " + this.usernameChofer.Text);
+
+                if (ex.Number == 547)
                     MessageBox.Show("No existe un usuario de nombre " + this.usernameChofer.Text);
             }
-            
+
         }
 
         private string entreParentesis(string texto)
@@ -176,7 +178,7 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         private void volver_Click(object sender, EventArgs e)
         {
             this.Close();
-            this.parent.Show();            
+            this.parent.Show();
         }
 
         private void label3_Click(object sender, EventArgs e)
@@ -186,13 +188,13 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 
         private void telefonoChofer_TextChanged(object sender, EventArgs e)
         {
-            
-          
+
+
         }
 
         private void nombreChofer_TextChanged(object sender, EventArgs e)
         {
-                        
+
         }
 
         private void limpiar_Click(object sender, EventArgs e)

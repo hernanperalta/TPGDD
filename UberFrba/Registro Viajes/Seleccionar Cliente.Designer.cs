@@ -77,7 +77,7 @@
             // clientesGrid
             // 
             this.clientesGrid.AllowUserToAddRows = false;
-            this.clientesGrid.AllowUserToOrderColumns = true;
+            this.clientesGrid.AllowUserToDeleteRows = false;
             this.clientesGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.clientesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.clientesGrid.Location = new System.Drawing.Point(23, 148);
@@ -171,7 +171,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(960, 384);
+            this.ClientSize = new System.Drawing.Size(928, 384);
             this.Controls.Add(this.noClientesLabel);
             this.Controls.Add(this.confirmarCliente);
             this.Controls.Add(this.volver);

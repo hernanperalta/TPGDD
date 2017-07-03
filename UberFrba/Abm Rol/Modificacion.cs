@@ -35,6 +35,7 @@ namespace UberFrba.Abm_Rol
 
         private void roles_SelectedIndexChanged(object sender, EventArgs e)
         {
+            
             this.rolDeshabilitadoLabel.Text = "";
             if(this.roles.SelectedItem != null)
                 this.setRolDeshabilitadoLabel();
@@ -82,6 +83,10 @@ namespace UberFrba.Abm_Rol
 
         private void rehabilitar_Click(object sender, EventArgs e)
         {
+            if (this.roles.SelectedIndex == -1) {
+                MessageBox.Show("No selecciono ningun rol.");
+                return;
+            }
             if (habilitado)
             {
                 MessageBox.Show("El rol seleccionado ya se encuentra dado de alta");

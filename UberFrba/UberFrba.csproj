@@ -195,9 +195,7 @@
     <Compile Include="Menu\Menu.Designer.cs">
       <DependentUpon>Menu.cs</DependentUpon>
     </Compile>
-    <Compile Include="..\..\..\..\..\..\Program.cs">
-      <Link>Program.cs</Link>
-    </Compile>
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Registro Viajes\Chofer.cs" />
     <Compile Include="Registro Viajes\Cliente.cs" />
@@ -222,11 +220,17 @@
       <DependentUpon>Seleccionar Cliente.cs</DependentUpon>
     </Compile>
     <Compile Include="Registro Viajes\Turno.cs" />
-    <Compile Include="Rendicion al chofer\Rendicion al chofer.cs">
+    <Compile Include="Rendicion al chofer\Rendicion_al_chofer.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Rendicion al chofer\Rendicion al chofer.Designer.cs">
-      <DependentUpon>Rendicion al chofer.cs</DependentUpon>
+    <Compile Include="Rendicion al chofer\Rendicion_al_chofer.Designer.cs">
+      <DependentUpon>Rendicion_al_chofer.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Rendicion al chofer\Seleccion_de_choferes.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Rendicion al chofer\Seleccion_de_choferes.Designer.cs">
+      <DependentUpon>Seleccion_de_choferes.cs</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Abm Automovil\Alta.resx">
       <DependentUpon>Alta.cs</DependentUpon>
@@ -306,11 +310,17 @@
     <EmbeddedResource Include="Registro Viajes\Registro de Viajes.resx">
       <DependentUpon>Registro de Viajes.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Registro Viajes\Seleccionar Choferes.resx">
+      <DependentUpon>Seleccionar Choferes.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Registro Viajes\Seleccionar Cliente.resx">
       <DependentUpon>Seleccionar Cliente.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Rendicion al chofer\Rendicion al chofer.resx">
-      <DependentUpon>Rendicion al chofer.cs</DependentUpon>
+    <EmbeddedResource Include="Rendicion al chofer\Rendicion_al_chofer.resx">
+      <DependentUpon>Rendicion_al_chofer.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Rendicion al chofer\Seleccion_de_choferes.resx">
+      <DependentUpon>Seleccion_de_choferes.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

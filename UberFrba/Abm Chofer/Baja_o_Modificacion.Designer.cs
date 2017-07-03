@@ -163,7 +163,7 @@
             // choferesGrid
             // 
             this.choferesGrid.AllowUserToAddRows = false;
-            this.choferesGrid.AllowUserToOrderColumns = true;
+            this.choferesGrid.AllowUserToDeleteRows = false;
             this.choferesGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.choferesGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.choferesGrid.Location = new System.Drawing.Point(55, 183);

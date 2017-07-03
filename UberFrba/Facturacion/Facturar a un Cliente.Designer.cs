@@ -81,7 +81,6 @@
             // 
             this.viajesSinFacturarGrid.AllowUserToAddRows = false;
             this.viajesSinFacturarGrid.AllowUserToDeleteRows = false;
-            this.viajesSinFacturarGrid.AllowUserToOrderColumns = true;
             this.viajesSinFacturarGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.viajesSinFacturarGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.viajesSinFacturarGrid.Location = new System.Drawing.Point(37, 254);

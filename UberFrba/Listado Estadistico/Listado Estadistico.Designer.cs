@@ -103,7 +103,6 @@
             // 
             this.listadoEstadistico.AllowUserToAddRows = false;
             this.listadoEstadistico.AllowUserToDeleteRows = false;
-            this.listadoEstadistico.AllowUserToOrderColumns = true;
             this.listadoEstadistico.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.listadoEstadistico.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.listadoEstadistico.Location = new System.Drawing.Point(40, 231);

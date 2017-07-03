@@ -1,3 +1,11 @@
 1) No tiramos el mail, nombre, apellido, dni en otra entidad (que seria lo correcto por normalizacion), porque el mail seria el unico determinante, pero es opcional => si un cliente/chofer no tiene mail, no tiene nombre, apellido o dni (que son obligatorios)
 
 2) Hicimos que la factura facture todos los viajes pendientes de facturar del cliente (sean del mes en curso o no) y que la fecha inicio de factura sea el comienzo del mes en curso, y la fecha de facturacion sea cuando el usuario se mete a facturar (independientemente de si esta en el dia del fin de mes o no)
+
+DESHABILITAR EL ORDENAMIENTO EN TODOS LOS GRIDS
+
+// FIX: Si cambias el nombre del rol administrador se rompe todo porque hay una query en la vista que consulta funcionalidad x rol where nombre_rol = 'Administrador'
+
+SACAR LOS FLOAT QUE VIENEN CON ','
+
+DESHABILITAR EL ORDENAMIENTO EN LAS GRILLAS

@@ -13,14 +13,16 @@ namespace UberFrba.Registro_Viajes
         public string telefono;
         public string username;
         public bool habilitado;
-
-        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado) 
+        public string patente;
+        
+        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado, string patente) 
         {
             this.datos = datos;
             this.domicilio = domicilio;
             this.telefono = telefono;
             this.username = username;
             this.habilitado = habilitado;
+            this.patente = patente;
         }
         public Chofer()
         { }
