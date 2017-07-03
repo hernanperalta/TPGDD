@@ -107,6 +107,7 @@
             this.horaFin.Name = "horaFin";
             this.horaFin.Size = new System.Drawing.Size(100, 20);
             this.horaFin.TabIndex = 67;
+            this.horaFin.TextChanged += new System.EventHandler(this.horaFin_TextChanged);
             // 
             // label8
             // 
@@ -123,6 +124,7 @@
             this.precioBase.Name = "precioBase";
             this.precioBase.Size = new System.Drawing.Size(100, 20);
             this.precioBase.TabIndex = 63;
+            this.precioBase.TextChanged += new System.EventHandler(this.precioBase_TextChanged);
             // 
             // label3
             // 

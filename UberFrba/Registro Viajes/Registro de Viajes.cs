@@ -104,7 +104,7 @@ namespace UberFrba.Registro_Viajes
 
         private void validarCampos()
         {
-            this.validarCampo("Cantidad de kilometros del viaje", this.cantKm.Text, 18, "^[0-9]+$");
+            this.validarCampo("Cantidad de kilometros del viaje", this.valorDelKm.Text, 18, "^[0-9]+$");
         }
 
         private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
@@ -162,7 +162,7 @@ namespace UberFrba.Registro_Viajes
                         + "(" + this.telefonoChofer.Text + "," + "'" + this.patente.Text + "'," + this.telefonoCliente.Text + ", "
                         + ((Turno)this.turnos.SelectedItem).horaInicioTurno + "," + ((Turno)this.turnos.SelectedItem).horaFinTurno + ",'" 
                         + this.fechaDelViaje.Value.ToString("d") + " " + this.horaInicio.Value.TimeOfDay + "', '"
-                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay + "', " + this.cantKm.Text + ")";
+                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay + "', " + this.valorDelKm.Text + ")";
             
             MessageBox.Show(insert);
 
@@ -210,8 +210,9 @@ namespace UberFrba.Registro_Viajes
         private void comboBox2_SelectedIndexChanged(object sender, EventArgs e)
         {
         }
-        private void textBox3_TextChanged(object sender, EventArgs e)
+        private void valorDelKm_TextChanged(object sender, EventArgs e)
         {
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
         }
         private void label1_Click(object sender, EventArgs e)
         {

@@ -140,7 +140,6 @@ CREATE TABLE LOS_CHATADROIDES.Rendicion
 	porcentaje_aplicado FLOAT CHECK(porcentaje_aplicado > 0 AND porcentaje_aplicado <= 1),
 	FOREIGN KEY (hora_inicio_turno, hora_fin_turno) REFERENCES LOS_CHATADROIDES.Turno(hora_inicio_turno, hora_fin_turno)
 );  
-select * from LOS_CHATADROIDES.Chofer where nombre like '%ampa%'
 
 CREATE TABLE LOS_CHATADROIDES.Viaje
 (
@@ -1603,67 +1602,6 @@ BEGIN
 		(@telefono_chofer, @patente, @telefono_cliente, @hora_inicio_turno, 
 		@hora_fin_turno, @fecha_hora_inicio, @fecha_hora_fin, @kmsDelViaje) 
 END
-
-SELECT * FROM LOS_CHATADROIDES.Rendicion order by 3
-
-
-ingresas dia chofer
------
-numero chof, numero cli, cantKM, importe turno, turno, dia
-numero chof, numero cli, cantKM, importe turno, turno2, dia
-numero chof, numero cli, cantKM, importe turno3, turno3, dia
-----
-apretas rendicion -> if(existe(select numerChof dia FROM RENDICION)) _-> ya se realizo la rendicion para el chofer tal dia tal
-
-EN LA TABLA RENDICION, VAS A INSERTAR
-rendicion1, fecha , numerochofer, turno, importeTotal turno
-rendicion2, fecha, numerochofer, turno2, importeTotal turno2
-
-
-
-
-
-
-
-
-
-
-
-select * from LOS_CHATADROIDES.Viaje where nro_rendicion IS NULL
-
-
-SELECT numero_viaje as 'Nro. Viaje', telefono_chofer as 'Telefono chofer', 
- patente as Patente, telefono_cliente as 'Telefono cliente', fecha_y_hora_inicio_viaje  
-as 'Fecha y comienzo del viaje' , fecha_y_hora_fin_viaje as 'Fecha y fin de viaje' , 
- precio_base + (valor_del_kilometro * kilometros_del_viaje) as 'Importe del viaje' 
-FROM LOS_CHATADROIDES.Viaje V 
-JOIN LOS_CHATADROIDES.Turno T 
-ON ( V.hora_inicio_turno = T.hora_inicio_turno AND V.hora_fin_turno = T.hora_fin_turno )
-WHERE telefono_chofer =5598227
- AND V.hora_inicio_turno = 0
-AND V.hora_fin_turno =  8
-AND CAST(fecha_y_hora_inicio_viaje AS DATE) = '15/06/2015'
-AND nro_rendicion IS NULL
-
-
-/*
-5598227
-6473234
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -35,7 +35,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.patente = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.cantKm = new System.Windows.Forms.TextBox();
+            this.valorDelKm = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.fechaDelViaje = new System.Windows.Forms.DateTimePicker();
             this.label7 = new System.Windows.Forms.Label();
@@ -117,13 +117,13 @@
             this.label1.Text = "Numero del cliente";
             this.label1.Click += new System.EventHandler(this.label1_Click);
             // 
-            // cantKm
+            // valorDelKm
             // 
-            this.cantKm.Location = new System.Drawing.Point(193, 204);
-            this.cantKm.Name = "cantKm";
-            this.cantKm.Size = new System.Drawing.Size(187, 20);
-            this.cantKm.TabIndex = 10;
-            this.cantKm.TextChanged += new System.EventHandler(this.textBox3_TextChanged);
+            this.valorDelKm.Location = new System.Drawing.Point(193, 204);
+            this.valorDelKm.Name = "valorDelKm";
+            this.valorDelKm.Size = new System.Drawing.Size(187, 20);
+            this.valorDelKm.TabIndex = 10;
+            this.valorDelKm.TextChanged += new System.EventHandler(this.valorDelKm_TextChanged);
             // 
             // label6
             // 
@@ -285,7 +285,7 @@
             this.Controls.Add(this.telefonoChofer);
             this.Controls.Add(this.fechaDelViaje);
             this.Controls.Add(this.label6);
-            this.Controls.Add(this.cantKm);
+            this.Controls.Add(this.valorDelKm);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
@@ -310,7 +310,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox patente;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox cantKm;
+        private System.Windows.Forms.TextBox valorDelKm;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DateTimePicker fechaDelViaje;
         private System.Windows.Forms.Label label7;

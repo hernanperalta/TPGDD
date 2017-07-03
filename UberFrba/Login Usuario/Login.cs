@@ -34,7 +34,7 @@ namespace UberFrba.Login_Usuario
             try
             {
                 SqlDataReader reader ;
-                reader = DBConexion.ResolverConsulta("SELECT username, password, habilitado FROM [LOS_CHATADROIDES].[Usuario] WHERE username = '" + this.username.Text + "'");
+                reader = DBConexion.ResolverQuery("SELECT username, password, habilitado FROM [LOS_CHATADROIDES].[Usuario] WHERE username = '" + this.username.Text + "'");
                 reader.Read();
                 String password = reader.GetString(1);
                 bool habilitado = reader.GetBoolean(2);

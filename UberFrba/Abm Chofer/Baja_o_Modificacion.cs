@@ -240,7 +240,7 @@ namespace UberFrba.Abm_Chofer
                     query += " where";
                 else prefijo = " and";
 
-                query += prefijo + " " + nombreDeCampo + " LIKE '" + campo.Text + "%'";
+                query += prefijo + " " + nombreDeCampo + " LIKE '%" + campo.Text + "%'";
                 cantFiltrosPuestos++;
             }
         }
@@ -331,8 +331,11 @@ namespace UberFrba.Abm_Chofer
         private void limpiar_Click(object sender, EventArgs e)
         {
             foreach (Control ctrl in this.Controls)
+            {
                 if (ctrl is TextBox)
                     (ctrl as TextBox).Clear();
+            }
+            this.choferesGrid.DataSource = null;
         }
 
         private void label3_Click(object sender, EventArgs e)

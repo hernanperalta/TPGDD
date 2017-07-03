@@ -109,6 +109,11 @@ namespace UberFrba.Abm_Rol
         {
             try
             {
+                if (this.roles.SelectedItem == null)
+                {
+                    MessageBox.Show("Debe seleccionar un rol antes de actualizar");
+                    return;
+                }
                 if (this.funcsAAgregar.CheckedItems != null)
                 {
                     this.agregarFuncs();
@@ -120,13 +125,7 @@ namespace UberFrba.Abm_Rol
                 if (!this.estaVacio(this.nuevoNombreRol.Text))
                 {
                     this.actualizarRol(this.roles.SelectedItem.ToString());
-                }
-
-                if (this.roles.SelectedItem == null)
-                {
-                    MessageBox.Show("Debe seleccionar un rol antes de actualizar");
-                    return;
-                }
+                }             
                 if (this.funcsAAgregar.CheckedItems.Count == 0 && this.funcsAQuitar.CheckedItems.Count == 0 && this.nuevoNombreRol.Text.Equals(""))
                 {
                     MessageBox.Show("El rol original no ha sufrido ningun cambio, asegurese de llenar los campos que desee actualizar");
@@ -212,6 +211,7 @@ namespace UberFrba.Abm_Rol
         {
             this.rolDeshabilitadoLabel.Text = "";
             this.roles.SelectedItem = null;
+            this.cargarRoles();
             this.funcsAQuitar.Items.Clear();
             this.funcsAAgregar.Items.Clear();
             this.funcionalidadesAAgregar = new List<Funcionalidad>();

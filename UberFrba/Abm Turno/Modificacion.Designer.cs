@@ -80,6 +80,7 @@
             this.precioBase.Name = "precioBase";
             this.precioBase.Size = new System.Drawing.Size(100, 20);
             this.precioBase.TabIndex = 116;
+            this.precioBase.TextChanged += new System.EventHandler(this.precioBase_TextChanged);
             // 
             // label7
             // 
@@ -154,6 +155,7 @@
             this.valorDelKm.Name = "valorDelKm";
             this.valorDelKm.Size = new System.Drawing.Size(100, 20);
             this.valorDelKm.TabIndex = 127;
+            this.valorDelKm.TextChanged += new System.EventHandler(this.valorDelKm_TextChanged);
             // 
             // label1
             // 

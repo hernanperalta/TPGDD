@@ -87,6 +87,7 @@ namespace UberFrba.Abm_Turno
                     text.Clear();
                 }
             }
+            this.turnosGrid.DataSource = null;
         }
 
       

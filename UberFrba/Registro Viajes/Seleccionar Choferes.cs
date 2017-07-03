@@ -182,7 +182,7 @@ namespace UberFrba.Registro_Viajes
                     query += " where";
                 else prefijo = " and";
 
-                query += prefijo + " " + nombreDeCampo + " LIKE '" + campo.Text + "%'";
+                query += prefijo + " " + nombreDeCampo + " LIKE '%" + campo.Text + "%'";
                 cantFiltrosPuestos++;
             }
         }
@@ -228,6 +228,7 @@ namespace UberFrba.Registro_Viajes
             foreach (Control ctrl in this.Controls)
                 if (ctrl is TextBox)
                     (ctrl as TextBox).Clear();
+            this.choferesGrid.DataSource = null;
         }
 
         private void volver_Click_1(object sender, EventArgs e)

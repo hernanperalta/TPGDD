@@ -24,8 +24,16 @@ namespace UberFrba.Menu
             InitializeComponent();
             this.rol = rol;
             this.username = username;
-            this.funcionalidades = new Funcionalidades(this.username, this.rol);
-            this.cargarFuncionalidades();
+            this.funcionalidades = new Funcionalidades(this.username, this.rol);        
+            try
+            {
+                this.cargarFuncionalidades();                
+            }
+            catch(SinRegistrosException)
+            {
+                this.noFuncionalidadesLabel.Text = "*El rol seleccionado no posee funcionalidades disponibles";
+            }
+            
             
         }
        
@@ -77,6 +85,11 @@ namespace UberFrba.Menu
                                              + " FROM LOS_CHATADROIDES.Funcionalidad_X_Rol FXR JOIN LOS_CHATADROIDES.Funcionalidad F" 
                                              + " ON(FXR.codigo_funcionalidad = F.codigo_funcionalidad)"
                                              + " WHERE FXR.nombre_del_rol = '" + this.rol + "'");
+        }
+
+        private void noFuncionalidadesLabel_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }

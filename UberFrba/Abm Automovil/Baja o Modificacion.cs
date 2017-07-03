@@ -166,6 +166,7 @@ namespace UberFrba.Abm_Automovil
 
         private void limpiarLosCampos()
         {
+            this.tablaAutomovil.DataSource = null;
             foreach (Control ctrl in this.Controls)
             {
                 if (ctrl is TextBox)
@@ -176,6 +177,7 @@ namespace UberFrba.Abm_Automovil
             }
 
             this.selectorDeMarcas.SelectedIndex = -1;
+            this.tablaAutomovil.DataSource = null;
 
         }
 
@@ -312,9 +314,9 @@ namespace UberFrba.Abm_Automovil
                 automoviles.Load(DBConexion.ResolverQuery("SELECT patente as Patente,telefono_chofer as 'Numero Chofer', marca as Marca, modelo as Modelo,  licencia as Licencia, rodado as Rodado, habilitado as Habilitado "
                                             + " FROM LOS_CHATADROIDES.Automovil "
                                             + " WHERE " + this.filtrarPorLaMarcaSiSelecciono()      
-                                            + " modelo LIKE '" + this.modeloBM.Text + "%' AND "
-                                            + " patente LIKE '" + this.patenteBM.Text + "%' AND "
-                                            + " CONVERT(VARCHAR(18),telefono_chofer) LIKE '" + this.numeroChoferBM.Text + "%' "
+                                            + " modelo LIKE '%" + this.modeloBM.Text + "%' AND "
+                                            + " patente LIKE '%" + this.patenteBM.Text + "%' AND "
+                                            + " CONVERT(VARCHAR(18),telefono_chofer) LIKE '%" + this.numeroChoferBM.Text + "%' "
                                             + " ORDER BY patente"
                                             )
 

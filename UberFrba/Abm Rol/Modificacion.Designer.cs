@@ -82,7 +82,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(21, 151);
+            this.label2.Location = new System.Drawing.Point(26, 99);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(210, 13);
             this.label2.TabIndex = 8;
@@ -91,7 +91,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(325, 151);
+            this.label4.Location = new System.Drawing.Point(325, 99);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(200, 13);
             this.label4.TabIndex = 11;
@@ -110,18 +110,18 @@
             // funcsAAgregar
             // 
             this.funcsAAgregar.FormattingEnabled = true;
-            this.funcsAAgregar.Location = new System.Drawing.Point(24, 167);
+            this.funcsAAgregar.Location = new System.Drawing.Point(24, 137);
             this.funcsAAgregar.Name = "funcsAAgregar";
-            this.funcsAAgregar.Size = new System.Drawing.Size(254, 64);
+            this.funcsAAgregar.Size = new System.Drawing.Size(254, 94);
             this.funcsAAgregar.TabIndex = 13;
             this.funcsAAgregar.SelectedIndexChanged += new System.EventHandler(this.funcsAAgregar_SelectedIndexChanged);
             // 
             // funcsAQuitar
             // 
             this.funcsAQuitar.FormattingEnabled = true;
-            this.funcsAQuitar.Location = new System.Drawing.Point(319, 167);
+            this.funcsAQuitar.Location = new System.Drawing.Point(319, 137);
             this.funcsAQuitar.Name = "funcsAQuitar";
-            this.funcsAQuitar.Size = new System.Drawing.Size(271, 64);
+            this.funcsAQuitar.Size = new System.Drawing.Size(271, 94);
             this.funcsAQuitar.TabIndex = 14;
             this.funcsAQuitar.SelectedIndexChanged += new System.EventHandler(this.funcsAQuitar_SelectedIndexChanged);
             // 
@@ -158,7 +158,7 @@
             // rolDeshabilitadoLabel
             // 
             this.rolDeshabilitadoLabel.AutoSize = true;
-            this.rolDeshabilitadoLabel.Location = new System.Drawing.Point(52, 92);
+            this.rolDeshabilitadoLabel.Location = new System.Drawing.Point(52, 73);
             this.rolDeshabilitadoLabel.Name = "rolDeshabilitadoLabel";
             this.rolDeshabilitadoLabel.Size = new System.Drawing.Size(113, 13);
             this.rolDeshabilitadoLabel.TabIndex = 43;

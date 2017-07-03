@@ -205,6 +205,16 @@ namespace UberFrba.Abm_Turno
 
         }
 
+        private void valorDelKm_TextChanged(object sender, EventArgs e)
+        {
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+        }
+
+        private void precioBase_TextChanged(object sender, EventArgs e)
+        {
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+        }
+
         
         
         
