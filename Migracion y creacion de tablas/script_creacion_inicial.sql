@@ -138,7 +138,7 @@ CREATE TABLE LOS_CHATADROIDES.Rendicion
 	importe_total NUMERIC(18,2) NOT NULL,
 	hora_inicio_turno NUMERIC(18,0),
 	hora_fin_turno NUMERIC(18,0),
-	porcentaje_aplicado FLOAT CHECK(porcentaje_aplicado > 0 AND porcentaje_aplicado <= 1),
+	porcentaje_aplicado FLOAT,
 	FOREIGN KEY (hora_inicio_turno, hora_fin_turno) REFERENCES LOS_CHATADROIDES.Turno(hora_inicio_turno, hora_fin_turno)
 );  
 
@@ -1609,7 +1609,7 @@ BEGIN
 		INSERT INTO LOS_CHATADROIDES.Rendicion 
 			(nro_rendicion, fecha, telefono_chofer, importe_total, hora_inicio_turno, hora_fin_turno, porcentaje_aplicado)
 				VALUES 
-			(@nro_rendicion, @fecha, @telefono_chofer, @importe_total, @hora_inicio_turno, @hora_fin_turno, @porcentaje)
+			(@nro_rendicion, @fecha, @telefono_chofer, @porcentaje * importe_total, @hora_inicio_turno, @hora_fin_turno, @porcentaje)
  
 		UPDATE LOS_CHATADROIDES.Viaje
 			SET nro_rendicion = @nro_rendicion
