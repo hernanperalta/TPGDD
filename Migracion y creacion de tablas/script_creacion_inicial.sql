@@ -1,6 +1,6 @@
-GO
+/*GO
 CREATE SCHEMA [LOS_CHATADROIDES] AUTHORIZATION [gd]
-GO
+GO*/
 
 CREATE TABLE LOS_CHATADROIDES.Usuario
 (
@@ -776,11 +776,11 @@ BEGIN
 		BEGIN TRANSACTION
 			DELETE FROM LOS_CHATADROIDES.Auto_X_Turno 
 			WHERE patente = @patente
-
+ 
 			UPDATE LOS_CHATADROIDES.Automovil
 			SET habilitado = 0
 			WHERE patente = @patente
-
+ 
 		 COMMIT TRANSACTION
 	END TRY
 	BEGIN CATCH
@@ -789,9 +789,9 @@ BEGIN
 	END CATCH
 END
 GO
-
-
-
+ 
+ 
+ 
 CREATE PROCEDURE LOS_CHATADROIDES.Modificar_auto_x_turno_si_el_valor_cambia
 @hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0), @patente VARCHAR(10), @loIncorpora BIT
 AS
@@ -817,7 +817,7 @@ BEGIN
 	END
 END
 GO
-
+ 
 CREATE TRIGGER LOS_CHATADROIDES.Modificar_automovil 
 ON LOS_CHATADROIDES.Automovil
 INSTEAD OF UPDATE
@@ -837,26 +837,24 @@ BEGIN
 			
 	SET @errorConLaMismaPatentePeroDistintoChofer = ''
 	SET @errorConLaNuevaPatentePeroDistintoChofer = ''
-
+ 
 	SELECT @patente = patente, @telefono_chofer = telefono_chofer, @marca = marca, @modelo = modelo, @habilitado = habilitado FROM inserted
-
+ 
 	SELECT @patente_vieja = patente, @telefono_chofer_viejo = telefono_chofer , @licencia = licencia, @rodado = rodado FROM deleted
-
+ 
 	IF(@patente = @patente_vieja)
 	BEGIN
-		UPDATE LOS_CHATADROIDES.Automovil
-					SET marca = @marca,
+	
+		SET @errorConLaMismaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente_vieja, @habilitado)
+		
+		IF( @errorConLaMismaPatentePeroDistintoChofer = '')
+		BEGIN
+			UPDATE LOS_CHATADROIDES.Automovil
+					SET telefono_chofer = @telefono_chofer,
+						marca = @marca,
 						modelo = @modelo,
 						habilitado = @habilitado
 					WHERE patente = @patente 
-
-		SET @errorConLaMismaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente_vieja)
-		
-		IF(@errorConLaMismaPatentePeroDistintoChofer = '' OR @habilitado = 0)
-		BEGIN
-			UPDATE LOS_CHATADROIDES.Automovil
-				SET telefono_chofer = @telefono_chofer
-			WHERE patente = @patente 
 		END 
 		ELSE
 			THROW 51000, @errorConLaMismaPatentePeroDistintoChofer, 1;
@@ -866,12 +864,12 @@ BEGIN
 	BEGIN
 		BEGIN TRY
 			BEGIN TRANSACTION
-				DECLARE @patenteDummie VARCHAR(10), @telefono_choferDummie NUMERIC(18,0), @usernameDummie VARCHAR(50), @username VARCHAR(50)
+				DECLARE @telefono_choferDummie NUMERIC(18,0), @usernameDummie VARCHAR(50), @username VARCHAR(50)
 				
 				SET @telefono_choferDummie = 1234567
-
+ 
 				SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer)
-
+ 
 				SET @usernameDummie = '$dummie'--le ponemos '$' porque desde la bd no te deja hacer usuarios con el char '$'
 	
 				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
@@ -889,26 +887,26 @@ BEGIN
 				UPDATE LOS_CHATADROIDES.Viaje
 					SET patente = @patente
 				WHERE patente = @patente_vieja
-
+ 
 				UPDATE LOS_CHATADROIDES.Auto_X_Turno
 					SET patente = @patente
 				WHERE patente = @patente_vieja
-
+ 
 				DELETE FROM LOS_CHATADROIDES.Automovil WHERE patente = @patente_vieja
-
-				SET @errorConLaNuevaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
-				IF(@errorConLaMismaPatentePeroDistintoChofer = '' OR @habilitado = 0)
+ 
+				SET @errorConLaNuevaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente, @habilitado)
+				IF(@errorConLaMismaPatentePeroDistintoChofer = '')
 					BEGIN 
 						UPDATE LOS_CHATADROIDES.Automovil
 						SET telefono_chofer = @telefono_chofer
 						WHERE patente = @patente 
-
+ 
 						DELETE FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_choferDummie
-
+ 
 						DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
-
+ 
 						DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
-
+ 
 						COMMIT
 					END
 				ELSE 
@@ -921,52 +919,51 @@ BEGIN
 	END
 END
 GO
-
-
+ 
+ 
+ 
 CREATE FUNCTION LOS_CHATADROIDES.Validar_Chofer 
-(@telefono_chofer NUMERIC(18,0), @patente VARCHAR(10) )
+(@telefono_chofer NUMERIC(18,0), @patente VARCHAR(10), @habilitado BIT)
 RETURNS VARCHAR(80)
 AS
 BEGIN
 	DECLARE @error VARCHAR(80)
 	SET @error = ''
-
+ 
 	IF NOT EXISTS (SELECT telefono FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer) 
 			SET @error = 'El telefono ingresado no corresponde a un chofer existente.'
-
-	IF((SELECT habilitado FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer) = 0)
-		SET @error = 'No se puede asignar automoviles al chofer porque no esta habilitado.'
-	
-	IF EXISTS (SELECT patente FROM LOS_CHATADROIDES.Automovil where patente <> @patente and telefono_chofer = @telefono_chofer)
+ 
+	IF EXISTS (SELECT patente FROM LOS_CHATADROIDES.Automovil where patente != @patente and habilitado = 1 and @habilitado = 1 and telefono_chofer = @telefono_chofer)
 		SET @error = 'El chofer ya tiene asignado un automovil.'  
-
+ 
 	RETURN @error
 END 
 GO
-
+ 
 CREATE TRIGGER LOS_CHATADROIDES.Alta_automovil_solo_si_el_chofer_esta_habilitado
 ON LOS_CHATADROIDES.Automovil
 INSTEAD OF INSERT
 AS
 BEGIN
-	DECLARE @habilitado BIT
 	DECLARE @patente VARCHAR(10)
 	DECLARE @telefono_chofer NUMERIC(18,0)
 	DECLARE @marca VARCHAR(255)
 	DECLARE @modelo VARCHAR(255)
 	DECLARE @error VARCHAR(80)
-
+ 
 	SELECT @patente = patente, @telefono_chofer = telefono_chofer, @marca = marca, @modelo = modelo FROM inserted
-
-	SET @error = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
-
-	IF(@error IS NULL)
+	
+	SET @error = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente, 1)
+ 
+	IF(@error = '')
 		INSERT INTO LOS_CHATADROIDES.Automovil (patente, telefono_chofer, marca, modelo)
 		VALUES (@patente, @telefono_chofer, @marca, @modelo)
 		
 	ELSE THROW 51000, @error, 1;	
 END
 GO
+ 
+
 
 CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
 ON LOS_CHATADROIDES.Cliente
@@ -1116,48 +1113,47 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		BEGIN TRY
-			BEGIN TRANSACTION
-				DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
+		DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50), @error VARCHAR(100)
 
-				SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo)
+		SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo)
 
-				SET @usernameDummie = '$dummie'--le ponemos '$' porque desde la bd no te deja hacer usuarios con el char '$'
+		SET @usernameDummie = '$dummie'--le ponemos '$' porque desde la bd no te deja hacer usuarios con el char '$'
 	
-				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
+		INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
 
-				INSERT INTO LOS_CHATADROIDES.Chofer 
-					(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado)
-						VALUES
-					(@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo)
+		IF(EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_nuevo))
+		BEGIN
+			SET @error = 'Ya existe un chofer de telefono ' + CONVERT(VARCHAR, @telefono_nuevo);
+
+			THROW 61000, @error, 4
+		END
+
+		INSERT INTO LOS_CHATADROIDES.Chofer 
+			(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado)
+				VALUES
+			(@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo)
 	
-				UPDATE LOS_CHATADROIDES.Viaje
-					SET telefono_chofer = @telefono_nuevo
-				WHERE telefono_chofer = @telefono_viejo
+		UPDATE LOS_CHATADROIDES.Viaje
+			SET telefono_chofer = @telefono_nuevo
+		WHERE telefono_chofer = @telefono_viejo
 
-				UPDATE LOS_CHATADROIDES.Automovil
-					SET telefono_chofer = @telefono_nuevo
-				WHERE telefono_chofer = @telefono_viejo;
+		UPDATE LOS_CHATADROIDES.Automovil
+			SET telefono_chofer = @telefono_nuevo
+		WHERE telefono_chofer = @telefono_viejo;
 			
-				UPDATE LOS_CHATADROIDES.Rendicion
-					SET telefono_chofer = @telefono_nuevo
-				WHERE telefono_chofer = @telefono_viejo
+		UPDATE LOS_CHATADROIDES.Rendicion
+			SET telefono_chofer = @telefono_nuevo
+		WHERE telefono_chofer = @telefono_viejo
 
-				DELETE FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo
+		DELETE FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_viejo
 			
-				UPDATE LOS_CHATADROIDES.Chofer
-					SET username = @username
-				WHERE telefono = @telefono_nuevo
+		UPDATE LOS_CHATADROIDES.Chofer
+			SET username = @username
+		WHERE telefono = @telefono_nuevo
 			
-				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
+		DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
 
-				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
-			COMMIT
-		END TRY
-		BEGIN CATCH
-			ROLLBACK;
-			THROW;
-		END CATCH
+		DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
 	END
 END
 GO
@@ -1209,44 +1205,36 @@ BEGIN
 	END
 	ELSE
 	BEGIN
-		BEGIN TRY
-			BEGIN TRANSACTION
-				DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
+		DECLARE @telefonoDummie NUMERIC(18,0), @username VARCHAR(50), @usernameDummie VARCHAR(50)
 
-				SET @username = (SELECT username FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo)
+		SET @username = (SELECT username FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo)
 
-				SET @usernameDummie = '$dummie'
+		SET @usernameDummie = '$dummie'
 
-				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
+		INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
 
-				INSERT INTO LOS_CHATADROIDES.Cliente 
-				  (telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado, codigo_postal)
-					VALUES
-				  (@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo, @codigo_postal_nuevo)
+		INSERT INTO LOS_CHATADROIDES.Cliente 
+			(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado, codigo_postal)
+			VALUES
+			(@telefono_nuevo, @nombre_nuevo, @apellido_nuevo, @dni_nuevo, @fecha_nac_nueva, @localidad_nueva, @dir_nueva, @depto_nuevo, @nro_piso_nuevo, @mail_nuevo, @usernameDummie, @habilitado_nuevo, @codigo_postal_nuevo)
 
-				UPDATE LOS_CHATADROIDES.Viaje
-				  SET telefono_cliente = @telefono_nuevo
-				WHERE telefono_cliente = @telefono_viejo
+		UPDATE LOS_CHATADROIDES.Viaje
+			SET telefono_cliente = @telefono_nuevo
+		WHERE telefono_cliente = @telefono_viejo
         
-				UPDATE LOS_CHATADROIDES.Factura
-				  SET telefono_cliente = @telefono_nuevo
-				WHERE telefono_cliente = @telefono_viejo
+		UPDATE LOS_CHATADROIDES.Factura
+			SET telefono_cliente = @telefono_nuevo
+		WHERE telefono_cliente = @telefono_viejo
 
-				DELETE FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo
+		DELETE FROM LOS_CHATADROIDES.Cliente WHERE telefono = @telefono_viejo
 
-				UPDATE LOS_CHATADROIDES.Cliente
-				  SET username = @username
-				WHERE telefono = @telefono_nuevo
+		UPDATE LOS_CHATADROIDES.Cliente
+			SET username = @username
+		WHERE telefono = @telefono_nuevo
 
-				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
+		DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
 
-				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
-			COMMIT
-		END TRY
-		BEGIN CATCH
-			ROLLBACK;
-			THROW;
-		END CATCH
+		DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
 	END
 END
 GO
@@ -1641,3 +1629,55 @@ BEGIN
 	DEALLOCATE rendiciones_cursor
 END
 GO
+
+INSERT INTO LOS_CHATADROIDES.Viaje 
+(telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, 
+fecha_y_hora_fin_viaje, kilometros_del_viaje) 
+VALUES 
+(5598227,'AFLOKM',4802842, 0,8,print convert(datetime,'04/07/2017 05:42:51.8201049', 108), convert(datetime,'04/07/2017 05:42:51.8175929',121), 65)
+
+
+print convert(datetime,'04/07/2017 05:42:51.82', 121)
+
+
+
+INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 05:51:51.6928296', '04/07/2017 05:51:51.6903276', 45)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_i
+
+nicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 System.Linq.Enumerable+<TakeIterator>d__24`1[System.Char]', '04/07/2017 System.Linq.Enumerable+<TakeIterator>d__24`1[System.Char]', 3)
+
+
+
+INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 05:55:12.1', '04/07/2017 05:55:12.1', 3)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

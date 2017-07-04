@@ -37,6 +37,8 @@ namespace UberFrba.Registro_Viajes
 
             this.horaFin.Format = DateTimePickerFormat.Custom;
             this.horaFin.CustomFormat = "HH:mm:ss";
+
+            this.fechaDelViaje.MaxDate = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
         }
 
         private void volver_Click(object sender, EventArgs e)
@@ -108,6 +110,10 @@ namespace UberFrba.Registro_Viajes
         private void validarCampos()
         {
             this.validarCampo("Cantidad de kilometros del viaje", this.cantKm.Text, 18, "^[0-9]+$");
+            if (this.horaInicio.Value.TimeOfDay > this.horaFin.Value.TimeOfDay)
+            {
+                errores += "La hora de inicio no puede ser igual o mayor a la de fin";
+            }
         }
 
         private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
@@ -164,9 +170,9 @@ namespace UberFrba.Registro_Viajes
                         + "(telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno, "
                         + " fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES "
                         + "(" + this.telefonoChofer.Text + "," + "'" + this.patente.Text + "'," + this.telefonoCliente.Text + ", "
-                        + ((Turno)this.turnos.SelectedItem).horaInicioTurno + "," + ((Turno)this.turnos.SelectedItem).horaFinTurno + ",'" 
-                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaInicio.Value.TimeOfDay + "', '"
-                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay + "', " + this.cantKm.Text + ")";         
+                        + ((Turno)this.turnos.SelectedItem).horaInicioTurno + "," + ((Turno)this.turnos.SelectedItem).horaFinTurno + ",'"
+                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaInicio.Value.TimeOfDay.ToString().Substring(0,8) + "', '"
+                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay.ToString().Substring(0,8) + "', " + this.cantKm.Text + ")";         
 
             DBConexion.ResolverNonQuery(insert);
         }

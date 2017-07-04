@@ -16,10 +16,6 @@ namespace UberFrba.Rendicion_al_chofer
 {
     public partial class Rendicion_al_chofer : Form
     {
-        /*
-        5598227
-        6473234
-        */
         private string username;
         private string rol;
         private string errores = "";
@@ -35,12 +31,6 @@ namespace UberFrba.Rendicion_al_chofer
 
             this.fechaRendicion.MaxDate = fechaActual;
         }
-
-        private void Rendicion_al_chofer_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void cargarTurnos()
         {
             SqlDataReader turno = this.leerTurnos();
@@ -261,6 +251,11 @@ namespace UberFrba.Rendicion_al_chofer
         }
 
         private void label6_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Rendicion_al_chofer_Load(object sender, EventArgs e)
         {
 
         }

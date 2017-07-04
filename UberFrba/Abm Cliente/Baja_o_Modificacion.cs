@@ -15,22 +15,35 @@ namespace UberFrba.Abm_Cliente
     {
         string errores = "";
         private Form parent;
-        private Registro_Viajes.Registro_Viajes parentSeleccion;
+        private Registro_Viajes.Registro_Viajes parentSeleccionRegistro;
+        private Facturacion.Facturacion_Cliente parentSeleccionFactura;
         private bool puedeDarDeBaja;
         private bool soloSeleccion;
         Cliente cliente = new Cliente();
         DataTable clientes = new DataTable();
 
+        public Baja_o_Modificacion(Facturacion.Facturacion_Cliente parent)
+        {
+            InitializeComponent();
+            this.parentSeleccionFactura = parent;
+            this.parent = parent;
+            this.setPanelSelecccion();
+        }
+
         public Baja_o_Modificacion(Registro_Viajes.Registro_Viajes parent)
         {
             InitializeComponent();
-            this.parentSeleccion = parent;
+            this.parent = parent;
+            this.parentSeleccionRegistro = parent;
+            this.setPanelSelecccion();
+        }
+        private void setPanelSelecccion()
+        {
             this.soloSeleccion = true;
             this.puedeDarDeBaja = true;
             this.setNombrePanel();
             this.noClientesLabel.Text = "";
         }
-
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
@@ -64,7 +77,14 @@ namespace UberFrba.Abm_Cliente
                 this.setCliente();
                 if (this.soloSeleccion)
                 {
-                    parentSeleccion.setCliente(cliente.telefono);
+                    if (parentSeleccionFactura == null)
+                    {
+                        parentSeleccionRegistro.setCliente(cliente.telefono);
+                    }
+                    else
+                    {
+                        parentSeleccionFactura.setCliente(cliente.telefono);
+                    }
                     this.Close();
                     return;
                 }
@@ -111,13 +131,8 @@ namespace UberFrba.Abm_Cliente
 
         private void volver_Click(object sender, EventArgs e)
         {
-            this.Close();
-            if (soloSeleccion)
-            {
-                parentSeleccion.Show();
-                return;
-            }
             this.parent.Show();
+            this.Close();
         }
 
         private void rehabilitar_Click(object sender, EventArgs e)

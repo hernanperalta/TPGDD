@@ -112,7 +112,8 @@ namespace UberFrba.Abm_Rol
             }
             catch (SqlException ex)
             {
-                MessageBox.Show(ex.Message);
+                if( ex.Number == 2627 )
+                    MessageBox.Show("Ya existe un rol de nombre " + this.nombreRol.Text);
             }
         }
 

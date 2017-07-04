@@ -13,7 +13,7 @@ using System.Data.SqlClient;
 using UberFrba.Menu;
 using System.Configuration;
 
-                
+
 namespace UberFrba.Abm_Chofer
 {
     public partial class Baja_o_Modificacion : Form
@@ -154,6 +154,11 @@ namespace UberFrba.Abm_Chofer
             this.buscarChoferesSegun(this.query);
         }
 
+        public void refrescar()
+        {
+            this.buscarChoferesSegun(this.query);
+        }
+
         private Chofer setChofer()
         {
             int index = this.choferesGrid.SelectedRows[0].Index;
@@ -171,21 +176,21 @@ namespace UberFrba.Abm_Chofer
                                         row["Fecha de nacimiento"].ToString());
 
             Chofer choferSeleccionado;
-            
+
             if (soloSeleccion)
             {
-                 choferSeleccionado = new Chofer(datos, domicilio,
-                                                        row["Telefono"].ToString(),
-                                                        row["USERNAME"].ToString(),
-                                                        row["Patente"].ToString(),
-                                                        Convert.ToBoolean(row["Habilitado"].ToString()));
+                choferSeleccionado = new Chofer(datos, domicilio,
+                                                       row["Telefono"].ToString(),
+                                                       row["USERNAME"].ToString(),
+                                                       row["Patente"].ToString(),
+                                                       Convert.ToBoolean(row["Habilitado"].ToString()));
             }
-            else 
+            else
             {
-                 choferSeleccionado = new Chofer(datos, domicilio,
-                            row["Telefono"].ToString(),
-                            row["USERNAME"].ToString(),
-                            Convert.ToBoolean(row["Habilitado"].ToString()));
+                choferSeleccionado = new Chofer(datos, domicilio,
+                           row["Telefono"].ToString(),
+                           row["USERNAME"].ToString(),
+                           Convert.ToBoolean(row["Habilitado"].ToString()));
             }
 
             return choferSeleccionado;
@@ -195,7 +200,7 @@ namespace UberFrba.Abm_Chofer
         {
             string chofsDeshabilitados = "";
 
-            foreach(DataGridViewRow fila in this.choferesGrid.SelectedRows)
+            foreach (DataGridViewRow fila in this.choferesGrid.SelectedRows)
             {
                 if ((bool)fila.Cells[5].Value)
                 {
@@ -207,7 +212,7 @@ namespace UberFrba.Abm_Chofer
             if (chofsDeshabilitados.Equals(""))
                 MessageBox.Show("Todos los choferes seleccionados se encuentran habilitados");
             else
-            { 
+            {
                 MessageBox.Show("Se deshabilitaron los siguientes choferes: \n" + chofsDeshabilitados);
             }
 
@@ -216,8 +221,8 @@ namespace UberFrba.Abm_Chofer
         private void deshabilitarChofer(string telefono)
         {
             DBConexion.ResolverNonQuery("UPDATE LOS_CHATADROIDES.Chofer "
-                                        +"SET habilitado = 0 "
-                                     +"WHERE telefono = " + telefono);
+                                        + "SET habilitado = 0 "
+                                     + "WHERE telefono = " + telefono);
         }
 
         private void buscarChoferesSegun(string select)
@@ -232,7 +237,7 @@ namespace UberFrba.Abm_Chofer
                 this.errores = "";
                 return;
             }
-  
+
 
             try
             {
@@ -249,12 +254,12 @@ namespace UberFrba.Abm_Chofer
 
         private void buscar_Click(object sender, EventArgs e)
         {
-            this.buscarChoferesSegun(this.query);   
+            this.buscarChoferesSegun(this.query);
         }
 
         private void validarTodosLosCamposNoVacios()
         {
-            if(!this.campoVacio(this.nombreChofer))
+            if (!this.campoVacio(this.nombreChofer))
                 this.validarPalabra(255, this.nombreChofer.Text, "nombre");
 
             if (!this.campoVacio(this.apellidoChofer))
@@ -326,17 +331,17 @@ namespace UberFrba.Abm_Chofer
 
         private void nombreChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());
         }
 
         private void apellidoChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());
         }
 
         private void dniChofer_TextChanged(object sender, EventArgs e)
         {
-            this.buscarChoferesSegun(this.agregarFiltrosAQuery());  
+            this.buscarChoferesSegun(this.agregarFiltrosAQuery());
         }
 
         private void choferesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)

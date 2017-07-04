@@ -32,26 +32,11 @@ namespace UberFrba.Facturacion
             this.fechaFin.Value = new DateTime(fechaFacturacion.Year, fechaFacturacion.Month, DateTime.DaysInMonth(fechaFacturacion.Year, fechaFacturacion.Month));
         }
 
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void volver_Click(object sender, EventArgs e)
         {
             Form menu = new Menu.Menu(this.username, this.rol);
             menu.Show();
             this.Close();
-        }
-
-        private void textBox1_TextChanged(object sender, EventArgs e)
-        {
-
         }
 
         private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeNoMatcheo)
@@ -78,7 +63,6 @@ namespace UberFrba.Facturacion
             else
             {
                 this.cargarDatosDeClienteYFactura();
-                // ACA HACER QUE FACTURE => INSERT
                 try
                 {
                     DBConexion.ResolverNonQuery("EXEC LOS_CHATADROIDES.Crear_factura " + this.telefonoTB.Text + ", " + this.importeTotal.Text.Replace(",", ".") + ", '" + this.fechaFacturacion + "', '" + this.fechaInicio.Value + "', '" + this.fechaFin.Value + "'");
@@ -86,12 +70,8 @@ namespace UberFrba.Facturacion
                 } catch (SqlException sqle)
                 {
                     MessageBox.Show(sqle.Message);
-                }
-
-                //MessageBox.Show(this.fechaInicio.Value.ToString());
-                
+                }          
             }
-
         }
 
         private void cargarDatosDeLaFactura() {
@@ -127,20 +107,14 @@ namespace UberFrba.Facturacion
 
                 this.importeTotal.Text = String.Format("{0:0.00}", importeFactura);
 
-
-
             }
             catch (SinRegistrosException)
             {
                MessageBox.Show("No hay viajes pendientes de facturacion.");
-            }
-          
-
-           
-
+            }  
         }
 
-        private void validarSiExisteElCliente() {
+        private void obtenerDatosCliente() {
             this.viajesSinFacturar.Clear();
             try
             {
@@ -180,7 +154,7 @@ namespace UberFrba.Facturacion
                 return;
             }
 
-            this.validarSiExisteElCliente();
+            this.obtenerDatosCliente();
             
         }
 
@@ -191,8 +165,29 @@ namespace UberFrba.Facturacion
                     (ctrl as TextBox).Clear();
             this.viajesSinFacturar.Clear();
         }
-
+        private void buscarCliente_Click(object sender, EventArgs e)
+        {
+            Form listado = new Abm_Cliente.Baja_o_Modificacion(this);
+            listado.Show();
+        }
+        public void setCliente(string telefono)
+        {
+            this.telefonoTB.Text = telefono;
+        }
         private void dateTimePicker1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void textBox1_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void label3_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
         {
 
         }

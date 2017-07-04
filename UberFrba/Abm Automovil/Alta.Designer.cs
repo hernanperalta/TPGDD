@@ -37,8 +37,8 @@
             this.numeroChofer = new System.Windows.Forms.TextBox();
             this.label6 = new System.Windows.Forms.Label();
             this.crear = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.limpiar = new System.Windows.Forms.Button();
+            this.volver = new System.Windows.Forms.Button();
             this.marca = new System.Windows.Forms.TextBox();
             this.listaDeTurnos = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
@@ -123,25 +123,25 @@
             this.crear.UseVisualStyleBackColor = true;
             this.crear.Click += new System.EventHandler(this.crear_Click);
             // 
-            // button2
+            // limpiar
             // 
-            this.button2.Location = new System.Drawing.Point(211, 277);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 32);
-            this.button2.TabIndex = 13;
-            this.button2.Text = "Limpiar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.limpiar_Click);
+            this.limpiar.Location = new System.Drawing.Point(211, 277);
+            this.limpiar.Name = "limpiar";
+            this.limpiar.Size = new System.Drawing.Size(109, 32);
+            this.limpiar.TabIndex = 13;
+            this.limpiar.Text = "Limpiar";
+            this.limpiar.UseVisualStyleBackColor = true;
+            this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
-            // button3
+            // volver
             // 
-            this.button3.Location = new System.Drawing.Point(47, 277);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(109, 32);
-            this.button3.TabIndex = 16;
-            this.button3.Text = "Volver";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.volver.Location = new System.Drawing.Point(47, 277);
+            this.volver.Name = "volver";
+            this.volver.Size = new System.Drawing.Size(109, 32);
+            this.volver.TabIndex = 16;
+            this.volver.Text = "Volver";
+            this.volver.UseVisualStyleBackColor = true;
+            this.volver.Click += new System.EventHandler(this.volver_Click);
             // 
             // marca
             // 
@@ -166,9 +166,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(378, 329);
             this.Controls.Add(this.listaDeTurnos);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.volver);
             this.Controls.Add(this.marca);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.limpiar);
             this.Controls.Add(this.crear);
             this.Controls.Add(this.numeroChofer);
             this.Controls.Add(this.label6);
@@ -197,8 +197,8 @@
         private System.Windows.Forms.TextBox numeroChofer;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.Button crear;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button limpiar;
+        private System.Windows.Forms.Button volver;
         private System.Windows.Forms.TextBox marca;
         private System.Windows.Forms.CheckedListBox listaDeTurnos;
     }

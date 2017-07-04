@@ -35,7 +35,7 @@
             this.registrarUsuario = new System.Windows.Forms.Button();
             this.roles = new System.Windows.Forms.CheckedListBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
+            this.limpiar = new System.Windows.Forms.Button();
             this.volver = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
@@ -101,15 +101,15 @@
             this.label3.TabIndex = 7;
             this.label3.Text = "Seleccionar los roles para el usuario :";
             // 
-            // button2
+            // limpiar
             // 
-            this.button2.Location = new System.Drawing.Point(149, 258);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(109, 23);
-            this.button2.TabIndex = 14;
-            this.button2.Text = "Limpiar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.limpiar.Location = new System.Drawing.Point(149, 258);
+            this.limpiar.Name = "limpiar";
+            this.limpiar.Size = new System.Drawing.Size(109, 23);
+            this.limpiar.TabIndex = 14;
+            this.limpiar.Text = "Limpiar";
+            this.limpiar.UseVisualStyleBackColor = true;
+            this.limpiar.Click += new System.EventHandler(this.limpiar_Click);
             // 
             // volver
             // 
@@ -127,7 +127,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(440, 306);
             this.Controls.Add(this.volver);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.limpiar);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.roles);
             this.Controls.Add(this.registrarUsuario);
@@ -152,7 +152,7 @@
         private System.Windows.Forms.Button registrarUsuario;
         private System.Windows.Forms.CheckedListBox roles;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button limpiar;
         private System.Windows.Forms.Button volver;
     }
 }

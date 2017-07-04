@@ -65,9 +65,28 @@ namespace UberFrba.Alta_de_Usuario
             this.Close();
         }
 
+        private bool hayCamposObligatoriosVacios()
+        {
+            foreach (Control control in this.Controls)
+                if (control is TextBox)
+                    if (this.estaVacio((control as TextBox).Text))
+                        return true;
+
+            return false;
+        }
+
+        private bool estaVacio(string texto)
+        {
+            return texto.Equals("") || texto.Replace(" ", "").Equals("");
+        }
+
         private void registrarUsuario_Click(object sender, EventArgs e)
         {
-           
+            if (this.hayCamposObligatoriosVacios())
+            {
+                MessageBox.Show("Debe llenar todos los campos no opcionales antes de crear un usuario");
+                return;
+            }
             
             this.validarCampoSegunTipo(64, "^[a-zA-Z-_.0-9]+$", this.usernameTB.Text, "Nombre de Usuario", "debe tener letras, numeros, guion bajo, guin medio y punto");
             this.validarCampoSegunTipo(50, "^[a-zA-Z-_.0-9]+$", this.passwordTB.Text, "Password", "debe tener letras, numeros, guion bajo, guin medio y punto");
@@ -143,9 +162,20 @@ namespace UberFrba.Alta_de_Usuario
             return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol ");
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void limpiar_Click(object sender, EventArgs e)
         {
-
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                    ((TextBox)ctrl).Clear();
+                if (ctrl is CheckedListBox)
+                {
+                    for (int i = 0; i < ((CheckedListBox)ctrl).Items.Count; i++)
+                    {
+                        ((CheckedListBox)ctrl).SetItemChecked(i, false);
+                    }
+                }
+            }
         }
        
 

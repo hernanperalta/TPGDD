@@ -57,6 +57,8 @@ namespace UberFrba.Abm_Automovil
             this.validarCampoSegunTipo(tamanio, "^[a-zA-Z]+$", texto, nombreDeCampo, "sólo debe tener letras");
         }
 
+        
+
         private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
         {
             if (!Regex.IsMatch(texto, regex))
@@ -99,7 +101,7 @@ namespace UberFrba.Abm_Automovil
         private void validarPatente()
         {
             if (!this.campoVacio(this.patenteBM))
-                this.validarPalabra(255, this.patenteBM.Text, "patente");
+                this.validarCampoSegunTipo(255, "^[a-zA-Z]+$", this.patenteBM.Text, "patente", "contiene caracteres invalidos");
             this.siHayErroresMostrarlos();
         }
 

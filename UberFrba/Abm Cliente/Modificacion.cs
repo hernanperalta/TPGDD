@@ -27,8 +27,9 @@ namespace UberFrba.Abm_Cliente
             this.setCampos();
         }
 
-        private void guardarCliente_Click(object sender, EventArgs e)
+        private void actualizarCliente_Click(object sender, EventArgs e)
         {
+            errores = "";
             this.validarCampos();
             if (this.errores != "")
             {
@@ -93,6 +94,28 @@ namespace UberFrba.Abm_Cliente
                 this.validarCampo("Mail", this.mailCliente.Text, 255, "^[a-zA-Z]+[a-zA-Z0-9-._]*@[a-zA-Z]+(.[a-zA-Z]+)+$");
             this.validarFecha();
             this.validarCampo("Nombre de usuario", this.usernameCliente.Text, 50, "^[a-zA-Z-_.0-9]+$");
+            this.camposSinCambios();
+        }
+
+        private void camposSinCambios()
+        {
+            if (this.camposIguales())
+                errores += "El cliente seleccionado no ha sufrido cambios, modifique el campo que desee modificar";
+        }
+
+        private bool camposIguales()
+        {
+            return (this.nombreCliente.Text.Equals(cliente.nombre)) && 
+                   (this.apellidoCliente.Text.Equals(cliente.apellido)) && 
+                   (this.dniCliente.Text.Equals(cliente.dni)) && 
+                   (this.telefonoCliente.Text.Equals(cliente.telefono)) &&
+                   (this.mailCliente.Text.Equals(cliente.mail)) &&
+                   (this.direccionCliente.Text.Equals(cliente.direccion)) && 
+                   (this.nroPiso.Text.Equals(cliente.nroPiso)) &&
+                   (this.deptoCliente.Text.Equals(cliente.departamento)) &&
+                   (this.fechaNacCli.Value.ToString().Equals(cliente.fechaNac)) &&
+                   (this.codPostal.Text.Equals(cliente.codigoPostal)) && 
+                   (this.localidadCliente.Text.Equals(cliente.localidad));
         }
 
         private void validarFecha()

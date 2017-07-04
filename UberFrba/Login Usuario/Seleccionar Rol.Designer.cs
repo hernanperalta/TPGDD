@@ -32,6 +32,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.aceptar = new System.Windows.Forms.Button();
             this.noPoseeRolesLabel = new System.Windows.Forms.Label();
+            this.button1 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // selectorRol
@@ -55,9 +56,9 @@
             // 
             // aceptar
             // 
-            this.aceptar.Location = new System.Drawing.Point(102, 132);
+            this.aceptar.Location = new System.Drawing.Point(155, 132);
             this.aceptar.Name = "aceptar";
-            this.aceptar.Size = new System.Drawing.Size(75, 23);
+            this.aceptar.Size = new System.Drawing.Size(91, 23);
             this.aceptar.TabIndex = 2;
             this.aceptar.Text = "Aceptar";
             this.aceptar.UseVisualStyleBackColor = true;
@@ -74,11 +75,22 @@
             this.noPoseeRolesLabel.UseMnemonic = false;
             this.noPoseeRolesLabel.Click += new System.EventHandler(this.label2_Click);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(21, 132);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(94, 23);
+            this.button1.TabIndex = 4;
+            this.button1.Text = "Cerrar sesion";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.cerraSesion_Click);
+            // 
             // Seleccionar_Rol
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(284, 201);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.noPoseeRolesLabel);
             this.Controls.Add(this.aceptar);
             this.Controls.Add(this.label1);
@@ -97,5 +109,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button aceptar;
         private System.Windows.Forms.Label noPoseeRolesLabel;
+        private System.Windows.Forms.Button button1;
     }
 }

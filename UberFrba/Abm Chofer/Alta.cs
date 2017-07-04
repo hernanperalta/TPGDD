@@ -18,8 +18,6 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
 {
     public partial class Alta : Form
     {
-        /*private string usernameActual;
-        private string rol;*/
         private Form parent;
         private string errores = "";
         private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
@@ -27,8 +25,6 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
         public Alta(Form parent)
         {
             InitializeComponent();
-            /*this.usernameActual = usernameActual;
-            this.rol = rol;*/
             this.parent = parent;
         }
 

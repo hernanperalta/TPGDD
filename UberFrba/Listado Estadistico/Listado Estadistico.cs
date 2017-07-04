@@ -28,9 +28,10 @@ namespace UberFrba.Listado_Estadistico
             anio.Format = DateTimePickerFormat.Custom;
             anio.CustomFormat = "yyyy";
             anio.ShowUpDown = true;
+            anio.MaxDate = fechaActual;
             this.listados.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            this.listados.Items.Add(new Listado("Chóferes con mayor recaudación", "SELECT TOP 5 C.telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, SUM(importe_total) as Recaudacion "
+            this.listados.Items.Add(new Listado("Choferes con mayor recaudación", "SELECT TOP 5 C.telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, SUM(importe_total) as Recaudacion "
                                                                                 + "FROM LOS_CHATADROIDES.Chofer C JOIN LOS_CHATADROIDES.Viaje V "
 	                                                                            + "ON(C.telefono = V.telefono_chofer) "
 	                                                                            + "JOIN LOS_CHATADROIDES.Rendicion R "
@@ -57,7 +58,7 @@ namespace UberFrba.Listado_Estadistico
                                                                             + "ORDER BY 5 DESC"));
 
       
-            this.listados.Items.Add(new Listado("Cliente que utilizo más veces el mismo automóvil en los viajes que ha realizado", "SELECT TOP 5 telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, COUNT(DISTINCT patente) as 'Veces que uso el mismo auto' "
+            this.listados.Items.Add(new Listado("Cliente que utilizo más veces el mismo automóvil", "SELECT TOP 5 telefono as Telefono, nombre as Nombre, apellido as Apellido, dni as DNI, COUNT(DISTINCT patente) as 'Veces que uso el mismo auto' "
                                                                                                                                 + "FROM LOS_CHATADROIDES.Cliente C JOIN LOS_CHATADROIDES.Viaje V "
                                                                                                                                 + "ON(C.telefono = V.telefono_cliente) "
                                                                                                                                 + "WHERE YEAR(V.fecha_y_hora_inicio_viaje) = anioSeleccionado "

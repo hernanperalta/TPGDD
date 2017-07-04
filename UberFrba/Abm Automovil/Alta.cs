@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
+using System.Text.RegularExpressions;
 
 namespace UberFrba.Abm_Automovil
 {
     public partial class Alta : Form
     {
         private Form parent;
-        
         
         private string errores = "";
 
@@ -26,100 +26,62 @@ namespace UberFrba.Abm_Automovil
             this.cargarLosHorariosDeLosTurnos();
         }
 
-        private void limpiarLosCampos() {
-            foreach (Control ctrl in this.Controls)
-            {
-                if (ctrl is TextBox)
-                {
-                    TextBox text = ctrl as TextBox;
-                    text.Clear();
-                }
-            }
-        }
-
-        private void limpiar_Click(object sender, EventArgs e)
-        {
-            this.limpiarLosCampos();
-        }
-        /* ----------------------- CUANDO CAMBIAN LOS CAMPOS */
-        private void turno_TextChanged(object sender, EventArgs e){
-        
-        }
-
-        private void marca_TextChanged(object sender, EventArgs e)
-        {
-            this.validarMarca();
-        }
-
-        private void numeroChofer_TextChanged(object sender, EventArgs e)
-        {
-            this.validarNumeroChofer();   
-        }
-
-        private void patente_TextChanged(object sender, EventArgs e)
-        {
-            this.validarPatente();
-        }
-        private void modelo_TextChanged(object sender, EventArgs e)
-        {
-            this.validarModelo();
-        }
-
-        /*  CUANDO CAMBIAN LOS CAMPOS  ----------------------- */
-
         /* VALIDACIONES : */
-        private void estaVacio(string campo, string nombreCampo) {
-            if(campo == null || campo.Equals(""))
-                this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
-        }
 
-        private void superaElRango(TextBox campo, string nombreCampo, int rango) {
-            if (campo.Text.Length > rango)
+        private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
+        {
+            if (!Regex.IsMatch(texto, regex))
             {
-                MessageBox.Show("El campo "+ nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
-                
+                errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
+            }
+            if (texto.Length > tamanio)
+            {
+                errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
             }
         }
+
+        private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[0-9]+$", texto, nombreDeCampo, "sólo debe tener números");
+        }
+
+        private void validarPalabra(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú]+$", texto, nombreDeCampo, "sólo debe tener letras");
+        }
+
+        private void validarAlfanumerico(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú0-9 ]+$", texto, nombreDeCampo, "debe tener letras o números");
+        }
+
+       
+
+       
 
         private void validarNumeroChofer()
         {
-            this.superaElRango(this.numeroChofer, "numero chofer", 18);
-
-            if (this.numeroChofer.Text.Any(char.IsLetter))
-            {
-                MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
-   
-            }
-
-            
+            this.validarNumeric(18, this.numeroChofer.Text, "numero chofer");
 
         }
+
         private void validarModelo()
         {
-            
-            this.superaElRango(this.modelo, "modelo", 255);
+
+            this.validarAlfanumerico(255, this.modelo.Text, "modelo");
         }
 
         private void validarMarca()
         {
-            
-            this.superaElRango(this.marca, "marca", 255);
-
-            if (this.marca.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("La marca no puede contener numeros.");
-                
-            }
-
-            
+            this.validarPalabra(255, this.marca.Text, "marca");
         }
 
 
-        private void validarPatente() {
+        private void validarPatente() 
+        {
 
-           
-            this.superaElRango(this.patente, "patente", 10);
-
+            this.validarAlfanumerico(18, this.patente.Text, "patente");
+      
         }
 
         private void validarQueLosCamposNoEstenVacios()
@@ -130,15 +92,39 @@ namespace UberFrba.Abm_Automovil
             this.estaVacio(this.patente.Text, "patente");
         }
 
+        private void estaVacio(string campo, string nombreCampo)
+        {
+            if (campo == null || campo.Equals(""))
+                this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
+        }
+
+        private void superaElRango(TextBox campo, string nombreCampo, int rango)
+        {
+            if (campo.Text.Length > rango)
+            {
+                MessageBox.Show("El campo " + nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
+
+            }
+        }
+
+        private void validarTodosLosCampos()
+        {
+            this.validarPatente();
+            this.validarMarca();
+            this.validarModelo();
+            this.validarNumeroChofer();
+
+        }
+
         private bool seleccionoTurno() {
 
             return this.listaDeTurnos.CheckedItems.Count != 0; 
             
         }
-
+                
         /**  - VALIDACIONES **/
 
-    
+        // Cargar los horarios de los turnos disponibles en la base de datos: 
         private void cargarLosHorariosDeLosTurnos(){
             
             try
@@ -158,18 +144,19 @@ namespace UberFrba.Abm_Automovil
 
         }
 
+        // Se da de alta al nuevo automovil y se insertan sus turnos si no hay errores 
         private void crear_Click(object sender, EventArgs e)
         {
-
+          
             string insertarAutomovil = "INSERT INTO LOS_CHATADROIDES.Automovil (patente, telefono_chofer, marca, modelo) "
 			                         + "VALUES ( '"
                                      + this.patente.Text + "', " 
                                      + this.numeroChofer.Text + ", '" 
               						 + this.marca.Text + "', '" 
                                      + this.modelo.Text + "')" ;
-          
 
 
+            this.validarTodosLosCampos();
             this.validarQueLosCamposNoEstenVacios();
             if (!this.errores.Equals("")) {
                 MessageBox.Show(this.errores);
@@ -184,6 +171,7 @@ namespace UberFrba.Abm_Automovil
 				this.insertarTurnos();
               
                 MessageBox.Show("Se pudo crear el automovil de patente : " + this.patente.Text);
+
             }
             catch (SqlException sqle)
             {
@@ -194,6 +182,7 @@ namespace UberFrba.Abm_Automovil
             
         }
 
+        // Se insertan los turnos para el automovil
         private void insertarTurnos()
         {
           string insertarAutoXTurno = "INSERT INTO LOS_CHATADROIDES.Auto_X_Turno (hora_inicio_turno, hora_fin_turno, patente) VALUES ";
@@ -204,38 +193,83 @@ namespace UberFrba.Abm_Automovil
           }
   
         }
+
+        private void limpiarLosCampos()
+        {
+            foreach (Control ctrl in this.Controls)
+            {
+                if (ctrl is TextBox)
+                    ((TextBox)ctrl).Clear();
+                if (ctrl is CheckedListBox)
+                {
+                    for (int i = 0; i < ((CheckedListBox)ctrl).Items.Count; i++)
+                    {
+                        ((CheckedListBox)ctrl).SetItemChecked(i, false);
+                    }
+                }
+            }
+
+        }
+
         
+        /* ----------------------- EVENTOS */
 
         private void Alta_o_Modificacion_Load(object sender, EventArgs e)
         {
-            
+
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void volver_Click(object sender, EventArgs e)
         {
-            /*
-            Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();
-            this.Close();*/
             this.Close();
             this.parent.Show();
         }
 
-      
+
+        
+        private void limpiar_Click(object sender, EventArgs e)
+        {
+            this.limpiarLosCampos();
+        }
+
+
+        private void turno_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void marca_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void numeroChofer_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void patente_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void modelo_TextChanged(object sender, EventArgs e)
+        {
+
+        }
 
         private void label5_Click(object sender, EventArgs e)
         {
-        
+
         }
 
         private void horaInicioTurno_TextChanged(object sender, EventArgs e)
         {
-        
+
         }
 
         private void selectorTurno_SelectedIndexChanged(object sender, EventArgs e)
         {
-            
+
         }
 
         private void listaDeTurnos_SelectedIndexChanged(object sender, EventArgs e)
@@ -248,7 +282,7 @@ namespace UberFrba.Abm_Automovil
 
         }
 
-        
+        /*  EVENTOS  ----------------------- */
       
     }
 }

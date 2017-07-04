@@ -235,6 +235,7 @@
             this.horaInicio.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.horaInicio.Location = new System.Drawing.Point(109, 316);
             this.horaInicio.Name = "horaInicio";
+            this.horaInicio.ShowUpDown = true;
             this.horaInicio.Size = new System.Drawing.Size(106, 20);
             this.horaInicio.TabIndex = 32;
             this.horaInicio.ValueChanged += new System.EventHandler(this.horaInicio_ValueChanged);
@@ -244,6 +245,7 @@
             this.horaFin.Format = System.Windows.Forms.DateTimePickerFormat.Time;
             this.horaFin.Location = new System.Drawing.Point(110, 374);
             this.horaFin.Name = "horaFin";
+            this.horaFin.ShowUpDown = true;
             this.horaFin.Size = new System.Drawing.Size(105, 20);
             this.horaFin.TabIndex = 33;
             // 

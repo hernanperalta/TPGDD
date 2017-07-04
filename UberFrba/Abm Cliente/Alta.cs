@@ -14,19 +14,14 @@ using System.Configuration;
 namespace UberFrba.Abm_Cliente
 {
     public partial class Alta : Form
-    {/*
-        private string username;
-        private string rol;*/
+    {
         private string errores = "";
         private Form parent;
         private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
-        //public Alta(string username, string rol)
         public Alta(Form parent)
         {
             InitializeComponent();
-            /*this.username = username;
-            this.rol = rol;*/
             this.parent = parent;
         }
 
@@ -54,7 +49,7 @@ namespace UberFrba.Abm_Cliente
                                            + this.fechaNacCli.Value + "', "
                                            + (this.estaVacio(this.mailCliente.Text) ? "NULL" : "'" + this.mailCliente.Text + "'") + ", '"
                                            + this.usernameCliente.Text + "', '"
-                                           + this.codPostal + "')");
+                                           + this.codPostal.Text + "')");
                 
                 MessageBox.Show("El cliente se creó con éxito!");
             }
@@ -66,9 +61,7 @@ namespace UberFrba.Abm_Cliente
         }
 
         private void volver_Click(object sender, EventArgs e)
-        {/*
-            Form menu = new Menu.Menu(this.username, this.rol);
-            menu.Show();*/
+        {
             this.Close();
             this.parent.Show();
         }

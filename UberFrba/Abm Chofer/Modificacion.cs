@@ -17,25 +17,20 @@ using System.Configuration;
 namespace UberFrba.Abm_Chofer
 {
     public partial class Modificacion : Form
-    {/*
-        private string usernameActual;
-        private string rolActual;*/
-        private Form parent;
+    {
+        private Baja_o_Modificacion parent;
         private Chofer choferAModificar;
         private UpdateBuilder updateBuilder;
         private string errores = "";
         private DateTime fechaActual = DateTime.Parse(System.Configuration.ConfigurationManager.AppSettings["Fecha"]);
 
-        //public Modificacion(Chofer choferAModificar, string usernameActual, string rolActual)
-        public Modificacion(Form parent, Chofer choferAModificar)
+        public Modificacion(Baja_o_Modificacion parent, Chofer choferAModificar)
         {
             InitializeComponent();
 
             this.parent = parent;
 
-            this.choferAModificar = choferAModificar;/*
-            this.usernameActual = usernameActual;
-            this.rolActual = rolActual;*/
+            this.choferAModificar = choferAModificar;
 
             this.updateBuilder = new UpdateBuilder("LOS_CHATADROIDES.Chofer", "WHERE telefono = " + choferAModificar.telefono);
 
@@ -59,11 +54,7 @@ namespace UberFrba.Abm_Chofer
 
         private void volver_Click(object sender, EventArgs e)
         {
-            /*Form menu = new Menu.Menu(this.usernameActual, this.rolActual);
-            menu.Show();
-            this.Close();*/
             this.Close();
-            //this.parent.Show();
         }
 
         private void limpiar_Click(object sender, EventArgs e)
@@ -149,18 +140,19 @@ namespace UberFrba.Abm_Chofer
 
             try
             {
-                DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
+                MessageBox.Show(this.updateBuilder.obtenerUpdate());
 
+                DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
+                
                 MessageBox.Show("El chofer se actualizó con éxito!");
 
                 this.Close();
+                this.parent.refrescar();
             }
             catch (SqlException ex)
             {
                 MessageBox.Show(ex.Message);
-                if (ex.Number == 2627)
-                    if (ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)))
-                        MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);
+                this.updateBuilder.resetearUpdate();
             }
         }
 
@@ -179,8 +171,6 @@ namespace UberFrba.Abm_Chofer
             this.validarCampoSegunTipo(tamanio, "^(NA|[0-9]+)$", texto, nombreDeCampo, "sólo debe tener números");
         }
 
-        
-
         private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
         {
             this.validarCampoSegunTipo(tamanio, "^[0-9]+$", texto, nombreDeCampo, "sólo debe tener números");
@@ -188,7 +178,7 @@ namespace UberFrba.Abm_Chofer
 
         private void validarFecha()
         {
-            if (this.fechaNacChofer.Value > fechaActual)
+            if (this.fechaNacChofer.Value.Date > fechaActual.Date)
                 errores += "-No puede ingresar una fecha de nacimiento posterior a la actual\n";
         }
 
@@ -206,7 +196,7 @@ namespace UberFrba.Abm_Chofer
 
         private void validarPalabra(int tamanio, string texto, string nombreDeCampo)
         {
-            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú]+$", texto, nombreDeCampo, "sólo debe tener letras");
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú ]+$", texto, nombreDeCampo, "sólo debe tener letras");
         }
 
         private void validarMail()

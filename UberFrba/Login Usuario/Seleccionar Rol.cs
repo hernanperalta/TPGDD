@@ -86,5 +86,11 @@ namespace UberFrba.Login_Usuario
         {
 
         }
+
+        private void cerraSesion_Click(object sender, EventArgs e)
+        {
+            new Login().Show();
+            this.Close();
+        }
     }
 }

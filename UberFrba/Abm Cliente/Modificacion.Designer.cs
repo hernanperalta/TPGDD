@@ -119,9 +119,9 @@
             this.guardarCliente.Name = "guardarCliente";
             this.guardarCliente.Size = new System.Drawing.Size(112, 38);
             this.guardarCliente.TabIndex = 93;
-            this.guardarCliente.Text = "Guardar Cliente";
+            this.guardarCliente.Text = "ActualizarCliente";
             this.guardarCliente.UseVisualStyleBackColor = true;
-            this.guardarCliente.Click += new System.EventHandler(this.guardarCliente_Click);
+            this.guardarCliente.Click += new System.EventHandler(this.actualizarCliente_Click);
             // 
             // deptoCliente
             // 

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Data.SqlClient;
 using UberFrba.Abm_Chofer;
+using System.Text.RegularExpressions;
 
 namespace UberFrba.Abm_Automovil
 {
@@ -111,16 +112,50 @@ namespace UberFrba.Abm_Automovil
         }
 
         /* VALIDACIONES  -------------- */
-        private void estaVacio(string campo, string nombreCampo)
+        private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
         {
-            if (campo == null || campo.Equals(""))
-                this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
+            if (!Regex.IsMatch(texto, regex))
+            {
+                errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
+            }
+            if (texto.Length > tamanio)
+            {
+                errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
+            }
         }
 
-
-        private bool estaVacio(string texto)
+        private void validarNumeric(int tamanio, string texto, string nombreDeCampo)
         {
-            return texto.Equals("") || texto.Replace(" ", "").Equals("");
+            this.validarCampoSegunTipo(tamanio, "^[0-9]+$", texto, nombreDeCampo, "sólo debe tener números");
+        }
+
+        private void validarPalabra(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú]+$", texto, nombreDeCampo, "sólo debe tener letras");
+        }
+
+        private void validarAlfanumerico(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[a-zA-Zá-úÁ-Ú0-9 ]+$", texto, nombreDeCampo, "debe tener letras o números");
+        }
+
+        private void validarTodosLosCampos()
+        {
+            this.validarPatente();
+            this.validarMarca();
+            this.validarModelo();
+            this.validarNumeroChofer();
+
+        }
+
+        private bool estaVacio(string campo) {
+            return campo == null || campo.Equals("");
+        }
+
+        private void estaVacio(string campo, string nombreCampo)
+        {
+            if (this.estaVacio(campo))
+                this.errores += "El campo " + nombreCampo + " no puede ser vacio. \n";
         }
 
         private void superaElRango(TextBox campo, string nombreCampo, int rango)
@@ -128,43 +163,34 @@ namespace UberFrba.Abm_Automovil
             if (campo.Text.Length > rango)
             {
                 MessageBox.Show("El campo " + nombreCampo + " excede los " + rango.ToString() + " digitos.\n");
-             
+
             }
         }
 
         private void validarNumeroChofer()
         {
-
-            this.superaElRango(this.numeroChofer, "numero chofer", 18);
-
-            if (this.numeroChofer.Text.Any(char.IsLetter))
-            {
-                MessageBox.Show("El telefono del chofer solo puede tener numeros.\n");
-                
-            }
+            this.validarNumeric(18, this.numeroChofer.Text, "numero chofer");
 
         }
 
         private void validarModelo()
         {
-            this.superaElRango(this.modelo, "modelo", 255);
+
+            this.validarAlfanumerico(255, this.modelo.Text, "modelo");
         }
 
         private void validarMarca()
         {
-            this.superaElRango(this.marca, "marca", 255);
-
-            if (this.marca.Text.Any(char.IsDigit))
-            {
-                MessageBox.Show("La marca no puede contener numeros.");
-               
-            }
+            this.validarPalabra(255, this.marca.Text, "marca");
         }
 
-        private void validarPatente() {
-            this.superaElRango(this.patente, "patente", 10);
-        }
 
+        private void validarPatente()
+        {
+
+            this.validarAlfanumerico(18, this.patente.Text, "patente");
+
+        }
 
         private void validarQueLosCamposNoEstenVacios()
         {
@@ -237,14 +263,17 @@ namespace UberFrba.Abm_Automovil
                 DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
                 
                 MessageBox.Show("Los datos del automovil se modificaron correctamente.");
-                this.Close();
-                new Abm_Automovil.Baja_o_Modificacion(this.parent.parent, false).Show();
+                
+            
+
             } catch(SqlException sqle)
             {
                 this.updateBuilder.resetearUpdate();
                 MessageBox.Show(sqle.Message);
-            } 
+            }
 
+            this.Close();
+            new Abm_Automovil.Baja_o_Modificacion(this.parent.parent, false).Show();
 
         }
 
