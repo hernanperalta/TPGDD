@@ -45,7 +45,7 @@
             // 
             this.noTurnosLabel.AutoSize = true;
             this.noTurnosLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.noTurnosLabel.Location = new System.Drawing.Point(348, 130);
+            this.noTurnosLabel.Location = new System.Drawing.Point(261, 123);
             this.noTurnosLabel.Name = "noTurnosLabel";
             this.noTurnosLabel.Size = new System.Drawing.Size(189, 20);
             this.noTurnosLabel.TabIndex = 57;
@@ -53,7 +53,7 @@
             // 
             // rehabilitar
             // 
-            this.rehabilitar.Location = new System.Drawing.Point(415, 366);
+            this.rehabilitar.Location = new System.Drawing.Point(310, 359);
             this.rehabilitar.Name = "rehabilitar";
             this.rehabilitar.Size = new System.Drawing.Size(117, 23);
             this.rehabilitar.TabIndex = 56;
@@ -63,7 +63,7 @@
             // 
             // volver
             // 
-            this.volver.Location = new System.Drawing.Point(271, 366);
+            this.volver.Location = new System.Drawing.Point(166, 359);
             this.volver.Name = "volver";
             this.volver.Size = new System.Drawing.Size(75, 23);
             this.volver.TabIndex = 55;
@@ -77,15 +77,15 @@
             this.turnosGrid.AllowUserToDeleteRows = false;
             this.turnosGrid.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.turnosGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.turnosGrid.Location = new System.Drawing.Point(20, 168);
+            this.turnosGrid.Location = new System.Drawing.Point(30, 162);
             this.turnosGrid.Name = "turnosGrid";
             this.turnosGrid.ReadOnly = true;
-            this.turnosGrid.Size = new System.Drawing.Size(878, 171);
+            this.turnosGrid.Size = new System.Drawing.Size(690, 171);
             this.turnosGrid.TabIndex = 54;
             // 
             // buscarTurnos
             // 
-            this.buscarTurnos.Location = new System.Drawing.Point(629, 125);
+            this.buscarTurnos.Location = new System.Drawing.Point(542, 118);
             this.buscarTurnos.Name = "buscarTurnos";
             this.buscarTurnos.Size = new System.Drawing.Size(101, 25);
             this.buscarTurnos.TabIndex = 53;
@@ -95,7 +95,7 @@
             // 
             // limpiarCampos
             // 
-            this.limpiarCampos.Location = new System.Drawing.Point(178, 125);
+            this.limpiarCampos.Location = new System.Drawing.Point(91, 118);
             this.limpiarCampos.Name = "limpiarCampos";
             this.limpiarCampos.Size = new System.Drawing.Size(101, 25);
             this.limpiarCampos.TabIndex = 52;
@@ -105,7 +105,7 @@
             // 
             // bajaOModificacion
             // 
-            this.bajaOModificacion.Location = new System.Drawing.Point(601, 366);
+            this.bajaOModificacion.Location = new System.Drawing.Point(496, 359);
             this.bajaOModificacion.Name = "bajaOModificacion";
             this.bajaOModificacion.Size = new System.Drawing.Size(117, 23);
             this.bajaOModificacion.TabIndex = 51;
@@ -116,7 +116,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(348, 25);
+            this.label4.Location = new System.Drawing.Point(261, 18);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(165, 13);
             this.label4.TabIndex = 50;
@@ -124,7 +124,7 @@
             // 
             // descripcion
             // 
-            this.descripcion.Location = new System.Drawing.Point(387, 72);
+            this.descripcion.Location = new System.Drawing.Point(300, 65);
             this.descripcion.Name = "descripcion";
             this.descripcion.Size = new System.Drawing.Size(150, 20);
             this.descripcion.TabIndex = 45;
@@ -133,7 +133,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(313, 75);
+            this.label1.Location = new System.Drawing.Point(226, 68);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(69, 13);
             this.label1.TabIndex = 44;
@@ -143,7 +143,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(921, 401);
+            this.ClientSize = new System.Drawing.Size(752, 401);
             this.Controls.Add(this.noTurnosLabel);
             this.Controls.Add(this.rehabilitar);
             this.Controls.Add(this.volver);

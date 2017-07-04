@@ -180,6 +180,7 @@
             this.dniChofer.Name = "dniChofer";
             this.dniChofer.Size = new System.Drawing.Size(100, 20);
             this.dniChofer.TabIndex = 26;
+            this.dniChofer.TextChanged += new System.EventHandler(this.dniChofer_TextChanged);
             // 
             // label2
             // 

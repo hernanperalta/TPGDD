@@ -27,8 +27,7 @@ namespace UberFrba
             DBConexion.Conectar();
 
             new Login().Show();
-           
-            
+          
             Application.Run();
 
           

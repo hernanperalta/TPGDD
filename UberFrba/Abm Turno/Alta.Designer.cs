@@ -34,15 +34,17 @@
             this.label9 = new System.Windows.Forms.Label();
             this.valorDelKm = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.horaFin = new System.Windows.Forms.TextBox();
             this.label8 = new System.Windows.Forms.Label();
             this.precioBase = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.descripcion = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.horaInicio = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.habilitado = new System.Windows.Forms.CheckBox();
+            this.horaInicio = new System.Windows.Forms.NumericUpDown();
+            this.horaFin = new System.Windows.Forms.NumericUpDown();
+            ((System.ComponentModel.ISupportInitialize)(this.horaInicio)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horaFin)).BeginInit();
             this.SuspendLayout();
             // 
             // volver
@@ -101,14 +103,6 @@
             this.label7.TabIndex = 68;
             this.label7.Text = "Valor de kilometro :";
             // 
-            // horaFin
-            // 
-            this.horaFin.Location = new System.Drawing.Point(181, 73);
-            this.horaFin.Name = "horaFin";
-            this.horaFin.Size = new System.Drawing.Size(100, 20);
-            this.horaFin.TabIndex = 67;
-            this.horaFin.TextChanged += new System.EventHandler(this.horaFin_TextChanged);
-            // 
             // label8
             // 
             this.label8.AutoSize = true;
@@ -151,13 +145,6 @@
             this.label2.TabIndex = 60;
             this.label2.Text = "Descripcion :";
             // 
-            // horaInicio
-            // 
-            this.horaInicio.Location = new System.Drawing.Point(26, 73);
-            this.horaInicio.Name = "horaInicio";
-            this.horaInicio.Size = new System.Drawing.Size(100, 20);
-            this.horaInicio.TabIndex = 59;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -177,11 +164,38 @@
             this.habilitado.Text = "Habilitado";
             this.habilitado.UseVisualStyleBackColor = true;
             // 
+            // horaInicio
+            // 
+            this.horaInicio.Location = new System.Drawing.Point(26, 74);
+            this.horaInicio.Maximum = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            this.horaInicio.Name = "horaInicio";
+            this.horaInicio.Size = new System.Drawing.Size(100, 20);
+            this.horaInicio.TabIndex = 82;
+            this.horaInicio.ValueChanged += new System.EventHandler(this.horaInicio_ValueChanged);
+            // 
+            // horaFin
+            // 
+            this.horaFin.Location = new System.Drawing.Point(181, 74);
+            this.horaFin.Maximum = new decimal(new int[] {
+            24,
+            0,
+            0,
+            0});
+            this.horaFin.Name = "horaFin";
+            this.horaFin.Size = new System.Drawing.Size(100, 20);
+            this.horaFin.TabIndex = 83;
+            // 
             // Alta
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(315, 329);
+            this.Controls.Add(this.horaFin);
+            this.Controls.Add(this.horaInicio);
             this.Controls.Add(this.habilitado);
             this.Controls.Add(this.volver);
             this.Controls.Add(this.limpiarCampos);
@@ -189,17 +203,17 @@
             this.Controls.Add(this.label9);
             this.Controls.Add(this.valorDelKm);
             this.Controls.Add(this.label7);
-            this.Controls.Add(this.horaFin);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.precioBase);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.descripcion);
             this.Controls.Add(this.label2);
-            this.Controls.Add(this.horaInicio);
             this.Controls.Add(this.label1);
             this.Name = "Alta";
             this.Text = "Alta de Turno";
             this.Load += new System.EventHandler(this.Alta_o_Modificacion_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.horaInicio)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.horaFin)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -213,15 +227,15 @@
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.TextBox valorDelKm;
         private System.Windows.Forms.Label label7;
-        private System.Windows.Forms.TextBox horaFin;
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.TextBox precioBase;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox descripcion;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox horaInicio;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.CheckBox habilitado;
+        private System.Windows.Forms.NumericUpDown horaInicio;
+        private System.Windows.Forms.NumericUpDown horaFin;
 
 
     }

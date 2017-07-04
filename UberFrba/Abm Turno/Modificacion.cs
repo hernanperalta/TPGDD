@@ -15,20 +15,32 @@ namespace UberFrba.Abm_Turno
     public partial class Modificacion : Form
     {
         private string errores = "";
-        private Form parent;
+        private Baja_o_Modificacion parent;
         private Turno turno;
-        
-        public Modificacion(Form parent, Turno turno)
+
+        public Modificacion(Baja_o_Modificacion parent, Turno turno)
         {
             InitializeComponent();
             this.parent = parent;
             this.turno = turno;
             this.setCampos();
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            this.precioBase.Text = this.precioBase.Text.Replace(",", ".");
         }
 
         private void guardarCliente_Click(object sender, EventArgs e)
         {
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            this.precioBase.Text = this.precioBase.Text.Replace(",", ".");
+
             this.validarCampos();
+
+            if (this.noCambioLosValores())
+            {
+                MessageBox.Show("No cambio los valores originales, por lo tanto el turno quedara sin actualizar.");
+                return;
+            }
+
             if (this.errores != "")
             {
                 MessageBox.Show(errores);
@@ -41,13 +53,25 @@ namespace UberFrba.Abm_Turno
                     this.actualizarTurno();
                     MessageBox.Show("Se ha actualizado el turno correctamente");
                     this.Close();
+                    parent.buscarTodos("");
                 }
                 catch (SqlException ex)
                 {
                     MessageBox.Show(ex.Message);
                     MessageBox.Show("Ha habido un error en la actualización");
+                    this.Close();
                 }
             }
+        }
+
+
+        private bool noCambioLosValores() 
+        {
+            return this.horaInicio.Text.Equals(this.turno.horaInicio)
+                && this.horaFin.Text.Equals(this.turno.horaFin)
+                && this.valorDelKm.Text.Equals(this.turno.valorDelKm.Replace(",","."))
+                && this.precioBase.Text.Equals(this.turno.precioBase.Replace(",", "."))
+                && this.descripcion.Text.Equals(this.turno.descripcion);
         }
 
         private void limpiarCampos_Click(object sender, EventArgs e)
@@ -207,12 +231,12 @@ namespace UberFrba.Abm_Turno
 
         private void valorDelKm_TextChanged(object sender, EventArgs e)
         {
-            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            
         }
 
         private void precioBase_TextChanged(object sender, EventArgs e)
         {
-            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            
         }
 
         

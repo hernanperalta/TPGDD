@@ -26,12 +26,8 @@ namespace UberFrba.Abm_Turno
 
         private void crearTurno_Click(object sender, EventArgs e)
         {
-            if (this.errores != "")
-            {
-                MessageBox.Show(errores);
-                this.errores = "";
-                return;
-            }
+            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            this.precioBase.Text = this.precioBase.Text.Replace(",", ".");
 
             if (this.hayCamposObligatoriosVacios())
             {
@@ -41,24 +37,33 @@ namespace UberFrba.Abm_Turno
 
             this.validarCampos();
 
+            if (this.errores != "")
+            {
+                MessageBox.Show(errores);
+                this.errores = "";
+                return;
+            }
+
             try
             {
+
+                
                 DBConexion.ResolverNonQuery("INSERT LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) "
                                            + " VALUES ("
-                                           + this.horaInicio.Text + ", "
-                                           + this.horaFin.Text + ", '"
+                                           + this.horaInicio.Value + ", "
+                                           + this.horaFin.Value + ", '"
                                            + this.descripcion.Text + "', "
                                            + this.precioBase.Text + ", "
                                            + this.valorDelKm.Text + ", "
                                            + (this.habilitado.Checked ? "1" : "0") + ")");
+                
+            
 
                 MessageBox.Show("El turno se creó con éxito!");
             }
             catch (SqlException ex)
             {
-                if (ex.Number == 2627)
-                    if (ex.Message.Contains(this.entreParentesis(this.horaInicio.Text + ", " + this.horaFin.Text)))
-                        MessageBox.Show("Ya existe un turno de " + this.horaInicio.Text + " a " + this.horaFin.Text);
+               MessageBox.Show(ex.Message);
             }
         }
 
@@ -106,11 +111,14 @@ namespace UberFrba.Abm_Turno
         }
 
         private void validarRangoHorario()
-        { 
-            if(Int32.Parse(this.horaFin.Text) + Int32.Parse(this.horaInicio.Text) > 24)
+        {
+            if (this.horaFin.Value - this.horaInicio.Value > 24)
                 errores += "No puede ingresar un turno que ocupe mas de un dia";
-            if (Int32.Parse(this.horaFin.Text) < Int32.Parse(this.horaInicio.Text))
+            if (this.horaFin.Value < this.horaInicio.Value)
                 errores += "El turno debe finalizar en el mismo dia";
+            if (this.horaFin.Value == this.horaInicio.Value)
+                errores += "La hora de inicio del turno no puede ser igual a la hora de finalizacion";
+
         }
 
         private void validarCampo(string campoError, string campo, int cantLetras, string expresion)
@@ -195,7 +203,7 @@ namespace UberFrba.Abm_Turno
 
         private void valorDelKm_TextChanged(object sender, EventArgs e)
         {
-            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+            //this.validarFloats(20, this.valorDelKm.Text, "valor del kilometro");
         }
 
         private void horaFin_TextChanged(object sender, EventArgs e)
@@ -205,11 +213,37 @@ namespace UberFrba.Abm_Turno
 
         private void precioBase_TextChanged(object sender, EventArgs e)
         {
-            this.valorDelKm.Text = this.valorDelKm.Text.Replace(",", ".");
+           // this.validarFloats(20, this.precioBase.Text, "precio base");
         }
 
-      
+        private void horaInicio_TextChanged(object sender, EventArgs e)
+        {
 
+        }
+
+        private void horaInicio_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+   
+
+        private void validarCampoSegunTipo(int tamanio, string regex, string texto, string nombreDeCampo, string mensajeDeError)
+        {
+            if (!Regex.IsMatch(texto, regex))
+            {
+                errores += "-El campo " + nombreDeCampo + " " + mensajeDeError + "\n";
+            }
+            if (texto.Length > tamanio)
+            {
+                errores += "-El campo " + nombreDeCampo + " no puede tener más de " + tamanio + " dígitos\n";
+            }
+        }
+
+        private void validarFloats(int tamanio, string texto, string nombreDeCampo)
+        {
+            this.validarCampoSegunTipo(tamanio, "^[0-9]+(.[0-9]+)?$", texto, nombreDeCampo, "sólo debe tener números y el caracter .");
+        }
        
         
     }

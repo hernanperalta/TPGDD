@@ -202,5 +202,10 @@ namespace UberFrba.Abm_Chofer // TODO decidir si el username de chofer es opcion
                     (ctrl as TextBox).Clear();
         }
 
+        private void dniChofer_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

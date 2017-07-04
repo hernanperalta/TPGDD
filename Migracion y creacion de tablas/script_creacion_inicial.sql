@@ -962,8 +962,6 @@ BEGIN
 	ELSE THROW 51000, @error, 1;	
 END
 GO
- 
-
 
 CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
 ON LOS_CHATADROIDES.Cliente
@@ -1309,6 +1307,9 @@ BEGIN
   SELECT @hora_inicio_turno = hora_inicio_turno , @hora_fin_turno = hora_fin_turno, @precio_base = precio_base,
 	@descripcion = descripcion, @valor_del_kilometro = valor_del_kilometro, @habilitado = habilitado
   FROM inserted
+
+  IF EXISTS ( SELECT 1 FROM LOS_CHATADROIDES.Turno WHERE hora_inicio_turno = @hora_inicio_turno AND hora_fin_turno = @hora_fin_turno )
+	THROW 63000, 'Ya existe un turno con la misma hora de inicio y la misma hora de fin.'
   
   IF(@habilitado = 1)
  	EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno --tira excepcion si el turno se solapa
@@ -1629,53 +1630,6 @@ BEGIN
 	DEALLOCATE rendiciones_cursor
 END
 GO
-
-INSERT INTO LOS_CHATADROIDES.Viaje 
-(telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, 
-fecha_y_hora_fin_viaje, kilometros_del_viaje) 
-VALUES 
-(5598227,'AFLOKM',4802842, 0,8,print convert(datetime,'04/07/2017 05:42:51.8201049', 108), convert(datetime,'04/07/2017 05:42:51.8175929',121), 65)
-
-
-print convert(datetime,'04/07/2017 05:42:51.82', 121)
-
-
-
-INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 05:51:51.6928296', '04/07/2017 05:51:51.6903276', 45)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_i
-
-nicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 System.Linq.Enumerable+<TakeIterator>d__24`1[System.Char]', '04/07/2017 System.Linq.Enumerable+<TakeIterator>d__24`1[System.Char]', 3)
-
-
-
-INSERT INTO LOS_CHATADROIDES.Viaje (telefono_chofer, patente, telefono_cliente, hora_inicio_turno, hora_fin_turno,  fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje) VALUES (5598227,'AFLOKM',4802842, 0,8,'04/07/2017 05:55:12.1', '04/07/2017 05:55:12.1', 3)
-
-
-
-
-
-
-
-
-
-
-
 
 
 

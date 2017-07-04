@@ -250,7 +250,7 @@ namespace UberFrba.Abm_Turno
             }
         }
 
-        private void buscarTodos(string descripcion)
+        public void buscarTodos(string descripcion)
         {
             this.validarCampos();
             if (this.errores != "")
