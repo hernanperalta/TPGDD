@@ -78,7 +78,6 @@ namespace UberFrba.Login_Usuario
                 }
                 else
                 {
-
                     Form seleccionDeRol = new Seleccionar_Rol(this.username.Text);
                     seleccionDeRol.Show();
                     this.Close();
@@ -98,7 +97,7 @@ namespace UberFrba.Login_Usuario
             {
                 MessageBox.Show("No se pudo deshabilitar el usuario");
             }
-            catch (Exception m)
+            catch (SinRegistrosException m)
             {
                 MessageBox.Show("No existe un usuario con ese nombre");
             }

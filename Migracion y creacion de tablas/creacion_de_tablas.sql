@@ -9,8 +9,6 @@ CREATE TABLE LOS_CHATADROIDES.Usuario
 	habilitado BIT NOT NULL DEFAULT 1
 );
 
-
-
 CREATE TABLE LOS_CHATADROIDES.Turno
 (
 	hora_inicio_turno NUMERIC(18,0),
@@ -165,7 +163,7 @@ GO
 CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Turnos
 AS
 BEGIN
-	DECLARE turnos_cursor CURSOR FOR
+	DECLARE turnos_cursor CURSOR FOR --Seleccionamos solo los turnos de la tabla maestra
 	SELECT Turno_Hora_Inicio, Turno_Hora_Fin, Turno_Descripcion, Turno_Valor_Kilometro, Turno_Precio_Base 
 	FROM gd_esquema.Maestra 
 	GROUP BY Turno_Hora_Inicio, Turno_Hora_Fin, Turno_Descripcion, Turno_Valor_Kilometro, Turno_Precio_Base 
@@ -182,7 +180,7 @@ BEGIN
 	WHILE (@@FETCH_STATUS = 0)
 	BEGIN	
 		INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, valor_del_kilometro, precio_base) 
-		VALUES (@hora_inicio, @hora_fin, @descripcion, @valor_km, @precio_base);
+			VALUES (@hora_inicio, @hora_fin, @descripcion, @valor_km, @precio_base);
 		FETCH turnos_cursor INTO @hora_inicio, @hora_fin, @descripcion, @valor_km, @precio_base;
 	 END 
 
@@ -196,6 +194,7 @@ AS
 BEGIN
 	DECLARE funcs_cursor CURSOR FOR
 	SELECT codigo_funcionalidad FROM LOS_CHATADROIDES.Funcionalidad
+	-- Tomamos los codigos de funcionalidad que creamos en el momento en que comienza la migracion (linea)
 
 	DECLARE @cod_func TINYINT;
 	
@@ -292,11 +291,8 @@ BEGIN
 
 		SET @nuevoUsername = LOS_CHATADROIDES.Quitar_espacios_y_tildes(@nombre + '_' + @apellido)
 
-		IF( NOT EXISTS (SELECT username FROM LOS_CHATADROIDES.Usuario WHERE username = @nombre + '_' + @apellido) )
-			BEGIN
-				INSERT INTO LOS_CHATADROIDES.Usuario (username, password)
-					VALUES (@nuevoUsername, @nuevoUsername);
-			END;
+		INSERT INTO LOS_CHATADROIDES.Usuario (username, password)
+			VALUES (@nuevoUsername, @nuevoUsername);
 
 		INSERT INTO LOS_CHATADROIDES.Cliente (telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username)
 			   VALUES (@telefono, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, LOS_CHATADROIDES.Quitar_espacios_y_tildes(@mail), @nuevoUsername);
@@ -461,7 +457,9 @@ BEGIN
 	SELECT Rendicion_Nro, Rendicion_Fecha, SUM(Rendicion_Importe) importe_total, Turno_Hora_Inicio, Turno_Hora_Fin, Chofer_Telefono 
 	FROM gd_esquema.Maestra
 	GROUP BY Rendicion_Nro, Rendicion_Fecha, Turno_Hora_Inicio, Turno_Hora_Fin, Chofer_Telefono
-	HAVING Rendicion_Nro IS NOT NULL
+	HAVING Rendicion_Nro IS NOT NULL 
+	/*Sacamos los que tienen numero de rendicion no nulo porque son los unicos registros
+	de la maestra que corresponden a una rendicion*/
   
 	DECLARE @rendicion_nro NUMERIC(18,0)
 	DECLARE @fecha DATETIME
@@ -492,23 +490,24 @@ AS
 BEGIN 
   SELECT M1.Chofer_Telefono AS chofer, M2.Cliente_Telefono AS cliente, M1.Viaje_Fecha AS fecha_y_hora_inicio, M2.Viaje_Fecha AS fecha_y_hora_fin 
   INTO LOS_CHATADROIDES.#Viajes_con_inicio_y_fin
-  FROM gd_esquema.Maestra M1 LEFT JOIN gd_esquema.Maestra M2
+  FROM gd_esquema.Maestra M1 LEFT JOIN gd_esquema.Maestra M2-- joineamos la maestra con si misma para sacar la fecha inicio y fin de un viaje
       ON(CONVERT(date, M1.Viaje_Fecha) = CONVERT(date, M2.Viaje_Fecha)
         AND M1.Chofer_Telefono = M2.Chofer_Telefono
-	      AND M1.Cliente_Telefono = M2.Cliente_Telefono
+	    AND M1.Cliente_Telefono = M2.Cliente_Telefono
         AND M1.Turno_Hora_Inicio = M2.Turno_Hora_Inicio
-  	    AND M1.Auto_Patente = M2.Auto_Patente)
-  WHERE CONVERT(time, M1.Viaje_Fecha) < CONVERT(time, M2.Viaje_Fecha) 
+  	    AND M1.Auto_Patente = M2.Auto_Patente)--igualamos por estos campos para poder identificar cuando se trata del mismo viaje
+  WHERE CONVERT(time, M1.Viaje_Fecha) < CONVERT(time, M2.Viaje_Fecha)-- la hora de M1 es menor a la de M2, pero tienen la misma fecha
   GROUP BY M1.Chofer_Telefono, M2.Cliente_Telefono, M1.Viaje_Fecha, M2.Viaje_Fecha
   
   DECLARE cursor_viajes CURSOR FOR 
   SELECT chofer, N.Auto_Patente, cliente, N.Turno_Hora_Inicio, N.Turno_Hora_Fin, fecha_y_hora_inicio, fecha_y_hora_fin, 
-	SUM(N.Viaje_Cant_Kilometros) AS cantidad_km_viaje,N.Rendicion_Nro, M.Factura_Nro
-    FROM (SELECT chofer, cliente, fecha_y_hora_inicio, MIN(fecha_y_hora_fin) AS fecha_y_hora_fin 
+	SUM(N.Viaje_Cant_Kilometros) AS cantidad_km_viaje, N.Rendicion_Nro, M.Factura_Nro
+    FROM (SELECT chofer, cliente, fecha_y_hora_inicio, MIN(fecha_y_hora_fin) AS fecha_y_hora_fin
       	  FROM LOS_CHATADROIDES.#Viajes_con_inicio_y_fin
 		  GROUP BY chofer, cliente, fecha_y_hora_inicio) AS T 
-
-    	LEFT JOIN 
+	-- agupamos para dejarle a cada fecha de inicio, la fecha de fin minima, logrando lo anterior
+    	
+		LEFT JOIN -- para dejar los viajes que no esten rendidos
 
 		 (SELECT Chofer_Telefono, Auto_Patente, Cliente_Telefono, Turno_Hora_Inicio, 
 			Turno_Hora_Fin, Viaje_Fecha, Viaje_Cant_Kilometros, Rendicion_Nro, Factura_Nro
@@ -516,12 +515,13 @@ BEGIN
   	      GROUP BY Chofer_Telefono, Auto_Patente, Cliente_Telefono, Turno_Hora_Inicio, 
     	 	Turno_Hora_Fin, Viaje_Fecha, Viaje_Cant_Kilometros, Rendicion_Nro, Factura_Nro
           HAVING Rendicion_Nro IS NOT NULL) AS N
+	-- todos los registros que sean rendiciones
 
 	      	ON(N.Chofer_Telefono = T.chofer 
 				AND N.Cliente_Telefono = T.cliente 
 				AND T.fecha_y_hora_inicio = N.Viaje_Fecha) 
 						 
-		LEFT JOIN
+		LEFT JOIN -- para dejar los viajes que no esten facturados
 
 		  (SELECT Chofer_Telefono, Auto_Patente, Cliente_Telefono, Turno_Hora_Inicio, 
 			Turno_Hora_Fin, Viaje_Fecha, Rendicion_Nro, Factura_Nro
@@ -529,13 +529,15 @@ BEGIN
 		   GROUP BY Chofer_Telefono, Auto_Patente, Cliente_Telefono, Turno_Hora_Inicio, 
 			Turno_Hora_Fin, Viaje_Fecha, Rendicion_Nro, Factura_Nro
 		   HAVING Factura_Nro IS NOT NULL) AS M
-			
+	-- todos los registros que sean facturas
+
 			ON(M.Chofer_Telefono = N.Chofer_Telefono 
 					AND M.Cliente_Telefono = N.Cliente_Telefono
 					AND M.Viaje_Fecha = N.Viaje_Fecha
 					AND M.Auto_Patente = N.Auto_Patente)
 												
-			 GROUP BY chofer, N.Auto_Patente, cliente, N.Turno_Hora_Inicio, N.Turno_Hora_Fin, fecha_y_hora_inicio, fecha_y_hora_fin, N.Rendicion_Nro, M.Factura_Nro
+			 GROUP BY chofer, N.Auto_Patente, cliente, N.Turno_Hora_Inicio, N.Turno_Hora_Fin, 
+				fecha_y_hora_inicio, fecha_y_hora_fin, N.Rendicion_Nro, M.Factura_Nro
 	
 	DECLARE @nro_rendicion NUMERIC(18,0);
 	DECLARE @telefono_chofer NUMERIC(18,0);
@@ -549,60 +551,24 @@ BEGIN
 	DECLARE @kilometros_del_viaje NUMERIC(18,0);
   
 	OPEN cursor_viajes;
-	FETCH cursor_viajes INTO 
-				@telefono_chofer, 
-				@patente, 
-				@telefono_cliente, 
-				@hora_inicio_turno, 
-				@hora_fin_turno, 
-				@fecha_y_hora_inicio_viaje, 
-				@fecha_y_hora_fin_viaje, 
-				@kilometros_del_viaje, 
-				@nro_rendicion, 
-				@id_factura 
+	FETCH cursor_viajes INTO @telefono_chofer, @patente, @telefono_cliente, @hora_inicio_turno, @hora_fin_turno, 
+		@fecha_y_hora_inicio_viaje, @fecha_y_hora_fin_viaje, @kilometros_del_viaje, @nro_rendicion, @id_factura 
 
 	WHILE (@@FETCH_STATUS = 0)
   	BEGIN
-      INSERT INTO LOS_CHATADROIDES.Viaje (nro_rendicion, 
-										  telefono_chofer, 
-									      patente, 
-									      id_factura, 
-										  telefono_cliente, 
-										  hora_inicio_turno, 
-										  hora_fin_turno, 
-										  fecha_y_hora_inicio_viaje, 
-										  fecha_y_hora_fin_viaje, 
-										  kilometros_del_viaje)
-
-      								VALUES (@nro_rendicion,
-											@telefono_chofer,
-											@patente, 
-											@id_factura, 
-											@telefono_cliente,
-											@hora_inicio_turno,
-											@hora_fin_turno,
-											@fecha_y_hora_inicio_viaje, 
-											@fecha_y_hora_fin_viaje,
-											@kilometros_del_viaje)
+      INSERT INTO LOS_CHATADROIDES.Viaje (nro_rendicion, telefono_chofer, patente, id_factura, telefono_cliente,
+			hora_inicio_turno, hora_fin_turno, fecha_y_hora_inicio_viaje, fecha_y_hora_fin_viaje, kilometros_del_viaje)
+		VALUES (@nro_rendicion, @telefono_chofer, @patente, @id_factura, @telefono_cliente, @hora_inicio_turno,
+			@hora_fin_turno, @fecha_y_hora_inicio_viaje, @fecha_y_hora_fin_viaje, @kilometros_del_viaje)
       
-      FETCH cursor_viajes INTO 
-					  @telefono_chofer, 
-					  @patente, 
-					  @telefono_cliente, 
-					  @hora_inicio_turno, 
-					  @hora_fin_turno, 
-					  @fecha_y_hora_inicio_viaje, 
-					  @fecha_y_hora_fin_viaje, 
-					  @kilometros_del_viaje, 
-					  @nro_rendicion, 
-					  @id_factura 
+      FETCH cursor_viajes INTO @telefono_chofer, @patente, @telefono_cliente, @hora_inicio_turno, @hora_fin_turno, 
+		@fecha_y_hora_inicio_viaje, @fecha_y_hora_fin_viaje, @kilometros_del_viaje, @nro_rendicion, @id_factura 
     END 
     
   CLOSE cursor_viajes;
   DEALLOCATE cursor_viajes;
 
   DROP TABLE LOS_CHATADROIDES.#Viajes_con_inicio_y_fin
-
 END
 GO
 
@@ -617,9 +583,10 @@ BEGIN
 	FROM LOS_CHATADROIDES.Viaje V JOIN LOS_CHATADROIDES.Turno T
 		ON(T.hora_inicio_turno = V.hora_inicio_turno AND T.hora_fin_turno = V.hora_fin_turno)
 	WHERE MONTH(V.fecha_y_hora_inicio_viaje) = @mes_factura AND V.telefono_cliente = @telefono_cliente
-  
+	-- sacamos los kilometros, precio base y valor del kilometro de los viajes que corresponden al mes y cliente pasado por parametro
+
 	DECLARE @importe_total FLOAT;
-	SET @importe_total = 0.0 ;
+	SET @importe_total = 0.0;
 	DECLARE @kilometros_del_viaje NUMERIC(18,0);
 	DECLARE @valor_del_kilometro NUMERIC(18,2);
 	DECLARE @precio_base NUMERIC(18,2);
@@ -630,7 +597,7 @@ BEGIN
   
   WHILE (@@FETCH_STATUS = 0)
   BEGIN 
-   	SET @importe_total = @importe_total + @precio_base + @kilometros_del_viaje * @valor_del_kilometro; 
+   	SET @importe_total = @importe_total + @precio_base + @kilometros_del_viaje * @valor_del_kilometro; --acumulamos el importe del viaje
     
    	FETCH viajes_para_facturar INTO @kilometros_del_viaje, @valor_del_kilometro, @precio_base;
   END
@@ -645,12 +612,11 @@ GO
 CREATE PROCEDURE LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe
 AS
 BEGIN
-	
 	DECLARE factura_cursor CURSOR FOR
 	SELECT Factura_Fecha, Factura_Fecha_Fin, Factura_Fecha_Inicio, Factura_Nro, Cliente_Telefono
 	FROM gd_esquema.Maestra
 	GROUP BY Factura_Fecha, Factura_Fecha_Fin, Factura_Fecha_Inicio, Factura_Nro, Cliente_Telefono
-	HAVING Factura_Nro IS NOT NULL
+	HAVING Factura_Nro IS NOT NULL--obtenemos todos los registros de la maestra que sean facturas, sin repetidos
 
 	DECLARE @factura_fecha DATETIME
 	DECLARE @factura_fecha_fin DATETIME
@@ -659,12 +625,12 @@ BEGIN
 	DECLARE @cliente_telefono NUMERIC(18,0)
 
 	OPEN factura_cursor
-	FETCH factura_cursor INTO @factura_fecha, @factura_fecha_fin, @factura_fecha_inicio, @factura_nro, @cliente_telefono 
+	FETCH factura_cursor INTO @factura_fecha, @factura_fecha_fin, @factura_fecha_inicio, @factura_nro, @cliente_telefono
 	
 	WHILE (@@FETCH_STATUS = 0)
 	BEGIN
 		INSERT INTO LOS_CHATADROIDES.Factura (fecha_facturacion, fecha_fin, fecha_inicio, id_factura, telefono_cliente, importe_total) 
-			VALUES (@factura_fecha, @factura_fecha_fin, @factura_fecha_inicio, @factura_nro, @cliente_telefono, 0 )
+			VALUES (@factura_fecha, @factura_fecha_fin, @factura_fecha_inicio, @factura_nro, @cliente_telefono, 0)
 
 		FETCH factura_cursor INTO @factura_fecha, @factura_fecha_fin, @factura_fecha_inicio, @factura_nro, @cliente_telefono 
 	END;
@@ -675,10 +641,9 @@ BEGIN
 END;
 GO	
 
-
 CREATE PROCEDURE LOS_CHATADROIDES.Cargar_Importe_A_Facturas
 AS
-BEGIN 
+BEGIN --este procedure se usa luego de haber migrado las facturas sin el importe
 	DECLARE factura_cursor CURSOR FOR
 	SELECT telefono_cliente, fecha_inicio FROM LOS_CHATADROIDES.Factura
 
@@ -691,7 +656,7 @@ BEGIN
 	WHILE(@@FETCH_STATUS = 0)
 	BEGIN
 		UPDATE LOS_CHATADROIDES.Factura
-		SET importe_total = LOS_CHATADROIDES.calcular_importe_total(MONTH(@fecha_inicio), @telefono_cliente)
+			SET importe_total = LOS_CHATADROIDES.calcular_importe_total(MONTH(@fecha_inicio), @telefono_cliente)
 		WHERE telefono_cliente = @telefono_cliente AND fecha_inicio = @fecha_inicio 
 
 		FETCH factura_cursor INTO @telefono_cliente, @fecha_inicio
@@ -702,12 +667,16 @@ BEGIN
 END
 GO
 
+/*---------------------------------------------------------------Migracion------------------------------------------------------------------------------------*/
+
 EXEC LOS_CHATADROIDES.Migrar_Turnos;
 
+--insertamos los roles del sistema
 INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Chofer');
 INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Cliente');
 INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol) VALUES ('Administrador');
 
+--insertamos las funcionalidades del sistema
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Rol');
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('Registro de Usuario');
 INSERT INTO LOS_CHATADROIDES.Funcionalidad (descripcion) VALUES ('ABM de Cliente');
@@ -723,12 +692,13 @@ EXEC LOS_CHATADROIDES.Cargar_Funcionalidades_X_Rol;
 EXEC LOS_CHATADROIDES.Migrar_Clientes;
 EXEC LOS_CHATADROIDES.Migrar_Choferes;
 
+--insertamos al admin
 INSERT INTO LOS_CHATADROIDES.Usuario
 	(username, password) VALUES ('admin', 'w23e')
 
 INSERT INTO LOS_CHATADROIDES.Administrador 
 	(telefono, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username) VALUES
-		(1, '25 de Mayo 5619', 'Quique', 'Reinosa', 1, '1966-01-01', 'chakl@hotmail.com', 'admin')
+		(1, '25 de Mayo 5619', 'Quique', 'Reinosa', 1, '1966-01-01', 'quique@gmail.com', 'admin')
 	
 EXEC LOS_CHATADROIDES.Cargar_Roles_X_Usuarios;
 EXEC LOS_CHATADROIDES.Migrar_Autos;
@@ -737,7 +707,10 @@ EXEC LOS_CHATADROIDES.Migrar_Rendicion;
 EXEC LOS_CHATADROIDES.Migrar_Facturas_Sin_Importe; 
 EXEC LOS_CHATADROIDES.Migrar_Viajes;
 EXEC LOS_CHATADROIDES.Cargar_Importe_A_Facturas;
+
+/*-------------------------------------------------------------Fin migracion--------------------------------------------------------------------------------*/
 GO
+
 CREATE TRIGGER LOS_CHATADROIDES.Dar_de_alta_cliente
 ON LOS_CHATADROIDES.Cliente
 INSTEAD OF INSERT
@@ -757,7 +730,8 @@ INSTEAD OF INSERT
 
  	BEGIN TRY
  		BEGIN TRANSACTION
- 			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, dni, fecha_de_nacimiento, mail, username, codigo_postal)
+ 			INSERT INTO LOS_CHATADROIDES.Cliente (telefono, localidad, direccion, nombre, apellido, 
+					dni, fecha_de_nacimiento, mail, username, codigo_postal)
  				VALUES (@telefono, @localidad, @direccion, @nombre, @apellido, @dni, @fecha_de_nac, @mail, @username, @codigo_postal)
  		COMMIT TRANSACTION
  	END TRY
@@ -868,7 +842,6 @@ BEGIN
 
 	SELECT @patente_vieja = patente, @telefono_chofer_viejo = telefono_chofer , @licencia = licencia, @rodado = rodado FROM deleted
 
-
 	IF(@patente = @patente_vieja)
 	BEGIN
 		UPDATE LOS_CHATADROIDES.Automovil
@@ -876,16 +849,18 @@ BEGIN
 						modelo = @modelo,
 						habilitado = @habilitado
 					WHERE patente = @patente 
+
 		SET @errorConLaMismaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente_vieja)
+		
 		IF(@errorConLaMismaPatentePeroDistintoChofer = '')
 		BEGIN
 			UPDATE LOS_CHATADROIDES.Automovil
-			SET telefono_chofer = @telefono_chofer
+				SET telefono_chofer = @telefono_chofer
 			WHERE patente = @patente 
 		END 
 		ELSE 
 			THROW 51000, @errorConLaMismaPatentePeroDistintoChofer, 1;
-			
+		--se actualiza al automovil, luego se valida al chofer. Si el chofer es valido, se actualiza tambien el chofer, y sino se lanza error
 	END
 	ELSE
 	BEGIN
@@ -893,7 +868,6 @@ BEGIN
 			BEGIN TRANSACTION
 				DECLARE @patenteDummie VARCHAR(10), @telefono_choferDummie NUMERIC(18,0), @usernameDummie VARCHAR(50), @username VARCHAR(50)
 				
-
 				SET @telefono_choferDummie = 1234567
 
 				SET @username = (SELECT username FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer)
@@ -901,13 +875,12 @@ BEGIN
 				SET @usernameDummie = '$dummie'--le ponemos '$' porque desde la bd no te deja hacer usuarios con el char '$'
 	
 				INSERT INTO LOS_CHATADROIDES.Usuario (username, password, habilitado) VALUES (@usernameDummie, 'NA', 0)
-
+				
 				INSERT INTO LOS_CHATADROIDES.Chofer 
 					(telefono, nombre, apellido, dni, fecha_de_nacimiento, localidad, direccion, depto, nro_piso, mail, username, habilitado)
 						VALUES
 					(@telefono_choferDummie, 'dummie','dummie', 123, GETDATE(), 'dummie', 'dummie','dum', 'dum', 'dummie', @usernameDummie, 1)
 	
-				
 				INSERT INTO LOS_CHATADROIDES.Automovil 
 					(patente, telefono_chofer, marca, modelo, licencia, rodado, habilitado)
 						VALUES
@@ -937,10 +910,9 @@ BEGIN
 						DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
 
 						COMMIT
-					END 
+					END
 				ELSE 
 					THROW 51000, @errorConLaMismaPatentePeroDistintoChofer, 1;
-			
 		END TRY
 		BEGIN CATCH
 			ROLLBACK;
@@ -982,7 +954,6 @@ BEGIN
 	DECLARE @modelo VARCHAR(255)
 	DECLARE @error VARCHAR(80)
 
-
 	SELECT @patente = patente, @telefono_chofer = telefono_chofer, @marca = marca, @modelo = modelo FROM inserted
 
 	SET @error = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
@@ -994,8 +965,6 @@ BEGIN
 	ELSE THROW 51000, @error, 1;	
 END
 GO
-
-
 
 CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Cliente
 ON LOS_CHATADROIDES.Cliente
@@ -1014,7 +983,6 @@ BEGIN
 	END
 END
 GO
-
 
 CREATE TRIGGER LOS_CHATADROIDES.Agregar_Rol_Chofer
 ON LOS_CHATADROIDES.Chofer
@@ -1048,7 +1016,6 @@ BEGIN
 END
 GO
 
-
 CREATE PROCEDURE LOS_CHATADROIDES.Dar_de_alta_usuario
 @username VARCHAR(50), @password VARCHAR(64), @rol VARCHAR(25)
 AS 
@@ -1064,7 +1031,6 @@ BEGIN
 END
 GO
 
-
 CREATE FUNCTION LOS_CHATADROIDES.Ultima_factura()
 RETURNS NUMERIC(18,0)
 AS
@@ -1077,17 +1043,6 @@ RETURN @ultimaFactura + 1
 END
 GO
 
-/*CREATE PROCEDURE LOS_CHATADROIDES.Crear_factura
-@telefono NUMERIC(18,0), @importeTotal FLOAT, @fecha_facturacion VARCHAR(20),
-@fecha_inicio VARCHAR(20), @fecha_fin VARCHAR(20)
-AS 
-BEGIN
-	INSERT INTO LOS_CHATADROIDES.Factura (id_factura, telefono_cliente, fecha_facturacion, fecha_inicio, fecha_fin, importe_total)
-		VALUES (LOS_CHATADROIDES.Ultima_factura(), @telefono, @fecha_facturacion, @fecha_inicio, @fecha_fin, @importeTotal)
-END
-GO*/
-
-
 CREATE PROCEDURE LOS_CHATADROIDES.Crear_factura
 @telefono NUMERIC(18,0), @importeTotal FLOAT, @fecha_facturacion VARCHAR(20),
 @fecha_inicio VARCHAR(20), @fecha_fin VARCHAR(20)
@@ -1098,18 +1053,18 @@ BEGIN
 END
 GO
 
-
-CREATE TRIGGER LOS_CHATADROIDES.Actualizar_Viajes_Facturados
+CREATE TRIGGER LOS_CHATADROIDES.Actualizar_Viajes_No_Facturados
 ON LOS_CHATADROIDES.Factura
 AFTER INSERT 
 AS 
 BEGIN
-DECLARE @id_factura NUMERIC(18,0), @telefono_cliente NUMERIC(18,0)
-SELECT @id_factura = id_factura, @telefono_cliente = telefono_cliente 
-FROM inserted
+	DECLARE @id_factura NUMERIC(18,0), @telefono_cliente NUMERIC(18,0)
+
+	SELECT @id_factura = id_factura, @telefono_cliente = telefono_cliente 
+	FROM inserted
 	
-UPDATE LOS_CHATADROIDES.Viaje 
-	SET id_factura = @id_factura
+	UPDATE LOS_CHATADROIDES.Viaje 
+		SET id_factura = @id_factura
 	WHERE telefono_cliente = @telefono_cliente AND 
 		   Id_factura IS NULL
 END
@@ -1194,7 +1149,7 @@ BEGIN
 			
 				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
 
-				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
+				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
 			COMMIT
 		END TRY
 		BEGIN CATCH
@@ -1283,7 +1238,7 @@ BEGIN
 
 				DELETE FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = @usernameDummie
 
-				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie
+				DELETE FROM LOS_CHATADROIDES.Usuario WHERE username = @usernameDummie--borro al usuario dummie
 			COMMIT
 		END TRY
 		BEGIN CATCH
@@ -1311,30 +1266,6 @@ BEGIN
 END
 GO
 
-CREATE FUNCTION LOS_CHATADROIDES.No_esta_en_intervalo_o_es_una_cota
-(@valor NUMERIC(18,0), @cota_inferior NUMERIC(18,0), @cota_superior NUMERIC(18,0), @comparaConInferior BIT)
-RETURNS BIT
-AS
-BEGIN
-	IF @comparaConInferior = 1
-	BEGIN
-		IF((@valor < @cota_inferior OR @valor > @cota_superior) OR @valor = @cota_inferior)
-		BEGIN
-			RETURN 1
-		END
-		
-		RETURN 0
-	END
-	ELSE
-	IF((@valor < @cota_inferior OR @valor > @cota_superior) OR @valor = @cota_superior)
-	BEGIN
-		RETURN 1
-	END
-
-	RETURN 0
-END
-GO
-
 CREATE FUNCTION LOS_CHATADROIDES.No_se_solapan
 (@inicio NUMERIC(18,0), @fin NUMERIC(18,0), @cota_inferior NUMERIC(18,0), @cota_superior NUMERIC(18,0))
 RETURNS BIT
@@ -1344,14 +1275,13 @@ BEGIN
 		RETURN 1
 	IF(@fin > @cota_superior AND @inicio >= @cota_superior)
 		RETURN 1
-
 	RETURN 0
 END
 GO
 
 CREATE PROCEDURE LOS_CHATADROIDES.Validar_turno_no_solapado
 @hora_inicio_turno NUMERIC(18,0), @hora_fin_turno NUMERIC(18,0)
- AS
+AS
 BEGIN
   	DECLARE @descripcion_que_fallo VARCHAR(50)
 	SET @descripcion_que_fallo = ''
@@ -1360,8 +1290,13 @@ BEGIN
 	FROM LOS_CHATADROIDES.Turno
 	WHERE LOS_CHATADROIDES.No_se_solapan(@hora_inicio_turno, @hora_fin_turno, hora_inicio_turno, hora_fin_turno) = 0
 	AND habilitado = 1
-	AND CONVERT(varchar, @hora_inicio_turno) + CONVERT(varchar,@hora_fin_turno) != CONVERT(varchar, hora_inicio_turno) + CONVERT(varchar,hora_fin_turno)
-	
+	AND CONVERT(VARCHAR, @hora_inicio_turno) + CONVERT(VARCHAR, @hora_fin_turno) != CONVERT(VARCHAR, hora_inicio_turno) + CONVERT(VARCHAR, hora_fin_turno)
+	/*
+	la ultima condicion verifica que 2 turnos no tengan la misma PK. 
+	Si hubiesemos hecho @hora_inicio_turno != @hora_inicio_turno and @hora_fin_turno != hora_fin_turno
+	no habria matcheado por ejemplo los turnos 8-16 y 8-17
+	*/
+
 	IF (@descripcion_que_fallo != '')
 	BEGIN
 		DECLARE @error VARCHAR(255)
@@ -1383,10 +1318,10 @@ BEGIN
  
   SELECT @hora_inicio_turno = hora_inicio_turno , @hora_fin_turno = hora_fin_turno, @precio_base = precio_base,
 	@descripcion = descripcion, @valor_del_kilometro = valor_del_kilometro, @habilitado = habilitado
-  FROM INSERTED
+  FROM inserted
   
   IF(@habilitado = 1)
- 	EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+ 	EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno --tira excepcion si el turno se solapa
  
   INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado)
 	VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, @habilitado)
@@ -1398,7 +1333,6 @@ ON LOS_CHATADROIDES.Turno
 INSTEAD OF UPDATE
 AS 
 BEGIN
-SET NOCOUNT ON
 	DECLARE @hora_inicio_turno NUMERIC(18,0), 
 			@hora_fin_turno NUMERIC(18,0), 
 			@descripcion VARCHAR(255), 
@@ -1417,7 +1351,7 @@ SET NOCOUNT ON
 	FROM deleted
 
 	IF(EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Turno WHERE hora_fin_turno = @hora_fin_turno AND hora_inicio_turno = @hora_inicio_turno AND habilitado = 1))
-	BEGIN
+	BEGIN--verifica si existe un turno con la misma franja horaria y que este habilitado
 		DECLARE @rango_error VARCHAR(40)
 
 		SET @rango_error = 'Ya existe un turno habilitado de ' + CONVERT(VARCHAR, @hora_inicio_turno) + ' a ' + CONVERT(VARCHAR, @hora_fin_turno);
@@ -1429,31 +1363,35 @@ SET NOCOUNT ON
 	BEGIN
 		BEGIN TRY
 			BEGIN TRANSACTION
-				IF(@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja)
+				IF(@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja)--si se updateo la franja horaria
 				BEGIN
 					INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) 
 						VALUES (@hora_inicio_turno, @hora_fin_turno, @descripcion, @precio_base, @valor_del_kilometro, 0)
+						--inserto turno nuevo como deshabilitado
 
 					UPDATE LOS_CHATADROIDES.Auto_X_Turno
 						SET hora_inicio_turno = @hora_inicio_turno,
 							hora_fin_turno = @hora_fin_turno
 					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
-						AND hora_fin_turno = @hora_fin_turno_vieja 
+						AND hora_fin_turno = @hora_fin_turno_vieja --cambiamos el auto por turno del turno viejo al turno viejo
 
 					UPDATE LOS_CHATADROIDES.Turno
 						SET habilitado = 0
 					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
-						AND hora_fin_turno = @hora_fin_turno_vieja 
+						AND hora_fin_turno = @hora_fin_turno_vieja --deshabilitamos el turno viejo
 
 					UPDATE LOS_CHATADROIDES.Turno
 						SET habilitado = 1
 					WHERE hora_inicio_turno = @hora_inicio_turno
-						AND hora_fin_turno = @hora_fin_turno 
+						AND hora_fin_turno = @hora_fin_turno --habilitamos el turno nuevo
 				END
-				ELSE
+				ELSE--si no cambio la hora
 				BEGIN
 					UPDATE LOS_CHATADROIDES.Turno
-						SET habilitado = 1
+						SET habilitado = 1,
+							descripcion = @descripcion,
+							precio_base = @precio_base,
+							valor_del_kilometro = @valor_del_kilometro
 					WHERE hora_inicio_turno = @hora_inicio_turno_vieja 
 					  AND hora_fin_turno = @hora_fin_turno_vieja 
 				END
@@ -1526,11 +1464,12 @@ BEGIN
  
 		INSERT INTO LOS_CHATADROIDES.Rol (nombre_del_rol, habilitado)
 		VALUES (@nombre_nuevo, @habilitado)
- 
+		
+		--corremos las referencias al nuevo
 		UPDATE LOS_CHATADROIDES.Rol_X_Usuario
 			SET nombre_del_rol = @nombre_nuevo
 		WHERE nombre_del_rol = @nombre_viejo
- 
+
 		UPDATE LOS_CHATADROIDES.Funcionalidad_X_Rol
 			SET nombre_del_rol = @nombre_nuevo
 		WHERE nombre_del_rol = @nombre_viejo
@@ -1577,7 +1516,7 @@ BEGIN
 	
 	IF(EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Viaje 
 		WHERE telefono_cliente = @telefono_cliente
-		AND	telefono_chofer =@telefono_chofer
+		AND	telefono_chofer = @telefono_chofer
 		AND fecha_y_hora_inicio_viaje = @fecha_hora_inicio
 		AND fecha_y_hora_fin_viaje = @fecha_hora_fin))
 	BEGIN;
@@ -1592,6 +1531,7 @@ BEGIN
 	IF((DATEPART(HOUR, @fecha_hora_inicio) NOT BETWEEN @hora_inicio_turno AND @hora_fin_turno)
 		OR
 		(DATEPART(HOUR, @fecha_hora_fin) NOT BETWEEN @hora_inicio_turno AND @hora_fin_turno))
+		--si la hora de inicio no esta en el turno o la hora de fin no esta en el turno -> excepcion
 	BEGIN;
 		THROW 58002, 'El horario del viaje no pertenece el turno seleccionado', 2
 	END
@@ -1599,14 +1539,14 @@ BEGIN
 	IF(EXISTS 
 		(
 		SELECT 1 FROM LOS_CHATADROIDES.Viaje 
-		WHERE (LOS_CHATADROIDES.No_se_solapan(
-				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), @fecha_hora_inicio, 108), ':', '')), 
-				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), @fecha_hora_fin, 108), ':', '')), 
-				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_inicio_viaje, 108), ':', '')), 
-				CONVERT(INT,REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_fin_viaje, 108), ':', ''))) 
-				= 0
-		AND CONVERT(DATE, fecha_y_hora_inicio_viaje) = CONVERT(DATE, @fecha_hora_inicio)
-		AND telefono_chofer = @telefono_chofer AND telefono_cliente = @telefono_cliente)
+		WHERE (LOS_CHATADROIDES.No_se_solapan(--si existe un viaje donde se solapan las fechas de inicio y fin con algun otra fecha que haya en Viaje
+				CONVERT(INT, REPLACE(CONVERT(VARCHAR(8), @fecha_hora_inicio, 108), ':', '')), 
+				CONVERT(INT, REPLACE(CONVERT(VARCHAR(8), @fecha_hora_fin, 108), ':', '')), 
+				CONVERT(INT, REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_inicio_viaje, 108), ':', '')), 
+				CONVERT(INT, REPLACE(CONVERT(VARCHAR(8), fecha_y_hora_fin_viaje, 108), ':', ''))) 
+				= 0 
+		AND CONVERT(DATE, fecha_y_hora_inicio_viaje) = CONVERT(DATE, @fecha_hora_inicio)--y la fecha de inicio del viaje es igual
+		AND telefono_chofer = @telefono_chofer AND telefono_cliente = @telefono_cliente)--y es del mismo chofer y cliente
 		))
 	BEGIN;
 		THROW 58003, 'El horario del viaje se solapa con otros existentes', 2

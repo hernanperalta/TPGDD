@@ -17,12 +17,19 @@ namespace UberFrba.Login_Usuario
 
         private String username;
         private UberFrba.Menu.Menu menu;
-
         public Seleccionar_Rol(String username)
         {
             InitializeComponent();
-            this.username = username;            
-            this.cargarRoles();
+            this.username = username;
+            try
+            {
+                this.cargarRoles();
+                this.noPoseeRolesLabel.Text = "";
+            }
+            catch (SinRegistrosException)
+            {
+                this.noPoseeRolesLabel.Text = "No posee roles asignados";
+            }
         }
 
 
@@ -38,7 +45,7 @@ namespace UberFrba.Login_Usuario
 
         private void aceptar_Click(object sender, EventArgs e)
         {
-            /*
+            
             if (selectorRol.SelectedItem == null)
             {
                 MessageBox.Show("Debe seleccionar un rol para seguir");
@@ -49,10 +56,10 @@ namespace UberFrba.Login_Usuario
                 menu.Show();
                 this.Close();
             }
-             */
-            Form menu = new Menu.Menu("admin", "Administrador");
+             
+           /* Form menu = new Menu.Menu("admin", "Administrador");
             menu.Show();
-            this.Close();
+            this.Close();*/
         }
 
         private void selectorRol_SelectedIndexChanged(object sender, EventArgs e)
@@ -73,6 +80,11 @@ namespace UberFrba.Login_Usuario
         private SqlDataReader leerRoles()
         {
             return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol_X_Usuario WHERE username = '" + username + "'");
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
