@@ -37,21 +37,14 @@ namespace UberFrba.Abm_Cliente
             this.parentSeleccionRegistro = parent;
             this.setPanelSelecccion();
         }
-        private void setPanelSelecccion()
-        {
-            this.soloSeleccion = true;
-            this.puedeDarDeBaja = true;
-            this.setNombrePanel();
-            this.noClientesLabel.Text = "";
-        }
+      
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
             this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.setNombrePanel();
-            this.noClientesLabel.Text = "";
-        } 
+        }
 
         private void bajaOModificacion_Click(object sender, EventArgs e)
         {
@@ -144,9 +137,6 @@ namespace UberFrba.Abm_Cliente
             }
             this.habilitarCliente();
         }
-
-
-
 
 
 
@@ -263,6 +253,14 @@ namespace UberFrba.Abm_Cliente
             }
         }
 
+        private void setPanelSelecccion()
+        {
+            this.soloSeleccion = true;
+            this.puedeDarDeBaja = true;
+            this.setNombrePanel();
+            this.noClientesLabel.Text = "";
+        }
+
         private void setNombrePanel()
         {
             if (this.soloSeleccion)
@@ -299,13 +297,6 @@ namespace UberFrba.Abm_Cliente
             this.listarClientes(nombre, apellido, dni);
 
             this.clientesGrid.DataSource = clientes;
-        }
-
-        private void Baja_o_Modificacion_Load(object sender, EventArgs e)
-        {
-        }
-        private void clientesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
         }
 
         private void nombreCliente_TextChanged(object sender, EventArgs e)
@@ -346,6 +337,12 @@ namespace UberFrba.Abm_Cliente
         private void label1_Click(object sender, EventArgs e)
         {
 
+        }
+        private void Baja_o_Modificacion_Load(object sender, EventArgs e)
+        {
+        }
+        private void clientesGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
         }
     }
 }
