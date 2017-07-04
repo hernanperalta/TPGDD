@@ -19,7 +19,6 @@ namespace UberFrba.Abm_Cliente
         Cliente cliente = new Cliente();
         DataTable clientes = new DataTable();
 
-
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
@@ -69,6 +68,12 @@ namespace UberFrba.Abm_Cliente
                 return;
             }
 
+        }
+
+        public void setSoloSeleccion() 
+        {
+            this.bajaOModificacion.Hide();
+            
         }
 
         private void limpiarCampos_Click(object sender, EventArgs e)

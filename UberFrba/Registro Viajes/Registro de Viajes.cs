@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using UberFrba.Conexion;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
+using UberFrba.Abm_Cliente;
 
 namespace UberFrba.Registro_Viajes
 {
@@ -99,7 +100,8 @@ namespace UberFrba.Registro_Viajes
 
         private void buscarCliente_Click(object sender, EventArgs e)
         {
-            new Seleccionar_Cliente(this).Show();
+            Form listado = new Abm_Cliente.Baja_o_Modificacion(this, false).Show();
+            listado.setSoloSeleccion();
         }
 
         private void validarCampos()
