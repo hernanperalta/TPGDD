@@ -159,7 +159,7 @@ namespace UberFrba.Alta_de_Usuario
 
         private SqlDataReader leerRoles()
         {
-            return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol ");
+            return DBConexion.ResolverQuery("SELECT nombre_del_rol FROM LOS_CHATADROIDES.Rol WHERE habilitado = 1");
         }
 
         private void limpiar_Click(object sender, EventArgs e)
