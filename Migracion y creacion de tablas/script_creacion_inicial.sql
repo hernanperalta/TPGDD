@@ -1,6 +1,6 @@
-/*GO
+GO
 CREATE SCHEMA [LOS_CHATADROIDES] AUTHORIZATION [gd]
-GO*/
+GO
 
 CREATE TABLE LOS_CHATADROIDES.Usuario
 (
@@ -230,16 +230,16 @@ BEGIN
 							REPLACE(
 							  REPLACE(
 								  REPLACE(@cadena COLLATE Latin1_General_BIN,
-									'·','a'),
-									  '¡', 'A'), 
-										'È', 'e'), 
-										  '…', 'E'), 
-											'Ì', 'i'), 
-											  'Õ', 'I'),
-												'Û', 'o'),
-													'”','O'),
-													  '˙','u'),
-														'⁄', 'U'),
+									'√°','a'),
+									  '√Å', 'A'), 
+										'√©', 'e'), 
+										  '√â', 'E'), 
+											'√≠', 'i'), 
+											  '√ç', 'I'),
+												'√≥', 'o'),
+													'√ì','O'),
+													  '√∫','u'),
+														'√ö', 'U'),
 														  ' ', '_')
 END
 GO
