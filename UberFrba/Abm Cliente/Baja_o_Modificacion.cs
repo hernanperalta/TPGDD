@@ -15,9 +15,21 @@ namespace UberFrba.Abm_Cliente
     {
         string errores = "";
         private Form parent;
+        private Registro_Viajes.Registro_Viajes parentSeleccion;
         private bool puedeDarDeBaja;
+        private bool soloSeleccion;
         Cliente cliente = new Cliente();
         DataTable clientes = new DataTable();
+
+        public Baja_o_Modificacion(Registro_Viajes.Registro_Viajes parent)
+        {
+            InitializeComponent();
+            this.parentSeleccion = parent;
+            this.soloSeleccion = true;
+            this.puedeDarDeBaja = true;
+            this.setNombrePanel();
+            this.noClientesLabel.Text = "";
+        }
 
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
@@ -50,15 +62,18 @@ namespace UberFrba.Abm_Cliente
             try
             {
                 this.setCliente();
-
+                if (this.soloSeleccion)
+                {
+                    parentSeleccion.setCliente(cliente.telefono);
+                    this.Close();
+                    return;
+                }
                 if (this.puedeDarDeBaja)
                 {
                     this.deshabilitarCliente();
                     return;
                 }
                 
-                /*Form modificar = new Modificacion(this.username, this.rol, cliente);
-                modificar.Show();*/
                 Form modificar = new Modificacion(this, cliente);
                 modificar.Show();
             }
@@ -97,6 +112,11 @@ namespace UberFrba.Abm_Cliente
         private void volver_Click(object sender, EventArgs e)
         {
             this.Close();
+            if (soloSeleccion)
+            {
+                parentSeleccion.Show();
+                return;
+            }
             this.parent.Show();
         }
 
@@ -211,11 +231,13 @@ namespace UberFrba.Abm_Cliente
             clientes.Clear();
             try
             {
+                string filtrarHabilitado = "";
+                if(soloSeleccion) filtrarHabilitado = "  AND habilitado = 1";
                 clientes.Load(DBConexion.ResolverQuery("SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad, codigo_postal AS 'Codigo postal',fecha_de_nacimiento AS 'Fecha de nacimiento' "
                                             + "FROM LOS_CHATADROIDES.Cliente "
                                             + "WHERE nombre LIKE '%" + nombre + "%' AND "
                                                      + "apellido LIKE '%" + apellido + "%' AND "
-                                                     + "DNI LIKE '%" + dni + "%'"));
+                                                     + "DNI LIKE '%" + dni + "%'" + filtrarHabilitado));
 
                 this.noClientesLabel.Text = "";
             } catch (SinRegistrosException)
@@ -228,16 +250,25 @@ namespace UberFrba.Abm_Cliente
 
         private void setNombrePanel()
         {
-            if (puedeDarDeBaja)
+            if (this.soloSeleccion)
             {
-                this.Text = "Baja Cliente";
-                this.bajaOModificacion.Text = "Dar de baja";
+                this.Text = "Seleccion de cliente";
+                this.bajaOModificacion.Text = "Confirmar cliente";
                 this.rhabilitar.Visible = false;
             }
             else
             {
-                this.Text = "Modificar Cliente";
-                this.bajaOModificacion.Text = "Modificar";
+                if (puedeDarDeBaja)
+                {
+                    this.Text = "Baja Cliente";
+                    this.bajaOModificacion.Text = "Dar de baja";
+                    this.rhabilitar.Visible = false;
+                }
+                else
+                {
+                    this.Text = "Modificar Cliente";
+                    this.bajaOModificacion.Text = "Modificar";
+                }
             }
         }
 

@@ -233,7 +233,7 @@ namespace UberFrba.Abm_Automovil
 
             try 
             {
-                MessageBox.Show(this.updateBuilder.obtenerUpdate());
+                
                 DBConexion.ResolverNonQuery(this.updateBuilder.obtenerUpdate());
                 
                 MessageBox.Show("Los datos del automovil se modificaron correctamente.");
@@ -272,7 +272,7 @@ namespace UberFrba.Abm_Automovil
             }
             if (turnosActualizados.Equals("Los turnos asignados son: \n"))
             {
-                MessageBox.Show("El automovil no tiene turnos asignados. \n");
+                MessageBox.Show("El automovil se guardo sin turnos asignados. \n");
                 return;
             }
 

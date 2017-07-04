@@ -11,6 +11,7 @@ using UberFrba.Conexion;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 using UberFrba.Abm_Cliente;
+using UberFrba.Abm_Chofer;
 
 namespace UberFrba.Registro_Viajes
 {
@@ -100,8 +101,8 @@ namespace UberFrba.Registro_Viajes
 
         private void buscarCliente_Click(object sender, EventArgs e)
         {
-            Form listado = new Abm_Cliente.Baja_o_Modificacion(this, false).Show();
-            listado.setSoloSeleccion();
+            Form listado = new Abm_Cliente.Baja_o_Modificacion(this);
+            listado.Show();
         }
 
         private void validarCampos()
@@ -153,7 +154,8 @@ namespace UberFrba.Registro_Viajes
 
         private void buscarChofer_Click(object sender, EventArgs e)
         {
-            new Seleccionar_Choferes(this).Show();
+            Abm_Chofer.Baja_o_Modificacion listado = new Abm_Chofer.Baja_o_Modificacion(this);
+            listado.Show();
         }
 
         private void registrarViaje()
@@ -164,9 +166,7 @@ namespace UberFrba.Registro_Viajes
                         + "(" + this.telefonoChofer.Text + "," + "'" + this.patente.Text + "'," + this.telefonoCliente.Text + ", "
                         + ((Turno)this.turnos.SelectedItem).horaInicioTurno + "," + ((Turno)this.turnos.SelectedItem).horaFinTurno + ",'" 
                         + this.fechaDelViaje.Value.ToString("d") + " " + this.horaInicio.Value.TimeOfDay + "', '"
-                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay + "', " + this.cantKm.Text + ")";
-            
-            MessageBox.Show(insert);
+                        + this.fechaDelViaje.Value.ToString("d") + " " + this.horaFin.Value.TimeOfDay + "', " + this.cantKm.Text + ")";         
 
             DBConexion.ResolverNonQuery(insert);
         }

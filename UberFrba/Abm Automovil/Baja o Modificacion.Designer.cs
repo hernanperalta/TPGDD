@@ -142,10 +142,10 @@
             this.tablaAutomovil.AllowUserToResizeRows = false;
             this.tablaAutomovil.BackgroundColor = System.Drawing.SystemColors.ControlLightLight;
             this.tablaAutomovil.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.tablaAutomovil.Location = new System.Drawing.Point(30, 187);
+            this.tablaAutomovil.Location = new System.Drawing.Point(129, 187);
             this.tablaAutomovil.Name = "tablaAutomovil";
             this.tablaAutomovil.ReadOnly = true;
-            this.tablaAutomovil.Size = new System.Drawing.Size(757, 149);
+            this.tablaAutomovil.Size = new System.Drawing.Size(568, 149);
             this.tablaAutomovil.TabIndex = 37;
             this.tablaAutomovil.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick_1);
             // 

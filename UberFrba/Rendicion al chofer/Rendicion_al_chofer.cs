@@ -68,9 +68,10 @@ namespace UberFrba.Rendicion_al_chofer
             this.cargarTurnos();
         }
 
-        private void button1_Click(object sender, EventArgs e)
+        private void buscarChofer_Click(object sender, EventArgs e)
         {
-            new Seleccion_de_choferes(this).Show();
+           Abm_Chofer.Baja_o_Modificacion listado = new Abm_Chofer.Baja_o_Modificacion(this);
+            listado.Show();
         }
 
         private void volver_Click(object sender, EventArgs e)

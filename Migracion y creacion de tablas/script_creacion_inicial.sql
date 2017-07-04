@@ -852,13 +852,13 @@ BEGIN
 
 		SET @errorConLaMismaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente_vieja)
 		
-		IF(@errorConLaMismaPatentePeroDistintoChofer = '')
+		IF(@errorConLaMismaPatentePeroDistintoChofer = '' OR @habilitado = 0)
 		BEGIN
 			UPDATE LOS_CHATADROIDES.Automovil
 				SET telefono_chofer = @telefono_chofer
 			WHERE patente = @patente 
 		END 
-		ELSE 
+		ELSE
 			THROW 51000, @errorConLaMismaPatentePeroDistintoChofer, 1;
 		--se actualiza al automovil, luego se valida al chofer. Si el chofer es valido, se actualiza tambien el chofer, y sino se lanza error
 	END
@@ -897,7 +897,7 @@ BEGIN
 				DELETE FROM LOS_CHATADROIDES.Automovil WHERE patente = @patente_vieja
 
 				SET @errorConLaNuevaPatentePeroDistintoChofer = LOS_CHATADROIDES.Validar_Chofer(@telefono_chofer, @patente)
-				IF(@errorConLaMismaPatentePeroDistintoChofer = '')
+				IF(@errorConLaMismaPatentePeroDistintoChofer = '' OR @habilitado = 0)
 					BEGIN 
 						UPDATE LOS_CHATADROIDES.Automovil
 						SET telefono_chofer = @telefono_chofer
@@ -919,9 +919,9 @@ BEGIN
 			THROW;
 		END CATCH
 	END
-
 END
 GO
+
 
 CREATE FUNCTION LOS_CHATADROIDES.Validar_Chofer 
 (@telefono_chofer NUMERIC(18,0), @patente VARCHAR(10) )
@@ -929,6 +929,8 @@ RETURNS VARCHAR(80)
 AS
 BEGIN
 	DECLARE @error VARCHAR(80)
+	SET @error = ''
+
 	IF NOT EXISTS (SELECT telefono FROM LOS_CHATADROIDES.Chofer WHERE telefono = @telefono_chofer) 
 			SET @error = 'El telefono ingresado no corresponde a un chofer existente.'
 
@@ -1509,8 +1511,8 @@ BEGIN
 			@patente = patente,
 			@hora_inicio_turno = hora_inicio_turno,
 			@hora_fin_turno = hora_fin_turno, 
-			@fecha_hora_inicio = fecha_y_hora_inicio_viaje ,
-			@fecha_hora_fin = fecha_y_hora_fin_viaje ,
+			@fecha_hora_inicio = fecha_y_hora_inicio_viaje,
+			@fecha_hora_fin = fecha_y_hora_fin_viaje,
 			@kmsDelViaje = kilometros_del_viaje
 	FROM inserted
 	
@@ -1597,14 +1599,24 @@ BEGIN
 	WHERE telefono_chofer = @telefono_chofer
 		AND CAST(fecha_y_hora_inicio_viaje AS DATE) = CAST(@fecha AS DATE)
 		AND nro_rendicion IS NULL
-	GROUP BY hora_inicio_turno, hora_fin_turno
+	GROUP BY hora_inicio_turno, hora_fin_turno --tomamos todos los turnos donde haya viajes del chofer no rendidos y sean de la fecha pasada por parametro
  
 	OPEN rendiciones_cursor 
  
-	FETCH rendiciones_cursor  INTO @hora_inicio_turno, @hora_fin_turno 
+	FETCH rendiciones_cursor INTO @hora_inicio_turno, @hora_fin_turno 
  
 	WHILE(@@FETCH_STATUS = 0)
 	BEGIN
+		SET @importe_total = (SELECT precio_base + (valor_del_kilometro * kilometros_del_viaje)
+								FROM LOS_CHATADROIDES.Viaje V JOIN LOS_CHATADROIDES.Turno T 
+									ON (V.hora_inicio_turno = T.hora_inicio_turno AND V.hora_fin_turno = T.hora_fin_turno) 
+								WHERE telefono_chofer = @telefono_chofer
+									AND V.hora_inicio_turno = @hora_inicio_turno
+									AND V.hora_fin_turno = @hora_fin_turno
+									AND CAST(fecha_y_hora_inicio_viaje AS DATE) = @fecha
+									AND nro_rendicion IS NULL)
+									--sacamos el importe del viaje segun el chofer que viene en inserted, el turno fetcheado y la fecha de inserted
+
 		INSERT INTO LOS_CHATADROIDES.Rendicion 
 			(nro_rendicion, fecha, telefono_chofer, importe_total, hora_inicio_turno, hora_fin_turno, porcentaje_aplicado)
 				VALUES 
@@ -1617,6 +1629,8 @@ BEGIN
 			 AND nro_rendicion IS NULL
 			 AND telefono_chofer = @telefono_chofer
 			 AND CAST(fecha_y_hora_inicio_viaje AS DATE) = CAST(@fecha AS DATE)
+			 /*se hace que los viajes que no estan rendidos, que son del turno fetcheado y que son del cliente y dia pasado por parametro
+			 referencien a la rendicion insertada*/
  
 		SET @nro_rendicion = @nro_rendicion + 1
  
@@ -1627,4 +1641,3 @@ BEGIN
 	DEALLOCATE rendiciones_cursor
 END
 GO
-

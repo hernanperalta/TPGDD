@@ -58,7 +58,6 @@ DROP PROCEDURE LOS_CHATADROIDES.Crear_factura;
 DROP TRIGGER LOS_CHATADROIDES.Actualizar_Viajes_Facturados;
 DROP TRIGGER LOS_CHATADROIDES.Actualizar_telefono_chofer;
 DROP TRIGGER LOS_CHATADROIDES.Actualizar_telefono_cliente;
-DROP TRIGGER LOS_CHATADROIDES.Dar_de_baja_automovil;
 DROP PROCEDURE LOS_CHATADROIDES.Modificar_auto_x_turno_si_el_valor_cambia;
 DROP PROCEDURE LOS_CHATADROIDES.Modificar_automovil;
 DROP FUNCTION LOS_CHATADROIDES.Validar_Chofer;
@@ -70,20 +69,11 @@ DROP TRIGGER LOS_CHATADROIDES.Validar_creacion_turnos_sobrepasados;
 DROP TRIGGER LOS_CHATADROIDES.Validar_actualizacion_turnos_sobrepasados;
 DROP TRIGGER LOS_CHATADROIDES.Dar_de_alta_cliente
 DROP FUNCTION LOS_CHATADROIDES.No_se_solapan
-
 DROP TRIGGER LOS_CHATADROIDES.Dar_de_alta_rendicion
-
-
 DROP TRIGGER LOS_CHATADROIDES.Registrar_Viaje
-
 DROP TRIGGER LOS_CHATADROIDES.Cambiar_nombre_rol
-
 DROP TRIGGER LOS_CHATADROIDES.Dar_de_baja_rol
-
-
-
 DROP FUNCTION LOS_CHATADROIDES.No_esta_en_intervalo_o_es_una_cota
-
 DROP PROCEDURE LOS_CHATADROIDES.Dar_de_alta_cliente
-
 DROP PROCEDURE LOS_CHATADROIDES.Dar_de_alta_chofer
+DROP TRIGGER LOS_CHATADROIDES.Actualizar_Viajes_No_Facturados

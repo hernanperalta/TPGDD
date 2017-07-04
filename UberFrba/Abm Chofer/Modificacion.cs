@@ -157,6 +157,7 @@ namespace UberFrba.Abm_Chofer
             }
             catch (SqlException ex)
             {
+                MessageBox.Show(ex.Message);
                 if (ex.Number == 2627)
                     if (ex.Message.Contains(this.entreParentesis(this.telefonoChofer.Text)))
                         MessageBox.Show("Ya existe un chofer con el teléfono " + this.telefonoChofer.Text);

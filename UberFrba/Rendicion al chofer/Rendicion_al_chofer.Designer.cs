@@ -32,7 +32,7 @@
             this.horaInicioTurno = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.turnos = new System.Windows.Forms.ComboBox();
-            this.button1 = new System.Windows.Forms.Button();
+            this.buscarChofer = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.telefonoChofer = new System.Windows.Forms.TextBox();
             this.volver = new System.Windows.Forms.Button();
@@ -84,15 +84,15 @@
             this.turnos.TabIndex = 49;
             this.turnos.SelectedIndexChanged += new System.EventHandler(this.turnos_SelectedIndexChanged);
             // 
-            // button1
+            // buscarChofer
             // 
-            this.button1.Location = new System.Drawing.Point(530, 23);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 23);
-            this.button1.TabIndex = 48;
-            this.button1.Text = "Buscar chofer";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
+            this.buscarChofer.Location = new System.Drawing.Point(530, 23);
+            this.buscarChofer.Name = "buscarChofer";
+            this.buscarChofer.Size = new System.Drawing.Size(95, 23);
+            this.buscarChofer.TabIndex = 48;
+            this.buscarChofer.Text = "Buscar chofer";
+            this.buscarChofer.UseVisualStyleBackColor = true;
+            this.buscarChofer.Click += new System.EventHandler(this.buscarChofer_Click);
             // 
             // label1
             // 
@@ -234,7 +234,7 @@
             this.Controls.Add(this.horaInicioTurno);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.turnos);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.buscarChofer);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.telefonoChofer);
             this.Controls.Add(this.volver);
@@ -257,7 +257,7 @@
         private System.Windows.Forms.TextBox horaInicioTurno;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox turnos;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button buscarChofer;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox telefonoChofer;
         private System.Windows.Forms.Button volver;

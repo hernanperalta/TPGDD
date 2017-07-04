@@ -13,8 +13,19 @@ namespace UberFrba.Abm_Chofer
         public string telefono;
         public string username;
         public bool habilitado;
+        public string patente;
 
-        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado) 
+        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, string patente, bool habilitado) 
+        {
+            this.datos = datos;
+            this.domicilio = domicilio;
+            this.telefono = telefono;
+            this.username = username;
+            this.habilitado = habilitado;
+            this.patente = patente;
+        }
+
+        public Chofer(Persona datos, Domicilio domicilio, string telefono, string username, bool habilitado)
         {
             this.datos = datos;
             this.domicilio = domicilio;
@@ -22,6 +33,7 @@ namespace UberFrba.Abm_Chofer
             this.username = username;
             this.habilitado = habilitado;
         }
+
         public Chofer()
         { }
 

@@ -209,7 +209,7 @@ namespace UberFrba.Abm_Automovil
 
             foreach (DataGridViewRow fila in this.tablaAutomovil.SelectedRows)
             {                                                                                                                                                                                                                                             
-                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(),  Convert.ToBoolean(fila.Cells[6].Value.ToString()));
+                Automovil filaAutomovil = new Automovil(fila.Cells[0].Value.ToString(), fila.Cells[1].Value.ToString(), fila.Cells[2].Value.ToString(), fila.Cells[3].Value.ToString(),  Convert.ToBoolean(fila.Cells[4].Value.ToString()));
                 autosSeleccionados.Add(filaAutomovil);
             }
 
@@ -291,9 +291,9 @@ namespace UberFrba.Abm_Automovil
         }
 
         private void buscarTodos_Click(object sender, EventArgs e)
-        {
-                this.llenarTablaSiSePuede();
-                this.limpiarLosCampos();
+        {       
+            this.limpiarLosCampos();
+            this.llenarTablaSiSePuede();
         }
 
 

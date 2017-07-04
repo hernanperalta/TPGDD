@@ -13,39 +13,85 @@ using System.Data.SqlClient;
 using UberFrba.Menu;
 using System.Configuration;
 
+                
 namespace UberFrba.Abm_Chofer
 {
     public partial class Baja_o_Modificacion : Form
     {
-        /*private string usernameActual;
-        private string rol;*/
         private Form parent;
+        private Registro_Viajes.Registro_Viajes parentSeleccionRegistro;
+        private Rendicion_al_chofer.Rendicion_al_chofer parentSeleccionRendicion;
         private bool puedeDarDeBaja;
+        private bool soloSeleccion = false;
+        private bool soloSeleccionRendicion = false;
         private string errores = "";
         private DataTable choferes = new DataTable();
         private string query = "SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, habilitado Habilitado, mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad,fecha_de_nacimiento AS 'Fecha de nacimiento'  "
-                             + " FROM LOS_CHATADROIDES.Chofer";
+                               + "FROM LOS_CHATADROIDES.Chofer ";
 
-        //public Baja_o_Modificacion(bool puedeDarDeBaja, string username, string rol)
+        public Baja_o_Modificacion(Rendicion_al_chofer.Rendicion_al_chofer parent)
+        {
+            InitializeComponent();
+            this.parentSeleccionRendicion = parent;
+            this.soloSeleccionRendicion = true;
+            this.parent = parent;
+            this.setPanelSeleccion();
+        }
+
+        public Baja_o_Modificacion(Registro_Viajes.Registro_Viajes parent)
+        {
+            InitializeComponent();
+            this.parentSeleccionRegistro = parent;
+            this.parent = parent;
+            this.setPanelSeleccion();
+        }
+
         public Baja_o_Modificacion(Form parent, bool puedeDarDeBaja)
         {
             InitializeComponent();
-           /* this.usernameActual = username;
-            this.rol = rol;*/
             this.parent = parent;
             this.puedeDarDeBaja = puedeDarDeBaja;
             this.noChoferesLabel.Text = "";
+            this.setPanel();
+        }
 
-            if (puedeDarDeBaja)
+        private void setPanelSeleccion()
+        {
+            this.puedeDarDeBaja = true;
+            this.soloSeleccion = true;
+            this.noChoferesLabel.Text = "";
+            if (soloSeleccion)
             {
-                this.Text = "Baja Chofer";
-                this.bajaOModificacion.Text = "Dar de baja";
+                this.query = "SELECT nombre Nombre, apellido Apellido, dni DNI, telefono Telefono, username USERNAME, C.habilitado Habilitado, patente as 'Patente', mail Mail, direccion Direccion, depto Departamento,  nro_piso AS 'Numero de piso', localidad Localidad,fecha_de_nacimiento AS 'Fecha de nacimiento'  "
+                               + "FROM LOS_CHATADROIDES.Chofer C JOIN LOS_CHATADROIDES.Automovil A "
+                               + "ON(C.telefono = A.telefono_chofer) WHERE C.habilitado = 1 AND A.habilitado = 1";
+
+            }
+            this.setPanel();
+        }
+
+        private void setPanel()
+        {
+            if (soloSeleccion)
+            {
+                this.Text = "Seleccionar chofer";
+                this.bajaOModificacion.Text = "Confirmar chofer";
                 this.rehabilitar.Visible = false;
             }
             else
             {
-                this.Text = "Modificar Chofer";
-                this.bajaOModificacion.Text = "Modificar";
+                if (puedeDarDeBaja)
+                {
+                    this.Text = "Baja Chofer";
+                    this.bajaOModificacion.Text = "Dar de baja";
+                    this.rehabilitar.Visible = false;
+                }
+                else
+                {
+                    this.Text = "Modificar Chofer";
+                    this.bajaOModificacion.Text = "Modificar";
+
+                }
             }
         }
 
@@ -68,9 +114,9 @@ namespace UberFrba.Abm_Chofer
                 return;
             }
 
-            if (this.choferesGrid.SelectedRows.Count > 1 && !puedeDarDeBaja)
+            if (this.choferesGrid.SelectedRows.Count > 1 && (!puedeDarDeBaja || soloSeleccion))
             {
-                MessageBox.Show("Sólo puede modificar de a un chofer a la vez");
+                MessageBox.Show("Sólo puede seleccionar de a un chofer a la vez");
                 return;
             }
 
@@ -80,20 +126,32 @@ namespace UberFrba.Abm_Chofer
                 return;
             }
 
+            Chofer choferSeleccionado = this.setChofer();
+
+            if (soloSeleccion)
+            {
+                if (soloSeleccionRendicion)
+                {
+                    parentSeleccionRendicion.setChofer(choferSeleccionado.telefono);
+                }
+                else
+                {
+                    parentSeleccionRegistro.setChofer(choferSeleccionado.telefono, choferSeleccionado.patente);
+                }
+                this.Close();
+                return;
+            }
             if (this.puedeDarDeBaja)
             {
                 this.deshabilitarChoferes();
                 this.buscarChoferesSegun(this.query);
                 return;
             }
-            
-            Chofer choferSeleccionado = this.setChofer();
 
-            //Form modificar = new Modificacion(choferSeleccionado, this.usernameActual, this.rol);
             Form modificar = new Modificacion(this, choferSeleccionado);
             modificar.Show();
-            /*this.Hide();
-            modificar.Show();*/
+
+            this.buscarChoferesSegun(this.query);
         }
 
         private Chofer setChofer()
@@ -112,10 +170,23 @@ namespace UberFrba.Abm_Chofer
                                         row["Mail"].ToString(),
                                         row["Fecha de nacimiento"].ToString());
 
-            Chofer choferSeleccionado = new Chofer(datos, domicilio,
-                                                    row["Telefono"].ToString(),
-                                                    row["USERNAME"].ToString(),
-                                                    Convert.ToBoolean(row["Habilitado"].ToString()));
+            Chofer choferSeleccionado;
+            
+            if (soloSeleccion)
+            {
+                 choferSeleccionado = new Chofer(datos, domicilio,
+                                                        row["Telefono"].ToString(),
+                                                        row["USERNAME"].ToString(),
+                                                        row["Patente"].ToString(),
+                                                        Convert.ToBoolean(row["Habilitado"].ToString()));
+            }
+            else 
+            {
+                 choferSeleccionado = new Chofer(datos, domicilio,
+                            row["Telefono"].ToString(),
+                            row["USERNAME"].ToString(),
+                            Convert.ToBoolean(row["Habilitado"].ToString()));
+            }
 
             return choferSeleccionado;
         }
@@ -161,10 +232,7 @@ namespace UberFrba.Abm_Chofer
                 this.errores = "";
                 return;
             }
-            /*
-            string query = this.agregarFiltros("SELECT nombre, apellido, dni, direccion, nro_piso, depto, localidad, telefono, "
-                + "mail, fecha_de_nacimiento, username, habilitado "
-                + "FROM LOS_CHATADROIDES.Chofer");*/
+  
 
             try
             {
@@ -181,7 +249,6 @@ namespace UberFrba.Abm_Chofer
 
         private void buscar_Click(object sender, EventArgs e)
         {
-            //this.buscarChoferes();   
             this.buscarChoferesSegun(this.query);   
         }
 
@@ -223,6 +290,7 @@ namespace UberFrba.Abm_Chofer
         {
             string ret = this.query;
             int cantFiltrosPuestos = 0;
+            if (soloSeleccion) cantFiltrosPuestos = 1;
 
             this.agregarCampoAQuery(ref ret, this.nombreChofer, "nombre", ref cantFiltrosPuestos);
             this.agregarCampoAQuery(ref ret, this.apellidoChofer, "apellido", ref cantFiltrosPuestos);
@@ -329,7 +397,7 @@ namespace UberFrba.Abm_Chofer
 
         }
 
-        private void limpiar_Click(object sender, EventArgs e)
+        private void limpiarCampos()
         {
             foreach (Control ctrl in this.Controls)
             {
@@ -337,6 +405,11 @@ namespace UberFrba.Abm_Chofer
                     (ctrl as TextBox).Clear();
             }
             this.choferesGrid.DataSource = null;
+        }
+
+        private void limpiar_Click(object sender, EventArgs e)
+        {
+            this.limpiarCampos();
         }
 
         private void label3_Click(object sender, EventArgs e)
