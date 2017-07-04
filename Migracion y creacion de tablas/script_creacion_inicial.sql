@@ -1309,7 +1309,7 @@ BEGIN
   FROM inserted
 
   IF EXISTS ( SELECT 1 FROM LOS_CHATADROIDES.Turno WHERE hora_inicio_turno = @hora_inicio_turno AND hora_fin_turno = @hora_fin_turno )
-	THROW 63000, 'Ya existe un turno con la misma hora de inicio y la misma hora de fin.'
+	THROW 63000, 'Ya existe un turno con la misma hora de inicio y la misma hora de fin.', 1
   
   IF(@habilitado = 1)
  	EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno --tira excepcion si el turno se solapa
@@ -1340,7 +1340,7 @@ BEGIN
 
 	SELECT @hora_inicio_turno_vieja = hora_inicio_turno, @hora_fin_turno_vieja = hora_fin_turno 
 	FROM deleted
-
+/*
 	IF(EXISTS (SELECT 1 FROM LOS_CHATADROIDES.Turno WHERE hora_fin_turno = @hora_fin_turno AND hora_inicio_turno = @hora_inicio_turno AND habilitado = 1))
 	BEGIN--verifica si existe un turno con la misma franja horaria y que este habilitado
 		DECLARE @rango_error VARCHAR(40)
@@ -1348,12 +1348,14 @@ BEGIN
 		SET @rango_error = 'Ya existe un turno habilitado de ' + CONVERT(VARCHAR, @hora_inicio_turno) + ' a ' + CONVERT(VARCHAR, @hora_fin_turno);
 
 		THROW 55000, @rango_error, 2
-	END
+	END*/
 
 	IF(@habilitado = 1)
 	BEGIN
 		BEGIN TRY
 			BEGIN TRANSACTION
+				EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+				
 				IF(@hora_inicio_turno != @hora_inicio_turno_vieja OR @hora_fin_turno != @hora_fin_turno_vieja)--si se updateo la franja horaria
 				BEGIN
 					INSERT INTO LOS_CHATADROIDES.Turno (hora_inicio_turno, hora_fin_turno, descripcion, precio_base, valor_del_kilometro, habilitado) 
@@ -1387,7 +1389,7 @@ BEGIN
 					  AND hora_fin_turno = @hora_fin_turno_vieja 
 				END
 		
-				EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
+				//EXEC LOS_CHATADROIDES.Validar_turno_no_solapado @hora_inicio_turno, @hora_fin_turno
 			COMMIT
 		END TRY
 		BEGIN CATCH
